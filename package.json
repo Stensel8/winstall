@@ -18,6 +18,7 @@
     "react-modal": "^3.11.2",
     "react-scripts": "3.4.1",
     "react-toggle": "^4.1.1",
+    "react-beautiful-dnd": "^13.0.0",
     "yaml": "^1.10.0"
   },
   "scripts": {
@@ -28,7 +29,6 @@
   },
   "devDependencies": {
     "@types/react": "^17.0.38",
-    "react-beautiful-dnd": "^13.0.0",
     "sass": "^1.49.0"
   }
 }
