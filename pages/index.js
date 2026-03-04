@@ -15,10 +15,12 @@ import fetchWinstallAPI from "../utils/fetchWinstallAPI";
 import Error from "../components/Error";
 import DonateCard from "../components/DonateCard";
 
-function Home({ popular, apps, recommended, error}) {
+function Home({ popular, apps, appsTotal, recommended, error}) {
   if(error) {
     return <Error title="Oops!" subtitle={error}/>
   }
+
+  const searchLabel = `${Math.floor(appsTotal / 50) * 50}+ packages and growing.`;
 
   return (
     <div>
@@ -32,7 +34,7 @@ function Home({ popular, apps, recommended, error}) {
             <p className={styles.lead}>
               Install Windows apps quickly with Windows Package Manager.
             </p>
-            <Search apps={apps} limit={4}/>
+            <Search apps={apps} label={searchLabel} limit={4}/>
           </div>
 
           <div className="art">
@@ -92,6 +94,7 @@ export async function getStaticProps(){
   };
 
   const appsList = normalizeAppsPayload(apps);
+  const appsTotal = typeof apps?.total === "number" ? apps.total : appsList.length;
 
   const popularResults = await Promise.all(
     popular.map(async (entry) => {
@@ -140,6 +143,7 @@ export async function getStaticProps(){
       props: {
         popular,
         apps: appsList,
+        appsTotal,
         recommended
       }
     }
