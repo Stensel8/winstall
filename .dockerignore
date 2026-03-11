@@ -1,4 +1,14 @@
+.git
+.gitignore
+.github
+.next
 node_modules
 npm-debug.log
-.git
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+.DS_Store
 .env
+.env.*
+coverage
+*.log
