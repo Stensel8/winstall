@@ -1,19 +1,16 @@
-import{ useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styles from "../styles/search.module.scss";
-
-import { DebounceInput } from "react-debounce-input";
 
 import SingleApp from "../components/SingleApp";
 import ListPackages from "../components/ListPackages";
 import fetchWinstallAPI from "../utils/fetchWinstallAPI";
 
 import { FiSearch, FiHelpCircle } from "react-icons/fi";
-import { forceVisible } from 'react-lazyload';
 import { useRouter } from "next/router";
 
 function Search({ apps, onSearch, label, placeholder, preventGlobalSelect, isPackView, alreadySelected=[], limit=-1}) {
   const [results, setResults] = useState([])
-  const [searchInput, setSearchInput] = useState();
+  const [searchInput, setSearchInput] = useState("");
   const router = useRouter();
   const [urlQuery, setUrlQuery] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +30,7 @@ function Search({ apps, onSearch, label, placeholder, preventGlobalSelect, isPac
   useEffect(() => {
     // if we have a ?q param on the url, we deal with it
     if (apps.length !== 0 && router.query && router.query.q && urlQuery !== router.query.q){
-      handleSearchInput(null, router.query.q)
+      setSearchInput(router.query.q);
       setUrlQuery(router.query.q)
     } else if(results != 0 && urlQuery && router.query && !router.query.q){
       // if we previously had a query, going back should reset it.
@@ -43,19 +40,23 @@ function Search({ apps, onSearch, label, placeholder, preventGlobalSelect, isPac
     }
   })
 
-  const handleSearchInput = async (e, q) => {
-    const inputVal = e ? e.target.value : q;
+  useEffect(() => {
+    if (searchInput === undefined || searchInput === null) return;
+    const timer = setTimeout(() => {
+      handleSearch(searchInput);
+    }, 300);
 
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
+  const handleSearch = async (inputVal) => {
     if(onSearch) onSearch(inputVal);
 
     if(inputVal === ""){
-      forceVisible();
       setSearchInput("");
       setResults([]);
       return;
     }
-
-    setSearchInput(inputVal);
 
     if (inputVal.length < 3) return;
 
@@ -87,10 +88,9 @@ function Search({ apps, onSearch, label, placeholder, preventGlobalSelect, isPac
         <div className={styles.searchInner}>
           <FiSearch />
 
-          <DebounceInput
+          <input
             minLength={2}
-            debounceTimeout={300}
-            onChange={(e) => handleSearchInput(e)}
+            onChange={(e) => setSearchInput(e.target.value)}
             id="search"
             value={searchInput}
             autoComplete="off"

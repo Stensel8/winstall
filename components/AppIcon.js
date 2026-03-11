@@ -1,5 +1,4 @@
 import styles from "../styles/singleApp.module.scss";
-import LazyLoad from "react-lazyload";
 import popularAppsList from "../data/popularApps.json";
 
 const AppIcon = ({id, name, icon}) => {
@@ -29,20 +28,19 @@ const AppIcon = ({id, name, icon}) => {
 
     if (icon.startsWith("http")) {
       return (
-        <LazyLoad height={25} offset={300} once>
-          { // if icon is not hosted on winstall
-            icon.startsWith("http") && (
-              <img
-                src={icon}
-                draggable={false}
-                alt={`Logo for ${name}`}
-                // Specify the size to avoid Cumulative Layout Shift:
-                width="25"
-                height="25"
-              />
-            )
-          }
-        </LazyLoad>
+        // if icon is not hosted on winstall
+        icon.startsWith("http") && (
+          <img
+            src={icon}
+            draggable={false}
+            alt={`Logo for ${name}`}
+            loading="lazy"
+            decoding="async"
+            // Specify the size to avoid Cumulative Layout Shift:
+            width="25"
+            height="25"
+          />
+        )
       );
     }
 
@@ -59,20 +57,20 @@ const AppIcon = ({id, name, icon}) => {
 
 const AppPicture = ({ name, srcSetPng, srcSetWebp }) => {
   return (
-    <LazyLoad height={25} offset={300} once>
-      <picture>
-        <source srcSet={srcSetWebp} type="image/webp" />
-        <source srcSet={srcSetPng} type="image/png" />
-        <img
-          src={srcSetPng}
-          alt={`Logo for ${name}`}
-          draggable={false}
-          // Specify the size to avoid Cumulative Layout Shift:
-          width="25"
-          height="25"
-        />
-      </picture>
-    </LazyLoad>
+    <picture>
+      <source srcSet={srcSetWebp} type="image/webp" />
+      <source srcSet={srcSetPng} type="image/png" />
+      <img
+        src={srcSetPng}
+        alt={`Logo for ${name}`}
+        draggable={false}
+        loading="lazy"
+        decoding="async"
+        // Specify the size to avoid Cumulative Layout Shift:
+        width="25"
+        height="25"
+      />
+    </picture>
   );
 }
 

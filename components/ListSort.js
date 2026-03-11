@@ -2,37 +2,7 @@ import { useState, useEffect } from "react";
 import styles from "../styles/listSort.module.scss";
 import { FiChevronDown } from "react-icons/fi";
 
-const ListSort = ({apps, defaultSort, onSort}) => {
-    const [sort, setSort] = useState("");
-
-    useEffect(() => {
-      if(!sort){
-        setSort(defaultSort);
-      }
-    })
-
-    let onSortSelected = (e) => {
-      let sortChoice = e.target.value;
-      setSort(sortChoice);
-      applySort(apps, sortChoice);
-      onSort(sortChoice);
-    };
-
-    return (
-      <div className={styles.sort}>
-        <label htmlFor="sort">Sort by</label>
-        <select id="sort" value={sort} onChange={(e) => onSortSelected(e)}>
-          <option value="update-desc">Recently Updated (Newest First)</option>
-          <option value="update-asc">Recently Updated (Oldest First)</option>
-          <option value="name-asc">Name (Ascending)</option>
-          <option value="name-desc">Name (Descending)</option>
-        </select>
-        <FiChevronDown/>
-      </div>
-    );
-}
-
-function applySort(apps, sortChoice) {
+export function applySort(apps, sortChoice) {
   if (sortChoice === "name-asc") {
     apps.sort((a, b) => a.name.localeCompare(b.name));
   } else if (sortChoice === "name-desc") {
@@ -47,7 +17,32 @@ function applySort(apps, sortChoice) {
   }
 };
 
-module.exports = {
-  ListSort,
-  applySort
-};
+export const ListSort = ({apps, defaultSort, onSort}) => {
+  const [sort, setSort] = useState("");
+
+  useEffect(() => {
+    if(!sort){
+      setSort(defaultSort);
+    }
+  })
+
+  let onSortSelected = (e) => {
+    let sortChoice = e.target.value;
+    setSort(sortChoice);
+    applySort(apps, sortChoice);
+    onSort(sortChoice);
+  };
+
+  return (
+    <div className={styles.sort}>
+      <label htmlFor="sort">Sort by</label>
+      <select id="sort" value={sort} onChange={(e) => onSortSelected(e)}>
+        <option value="update-desc">Recently Updated (Newest First)</option>
+        <option value="update-asc">Recently Updated (Oldest First)</option>
+        <option value="name-asc">Name (Ascending)</option>
+        <option value="name-desc">Name (Descending)</option>
+      </select>
+      <FiChevronDown/>
+    </div>
+  );
+}

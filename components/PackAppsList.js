@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 import styles from "../styles/packsAppList.module.scss";
 import SingleApp from "./SingleApp";
@@ -60,10 +60,10 @@ function PackAppsList({ notLoggedIn = false, providedApps, reorderEnabled, onLis
     useEffect(() => {
         setApps(providedApps)
     }, [])
-    
+
     if(!reorderEnabled){
         return (
-          <ul className={`${styles.appsList} ${styles.noDragList}`}> 
+          <ul className={`${styles.appsList} ${styles.noDragList}`}>
             {apps.map((app, index) => (
               <React.Fragment>
                 <div className={styles.appCard} key={app._id}>
@@ -115,7 +115,7 @@ function PackAppsList({ notLoggedIn = false, providedApps, reorderEnabled, onLis
 
       setApps(existingApps);
       onListUpdate(existingApps);
-      
+
       forceUpdate();
     }
 
@@ -143,7 +143,7 @@ function PackAppsList({ notLoggedIn = false, providedApps, reorderEnabled, onLis
           </div>
           <Search apps={allApps} preventGlobalSelect={handleSelect} isPackView={true} alreadySelected={apps} limit={4}/>
         </Modal>
-   
+
         {notLoggedIn ? <p>You need to login first before you can view the apps in this pack.</p> : (
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="list">
