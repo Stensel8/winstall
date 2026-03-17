@@ -47,12 +47,6 @@
     "_id": "Python.Python.3.14",
     "path": "Python/Python"
   },
-  "whatsapp": {
-    "img": "whatsapp.webp",
-    "name": "WhatsApp",
-    "_id": "WhatsApp.WhatsApp",
-    "path": "WhatsApp/WhatsApp"
-  },
   "zoom": {
     "img": "zoom.webp",
     "name": "Zoom",
