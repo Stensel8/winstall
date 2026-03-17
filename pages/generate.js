@@ -16,7 +16,7 @@ import ExportApps from "../components/AppExport/ExportApps";
 function Generate() {
     const { selectedApps } = useContext(SelectedContext);
     const [apps, setApps] = useState([]);
-    
+
     useEffect(() => {
       setApps(selectedApps);
     }, [ apps, selectedApps ]);
@@ -32,11 +32,9 @@ function Generate() {
                 Make sure you select some apps first to be able to generate a
                 script :)
               </h3>
-              <Link href="/">
-                <a className="button">
-                  <FiHome />
-                  Go home
-                </a>
+              <Link href="/" className="button">
+                <FiHome />
+                Go home
               </Link>
             </div>
             <div className="art">
@@ -58,7 +56,7 @@ function Generate() {
           <div className={styles.generate}>
             <h1>Your apps are ready to be installed.</h1>
             <h3>Make sure you have Windows Package Manager installed :)</h3>
-        
+
             <ExportApps apps={apps} />
           </div>
           <div className="art">

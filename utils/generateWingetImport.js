@@ -6,7 +6,7 @@ let wingetImportSchema = {
 	"Sources": [
 		{
 			"Packages": [
-                // we just need to populate this 
+                // we just need to populate this
             ],
 			"SourceDetails": {
 				"Argument" : "https://winget.azureedge.net/cache",
@@ -35,4 +35,4 @@ const generateWingetImport = async (apps) => {
     return wingetImportSchema;
 }
 
-module.exports = generateWingetImport;
+export default generateWingetImport;

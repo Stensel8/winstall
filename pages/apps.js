@@ -300,12 +300,19 @@ function Store({ data, error }) {
 
 export async function getStaticProps() {
   let { response, error } = await fetchWinstallAPI(
-    `/apps?offset=0&limit=60`,
-    {},
-    true
+    `/apps?offset=0&limit=60`
   );
 
-  if (error) return { props: { error } };
+  if (error) {
+    console.error('[getStaticProps /apps] Failed to fetch apps:', error);
+    return {
+      props: {
+        data: null,
+        error: 'Failed to load apps'
+      },
+      revalidate: 600
+    };
+  }
 
   return {
     props: {

@@ -83,10 +83,12 @@ function UserProfile({ uid }) {
   );
 }
 
-UserProfile.getInitialProps = async (ctx) => {
+export async function getServerSideProps(context) {
   return {
-    uid: ctx.query.id,
+    props: {
+      uid: context.params.id,
+    },
   };
-};
+}
 
 export default UserProfile;

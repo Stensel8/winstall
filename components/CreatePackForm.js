@@ -66,7 +66,7 @@ const CreatePackForm = ({ user, packApps, editMode, defaultValues, isDisabled })
     if(created){
       const packUrl = buildSiteUrl(`/packs/${created._id}`);
       return (
-      <p>Your pack has been sucesfully {editMode ? "updated" : "created"}! You can view it here: <Link href="/packs/[id]" as={`/packs/${created._id}`}><a>{packUrl}</a></Link></p>
+      <p>Your pack has been sucesfully {editMode ? "updated" : "created"}! You can view it here: <Link href="/packs/[id]" as={`/packs/${created._id}`}>{packUrl}</Link></p>
       )
     }
 

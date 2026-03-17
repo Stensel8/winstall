@@ -10,11 +10,9 @@ let RecentApps = ({ apps }) => {
     <div className="homeBlock">
       <div className="box">
         <h2 className="blockHeader">Recent Updates</h2>
-        <Link href="/apps?sort=update-desc">
-          <a className="button small">
-            <FiPackage />
-            View All
-          </a>
+        <Link href="/apps?sort=update-desc" className="button small">
+          <FiPackage />
+          View All
         </Link>
       </div>
       <h3 className="blockSubtitle">

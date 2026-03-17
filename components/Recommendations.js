@@ -13,11 +13,9 @@ const Recommendations = ({ packs }) => {
     <div className="homeBlock">
       <div className="box">
         <h2 className="blockHeader">Featured Packs</h2>
-        <Link href="/packs">
-          <a className="button small">
-            <FiPackage />
-            View All
-          </a>
+        <Link href="/packs" className="button small">
+          <FiPackage />
+          View All
         </Link>
       </div>
       <h3 className="blockSubtitle">
@@ -53,7 +51,7 @@ const Recommendations = ({ packs }) => {
         <PackList id="NYWPVq9ct" title="Social Media" packs={packs}>
           <FiUserPlus />
         </PackList>
-        
+
         <PackList id="yphy7XItI" title="School" packs={packs}>
           <FiBookOpen />
         </PackList>
@@ -83,21 +81,17 @@ const PackList = ({ children, title, id, packs}) => {
 
   return (
     <div className={styles.recommendation}>
-      <Link href="/packs/[id]" as={`/packs/${pack._id}`} prefetch={false}>
-        <a id={pack.accent} className={styles.packHeader} ref={headerRef}>
-          {children}
-          <h3>{title}</h3>
-          <p>{pack.desc}</p>
-        </a>
+      <Link href="/packs/[id]" as={`/packs/${pack._id}`} prefetch={false} id={pack.accent} className={styles.packHeader} ref={headerRef}>
+        {children}
+        <h3>{title}</h3>
+        <p>{pack.desc}</p>
       </Link>
 
       <div className={styles.packListContainer}>
         {packApps && packApps.map((app) => <App key={app._id} data={app} />)}
 
-        <Link href="/packs/[id]" as={`/packs/${pack._id}`} prefetch={false}>
-          <a className={`button subtle ${styles.viewPack}`}>
-            View Pack <FiChevronRight />
-          </a>
+        <Link href="/packs/[id]" as={`/packs/${pack._id}`} prefetch={false} className={`button subtle ${styles.viewPack}`}>
+          View Pack <FiChevronRight />
         </Link>
       </div>
     </div>
@@ -135,12 +129,10 @@ const App = ({ data }) => {
 
   return (
     <div className={`${styles.appContainer} ${selected ? styles.selected : null}`}>
-  
+
       <Link href="/apps/[id]" as={`/apps/${data._id}`} prefetch={false}>
-        <a>
-          <AppIcon name={data.name} icon={data.icon} id={data._id}/>
-          <h4>{data.name}</h4>
-        </a>
+        <AppIcon name={data.name} icon={data.icon} id={data._id}/>
+        <h4>{data.name}</h4>
       </Link>
     </div>
   )

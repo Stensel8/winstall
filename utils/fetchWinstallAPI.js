@@ -48,16 +48,30 @@ const fetchWinstallAPI = async (path, givenOptions, throwErr) => {
 
     if (!res.ok) {
       let errorBody;
-      // if `throwErr` is true we fail deployments
-      if (throwErr) {
-        errorBody = await res.json();
-        console.error(`[fetchWinstallAPI] ${res.status} ${res.statusText} ${url}`, errorBody);
-        throw new Error(errorBody.error);
+      const contentType = res.headers.get('content-type');
+
+      try {
+        // Only try to parse JSON if content-type indicates JSON
+        if (contentType && contentType.includes('application/json')) {
+          errorBody = await res.json();
+          error = errorBody.error || errorBody.message || res.statusText;
+        } else {
+          // For non-JSON responses (like plain text error messages)
+          const textBody = await res.text();
+          error = textBody || res.statusText;
+          errorBody = { error: textBody };
+        }
+      } catch (parseErr) {
+        // If parsing fails, use status text as error
+        error = res.statusText;
+        errorBody = { error: res.statusText };
       }
 
-      errorBody = await res.json();
       console.error(`[fetchWinstallAPI] ${res.status} ${res.statusText} ${url}`, errorBody);
-      error = errorBody.error;
+
+      if (throwErr) {
+        throw new Error(error);
+      }
     } else {
       response = await res.json();
     }
@@ -78,4 +92,4 @@ const fetchWinstallAPI = async (path, givenOptions, throwErr) => {
   return { response, error };
 };
 
-module.exports = fetchWinstallAPI;
+export default fetchWinstallAPI;

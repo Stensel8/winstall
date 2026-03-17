@@ -104,12 +104,17 @@ function Create({ allApps }) {
 }
 
 export async function getStaticProps() {
-  let { response: apps } = await fetchWinstallAPI(`/apps`);
+  let { response: apps, error } = await fetchWinstallAPI(`/apps`);
+
+  if (error) {
+    console.error('[getStaticProps /packs/create] Failed to fetch apps:', error);
+  }
 
   return {
     props: {
       allApps: apps ?? null,
     },
+    revalidate: 600,
   };
 }
 

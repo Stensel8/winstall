@@ -65,7 +65,7 @@ export default function Packs({ packs, error }) {
                     <h3>Introducing Packs</h3>
                     <h1>Curate and share the apps you use daily.</h1>
                     <div className="box2">
-                        <Link href="/packs/create"><button className="button spacer accent" id="starWine"><FiPlus /> Create a pack</button></Link>
+                        <Link href="/packs/create" className="button spacer accent" id="starWine"><FiPlus /> Create a pack</Link>
                     </div>
                 </FeaturePromoter>
 
@@ -109,11 +109,18 @@ export default function Packs({ packs, error }) {
 
 
 export async function getStaticProps() {
-    let { response: packs, error } = await fetchWinstallAPI(`/packs`, {}, true);
+    let { response: packs, error } = await fetchWinstallAPI(`/packs`);
 
     if (error) {
-        console.error(error);
-        return { props: { error } };
+        console.error('[getStaticProps /packs] Failed to fetch packs:', error);
+        // Return empty array on build error to allow build to continue
+        return {
+            props: {
+                packs: [],
+                error: 'Failed to load packs'
+            },
+            revalidate: 600
+        };
     }
 
     const officialPacks = process.env.NEXT_OFFICIAL_PACKS_CREATOR;

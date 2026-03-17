@@ -66,11 +66,21 @@ export async function getServerSideProps({ req, res }) {
   const host = req.headers['host'];
   const urlPrefix = protocol + "://" + host;
 
-  let { response: apps, err1 } = await fetchWinstallAPI(`/apps`, {}, true);
-  if (err1) return { props: { err1 } };
+  let { response: apps, error: err1 } = await fetchWinstallAPI(`/apps`);
+  if (err1) {
+    console.error('[sitemap] Failed to fetch apps:', err1);
+    res.statusCode = 500;
+    res.end('Error generating sitemap');
+    return { props: {} };
+  }
 
-  let { response: packs, err2 } = await fetchWinstallAPI(`/packs`, {}, true);
-  if (err2) return { props: { err2 } };
+  let { response: packs, error: err2 } = await fetchWinstallAPI(`/packs`);
+  if (err2) {
+    console.error('[sitemap] Failed to fetch packs:', err2);
+    res.statusCode = 500;
+    res.end('Error generating sitemap');
+    return { props: {} };
+  }
 
   const users = Array.from(new Set(packs.map(pack => pack.creator)));
   users.forEach(pack => {console.log(pack);});

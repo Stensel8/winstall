@@ -167,10 +167,8 @@ let SingleApp = ({ app, all, onVersionChange = false, large = false, showTime = 
             </>
           ) : (
             <Link href="/apps/[id]" as={`/apps/${app._id}`} prefetch={false}>
-              <a>
-                <AppIcon id={app._id} name={app.name} icon={app.icon} />
-                <p>{app.name}</p>
-              </a>
+              <AppIcon id={app._id} name={app.name} icon={app.icon} />
+              <p>{app.name}</p>
             </Link>
           )}
 
@@ -212,9 +210,7 @@ let SingleApp = ({ app, all, onVersionChange = false, large = false, showTime = 
               <VersionSelector />
             ) : (
               <Link href="/apps/[id]" as={`/apps/${app._id}`} prefetch={false}>
-                <a>
-                  v{app.selectedVersion}
-                </a>
+                v{app.selectedVersion}
               </Link>
             )}
           </li>
@@ -222,10 +218,8 @@ let SingleApp = ({ app, all, onVersionChange = false, large = false, showTime = 
 
         <li>
           <Link href={`/apps?q=${`publisher: ${app.publisher}`}`}>
-            <a>
-              <FiUser />
-              Other apps by {app.publisher}
-            </a>
+            <FiUser />
+            Other apps by {app.publisher}
           </Link>
         </li>
 
@@ -246,10 +240,8 @@ let SingleApp = ({ app, all, onVersionChange = false, large = false, showTime = 
         {large && (
           <li>
             <Link href={`https://github.com/microsoft/winget-pkgs/tree/master/manifests/${app._id.substring(0, 1).toLowerCase()}/${app._id.replaceAll('.', '/')}/`}>
-              <a>
-                <FiCode />
-                Source code for winget package
-              </a>
+              <FiCode />
+              Source code for winget package
             </Link>
           </li>
         )}
@@ -399,7 +391,7 @@ const Tags = ({ tags }) => {
         {tags.map((tag, i) => (
           <li key={i}>
             <Link href={`/apps?q=tags: ${tag}`}>
-              <a>{tag}</a>
+              {tag}
             </Link>
           </li>
         ))}

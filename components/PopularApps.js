@@ -22,11 +22,9 @@ let PopularApps = ({ apps, all }) => {
         <div className="homeBlock">
           <div className="box">
             <h2 className="blockHeader">Popular Apps</h2>
-            <Link href="/apps">
-              <a className="button small">
-                <FiPackage />
-                View All
-              </a>
+            <Link href="/apps" className="button small">
+              <FiPackage />
+              View All
             </Link>
           </div>
           <h3 className="blockSubtitle">

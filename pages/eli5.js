@@ -44,7 +44,7 @@ export default function Explainer() {
             Additionally, you can also view all the apps available via Windows
             Package Manager{" "}
             <Link href="/apps">
-              <a>on this page.</a>
+              on this page.
             </Link>
           </p>
           <p>

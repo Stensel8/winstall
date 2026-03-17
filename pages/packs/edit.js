@@ -153,11 +153,16 @@ export default function Edit({ allApps }) {
 }
 
 export async function getStaticProps() {
-  let { response: apps } = await fetchWinstallAPI(`/apps`);
+  let { response: apps, error } = await fetchWinstallAPI(`/apps`);
+
+  if (error) {
+    console.error('[getStaticProps /packs/edit] Failed to fetch apps:', error);
+  }
 
   return {
     props: {
       allApps: apps ?? null,
     },
+    revalidate: 600,
   };
 }

@@ -1,11 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 
 class MyDocument extends Document {
-  static async getInitialProps(ctx) {
-    const initialProps = await Document.getInitialProps(ctx);
-    return { ...initialProps };
-  }
-
   render() {
     return (
       <Html lang="en">
@@ -35,7 +30,7 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
         </body>
-        <a id="gsc" href="#" download="winstall.bat" />
+        <a id="gsc" href="#" download="winstall.bat" style={{ display: 'none' }} />
         <link rel="manifest" href="/manifest.json" />
         <link
           href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap"

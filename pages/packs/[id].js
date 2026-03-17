@@ -219,17 +219,14 @@ function PackDetail({ pack, creator, error }) {
               href="/users/[id]"
               as={`/users/${creator.id_str}`}
               prefetch={false}
+              className={styles.author}
+              title="View other packs by this user"
             >
-              <a
-                className={styles.author}
-                title="View other packs by this user"
-              >
-                <img
-                  src={creator.profile_image_url_https}
-                  alt="pack creator image"
-                />
-                @{creator.screen_name}
-              </a>
+              <img
+                src={creator.profile_image_url_https}
+                alt="pack creator image"
+              />
+              @{creator.screen_name}
             </Link>
 
             <p>{pack.desc}</p>
@@ -255,10 +252,8 @@ function PackDetail({ pack, creator, error }) {
 
             {user && user.id === pack.creator && (
               <div className={styles.packGet}>
-                <Link href={`/packs/edit?id=${pack._id}`} prefetch={false}>
-                  <a className="button subtle">
-                    <FiEdit /> Edit Pack
-                  </a>
+                <Link href={`/packs/edit?id=${pack._id}`} prefetch={false} className="button subtle">
+                  <FiEdit /> Edit Pack
                 </Link>{" "}
                 &nbsp;
                 <a className="button subtle" onClick={handleDelete}>

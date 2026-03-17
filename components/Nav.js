@@ -83,18 +83,14 @@ function Nav() {
   return (
     <header>
       <div className={styles.brand}>
-        <Link href="/">
-          <a>winstall</a>
-        </Link>
+        <Link href="/">winstall</Link>
         {/* <span className="preview">&nbsp;(preview)</span> */}
       </div>
 
       <div className={styles.nav} ref={navRef}>
         <Link href="/apps">
-          <a>
-            <FiPackage />
-            <p>Apps</p>
-          </a>
+          <FiPackage />
+          <p>Apps</p>
         </Link>
         {/* <a
           href="https://ko-fi.com/mehedi"

@@ -4,7 +4,6 @@ const withPWA = require("@ducanh2912/next-pwa").default({
 });
 
 module.exports = withPWA({
-  output: "standalone",
-  turbopack: {},
-  // next.js config
+  // Enable standalone mode for Docker builds only
+  ...(process.env.STANDALONE_BUILD === "true" && { output: "standalone" }),
 });

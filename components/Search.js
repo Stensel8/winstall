@@ -89,6 +89,7 @@ function Search({ apps, onSearch, label, placeholder, preventGlobalSelect, isPac
           <FiSearch />
 
           <input
+            type="text"
             minLength={2}
             onChange={(e) => setSearchInput(e.target.value)}
             id="search"

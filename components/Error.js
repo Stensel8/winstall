@@ -18,13 +18,11 @@ function Error({title, subtitle}) {
           ? subtitle
           : "It's looks like you're trying to find something that doesn't exist, would you like some help with that?"}
       </h3>
-      <Link href="/">
-        <a className={styles.btnError}>
-          <div>
-            <FiHome />
-            Go Home
-          </div>
-        </a>
+      <Link href="/" className={styles.btnError}>
+        <div>
+          <FiHome />
+          Go Home
+        </div>
       </Link>
     </div>
   );

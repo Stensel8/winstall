@@ -35,7 +35,7 @@ export default function Footer() {
   return (
     <div className={styles.footer}>
       <a
-        href="https://www.splashtop.com"
+        href="https://www.splashtop.com/"
         target="_blank"
         className={styles.brand}
       >
@@ -72,9 +72,7 @@ export default function Footer() {
           </a>
         </li>
         <li>
-          <Link href="/eli5">
-            <a>Help</a>
-          </Link>
+          <Link href="/eli5">Help</Link>
         </li>
       </ul>
 
