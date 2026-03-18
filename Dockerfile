@@ -1,32 +1,44 @@
 # syntax=docker/dockerfile:1
 
-FROM node:20-slim AS deps
+FROM node:22-slim AS deps
 WORKDIR /app
-
 COPY package.json package-lock.json ./
 RUN npm ci
 
-FROM node:20-slim AS builder
+FROM node:22-slim AS builder
 WORKDIR /app
-
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ENV NODE_ENV=production
-ENV STANDALONE_BUILD=true
+ARG NEXT_PUBLIC_WINGET_API_BASE
+ARG NEXT_PUBLIC_WINGET_API_KEY
+ARG NEXT_PUBLIC_WINGET_API_SECRET
+ARG NEXT_PUBLIC_TWITTER_BEARER
+ARG NEXT_PUBLIC_SITE_URL
+
+ENV NODE_ENV=production \
+    STANDALONE_BUILD=true \
+    NEXT_PUBLIC_WINGET_API_BASE=${NEXT_PUBLIC_WINGET_API_BASE} \
+    NEXT_PUBLIC_WINGET_API_KEY=${NEXT_PUBLIC_WINGET_API_KEY} \
+    NEXT_PUBLIC_WINGET_API_SECRET=${NEXT_PUBLIC_WINGET_API_SECRET} \
+    NEXT_PUBLIC_TWITTER_BEARER=${NEXT_PUBLIC_TWITTER_BEARER} \
+    NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
+
 RUN npm run build
 
-FROM node:20-slim AS runner
+FROM node:22-slim AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
-ENV PORT=3000
+ENV NODE_ENV=production \
+    PORT=3000
 
-# Next.js standalone output
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 
 EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
 CMD ["node", "server.js"]
