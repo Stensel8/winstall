@@ -9,6 +9,13 @@ import { getRuntimeConfig } from "./runtimeConfig";
  */
 const fetchWinstallAPI = async (path, givenOptions, throwErr) => {
   const config = await getRuntimeConfig();
+
+  // Skip API calls if no API configured
+  if (!config.apiBase) {
+    console.warn(`[fetchWinstallAPI] no API configured, skipping ${path}`);
+    return { response: null, error: null };
+  }
+
   const url = `${config.apiBase}${path}`;
   const isDebug = process.env.WINSTALL_API_DEBUG === "1";
   const timeoutMs = Number(process.env.WINSTALL_API_TIMEOUT_MS || 15000);
@@ -81,14 +88,6 @@ const fetchWinstallAPI = async (path, givenOptions, throwErr) => {
   } catch (err) {
     const elapsedMs = Date.now() - startedAt;
     const errName = err?.name || "Error";
-    const isConnRefused = err?.cause?.code === "ECONNREFUSED";
-    const isBuildTime = process.env.NODE_ENV === "production" && !process.env.PORT;
-
-    // During Docker build, API is unavailable. Return empty data instead of failing.
-    if (isConnRefused && isBuildTime) {
-      console.warn(`[fetchWinstallAPI] build-time: API unavailable, returning empty data for ${url}`);
-      return { response: null, error: null };
-    }
 
     console.error(`[fetchWinstallAPI] request failed ${url} (${elapsedMs}ms)`, err);
     error = errName === "AbortError" ? `Request timed out after ${timeoutMs}ms` : err.message;
