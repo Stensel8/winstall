@@ -33,16 +33,10 @@ function UserProfile({ uid }) {
   }, []);
 
   const getPacks = async (id, cache = true) => {
-    const { response } = await fetchWinstallAPI(
-      `/packs/${cache ? "users" : "profile"}/${uid}`,
-      {
-        headers: {
-          Authorization: process.env.NEXT_PUBLIC_TWITTER_SECRET,
-        },
-      }
-    );
+    const response = await fetch(`/api/packs/users/${uid}?cache=${cache}`)
+      .then(res => res.json());
 
-    if (response) {
+    if (response && !response.error) {
       setPacks(response);
       if (response.length === 0)
         setStatus("This user does not have any packs yet.");
