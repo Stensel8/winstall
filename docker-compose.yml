@@ -1,17 +1,15 @@
-version: '3.8'
-
 services:
   winstall:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        # No build-time args needed
-    image: winstall-app:latest
+    image: splashtopandroid/winstall:${WINSTALL_APP_TAG:-app-latest}
     container_name: winstall
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
+    env_file:
+      - .env
     environment:
       # Runtime environment variables (for NextAuth, etc.)
       - NODE_ENV=production
