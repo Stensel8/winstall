@@ -78,18 +78,14 @@ export async function getStaticProps(){
   let popular = shuffleArray(Object.values(popularAppsList));
 
   let { response: apps, error: appsError } = await fetchWinstallAPI(`/apps`);
-  let { response: recommended, error: recommendedError } = await fetchWinstallAPI(`/packs/users/${process.env.NEXT_OFFICIAL_PACKS_CREATOR}`);
+  let { response: recommended, error: recommendedError } = await fetchWinstallAPI(`/packs/users/${process.env.NEXT_OFFICIAL_PACKS_CREATOR}?offset=0&limit=12`);
 
   if(appsError) console.error(appsError);
   if(recommendedError) console.error(recommendedError);
 
   const normalizeAppsPayload = (payload) => {
-    if (!payload) return [];
-    if (Array.isArray(payload.data)) return payload.data;
-    if (Array.isArray(payload)) return payload;
-    if (Array.isArray(payload.apps)) return payload.apps;
-    if (Array.isArray(payload.items)) return payload.items;
-    return [];
+    if (!payload?.data) return [];
+    return payload.data;
   };
 
   const appsTotal = typeof apps?.total === "number" ? apps.total : 0;

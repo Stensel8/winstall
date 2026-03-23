@@ -16,15 +16,8 @@ function Search({ onSearch, label, placeholder, preventGlobalSelect, isPackView,
   const [isLoading, setIsLoading] = useState(false);
 
   const normalizeAppsPayload = (payload) => {
-    if (!payload) return [];
-
-    if (Array.isArray(payload)) return payload;
-
-    if (Array.isArray(payload.items)) return payload.items;
-
-    if (Array.isArray(payload.data)) return payload.data;
-
-    return [];
+    if (!payload?.data) return [];
+    return payload.data;
   };
 
   useEffect(() => {

@@ -35,43 +35,15 @@ function Store({ data, error }) {
   const totalPages = totalKnown ? Math.ceil(total / appsPerPage) : 0;
 
   const normalizeAppsPayload = (payload) => {
-    if (!payload) return { items: [], total: 0, totalKnown: false, offset: 0, limit: 0 };
+    if (!payload?.data) return { items: [], total: 0, totalKnown: false, offset: 0, limit: 0 };
 
-    if (Array.isArray(payload)) {
-      return { items: payload, total: payload.length, totalKnown: false, offset: 0, limit: payload.length };
-    }
-
-    if (Array.isArray(payload.items)) {
-      return {
-        items: payload.items,
-        total: typeof payload.total === "number" ? payload.total : payload.items.length,
-        totalKnown: typeof payload.total === "number",
-        offset: typeof payload.offset === "number" ? payload.offset : 0,
-        limit: typeof payload.limit === "number" ? payload.limit : payload.items.length,
-      };
-    }
-
-    if (Array.isArray(payload.apps)) {
-      return {
-        items: payload.apps,
-        total: typeof payload.total === "number" ? payload.total : payload.apps.length,
-        totalKnown: typeof payload.total === "number",
-        offset: typeof payload.offset === "number" ? payload.offset : 0,
-        limit: typeof payload.limit === "number" ? payload.limit : payload.apps.length,
-      };
-    }
-
-    if (Array.isArray(payload.data)) {
-      return {
-        items: payload.data,
-        total: typeof payload.total === "number" ? payload.total : payload.data.length,
-        totalKnown: typeof payload.total === "number",
-        offset: typeof payload.offset === "number" ? payload.offset : 0,
-        limit: typeof payload.limit === "number" ? payload.limit : payload.data.length,
-      };
-    }
-
-    return { items: [], total: 0, totalKnown: false, offset: 0, limit: 0 };
+    return {
+      items: payload.data,
+      total: typeof payload.total === "number" ? payload.total : payload.data.length,
+      totalKnown: typeof payload.total === "number",
+      offset: typeof payload.offset === "number" ? payload.offset : 0,
+      limit: typeof payload.limit === "number" ? payload.limit : payload.data.length,
+    };
   };
 
   const loadPage = async (targetPage, shouldThrow = false) => {
