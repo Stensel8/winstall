@@ -3,8 +3,8 @@ import { buildSiteUrl, getSiteOrigin } from "../utils/helpers";
 
 const MetaTags = ({ title, desc="Bulk install Windows apps quickly with Windows Package Manager." }) => {
   const siteOrigin = getSiteOrigin();
-  const siteUrl = siteOrigin || "/";
-  const coverUrl = buildSiteUrl("/cover.png") || "/cover.png";
+  const siteUrl = siteOrigin || undefined;
+  const coverUrl = siteOrigin ? buildSiteUrl("/cover.png") : undefined;
   const appleTouchIcon = buildSiteUrl("/logo192.png") || "/logo192.png";
   const manifestUrl = buildSiteUrl("/manifest.json") || "/manifest.json";
 
@@ -25,25 +25,25 @@ const MetaTags = ({ title, desc="Bulk install Windows apps quickly with Windows 
         <meta name="theme-color" content="#9b2eff" />
 
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={siteUrl} />
+        {siteUrl && <meta property="og:url" content={siteUrl} />}
         <meta property="og:title" content={title} />
         <meta
           property="og:description"
           content={desc}
         />
-        <meta property="og:image" content={coverUrl} />
+        {coverUrl && <meta property="og:image" content={coverUrl} />}
 
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={siteUrl} />
+        {siteUrl && <meta property="twitter:url" content={siteUrl} />}
         <meta property="twitter:title" content={title} />
         <meta
           property="twitter:description"
           content={desc}
         />
-        <meta
+        {coverUrl && <meta
           property="twitter:image"
           content={coverUrl}
-        />
+        />}
 
         <link rel="apple-touch-icon" href={appleTouchIcon} />
         <link rel="manifest" href={manifestUrl} />
