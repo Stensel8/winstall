@@ -75,6 +75,18 @@ function Home({ popular, appsTotal, recommended, error}) {
 }
 
 export async function getStaticProps(){
+  const { getRuntimeConfig } = require('../utils/runtimeConfig');
+  const config = await getRuntimeConfig();
+
+  const transformIcon = (app) => {
+    if (app && app.icon && config.apiBase && !app.icon.startsWith('http')) {
+      const iconName = app.icon.replace('.png', '');
+      app.iconUrl = `${config.apiBase}/icons/next/${iconName}.webp`;
+      app.iconPng = `${config.apiBase}/icons/${iconName}.png`;
+    }
+    return app;
+  };
+
   let popular = shuffleArray(Object.values(popularAppsList));
 
   let { response: apps, error: appsError } = await fetchWinstallAPI(`/apps`);
@@ -111,22 +123,19 @@ export async function getStaticProps(){
 
   if(appsError || recommendedError) return { props: { error: `Could not fetch data from Winstall API.`}, revalidate: getRevalidateTime('index-error', false) };
 
-  // Fetch popular apps from API with exclude=versions to avoid large payload
-  // Fallback to popularApps.json if API is unavailable
   const popularResults = await Promise.all(
     popular.slice(0, 16).map(async (entry) => {
       const { response: appData } = await fetchWinstallAPI(`/apps/${entry._id}?exclude=versions`);
 
       if (!appData) {
-        // Fallback to static popularApps.json data
         return entry;
       }
 
-      return {
+      return transformIcon({
         ...appData,
         _id: entry._id,
-        img: entry.img, // Preserve img from popularApps.json for consistency
-      };
+        img: entry.img,
+      });
     })
   );
 
@@ -142,6 +151,10 @@ export async function getStaticProps(){
           let { response: appData, error } = await fetchWinstallAPI(`/apps/${app._id}`);
 
           if(error) appData = null;
+
+          if(appData) {
+            appData = transformIcon(appData);
+          }
 
           appsList[index] = appData;
           resolve();

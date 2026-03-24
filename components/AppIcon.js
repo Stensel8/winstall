@@ -1,14 +1,19 @@
 import styles from "../styles/singleApp.module.scss";
 import popularAppsList from "../data/popularApps.json";
 import { useState, useEffect } from "react";
-import { getRuntimeConfig } from "../utils/runtimeConfig";
 
-const AppIcon = ({id, name, icon}) => {
-    const [apiBase, setApiBase] = useState('');
+const AppIcon = ({id, name, icon, iconUrl, iconPng}) => {
+    const [runtimeApiBase, setRuntimeApiBase] = useState('');
 
     useEffect(() => {
-        getRuntimeConfig().then(config => setApiBase(config.apiBase));
-    }, []);
+        // For client-side dynamic content without iconUrl (search, pagination)
+        if (!iconUrl && icon && !icon.startsWith('http') && typeof window !== 'undefined') {
+            fetch('/api/runtime-config')
+                .then(res => res.json())
+                .then(config => setRuntimeApiBase(config.apiBase))
+                .catch(() => setRuntimeApiBase(''));
+        }
+    }, [iconUrl, icon]);
 
     // if the app is listed in popularApps, use the image specified there
     const popularApps = Object.values(popularAppsList).filter((app) => app._id === id);
@@ -54,11 +59,24 @@ const AppIcon = ({id, name, icon}) => {
 
     icon = icon.replace(".png", "")
 
+    // Use pre-rendered URLs from ISR or fetch apiBase for dynamic content
+    if (iconUrl && iconPng) {
+        return (
+          <AppPicture
+            name={name}
+            srcSetPng={iconPng}
+            srcSetWebp={iconUrl}
+          />
+        );
+    }
+
+    // Fallback for dynamic content
+    const baseUrl = runtimeApiBase || '';
     return (
       <AppPicture
         name={name}
-        srcSetPng={`${apiBase}/icons/${icon}.png`}
-        srcSetWebp={`${apiBase}/icons/next/${icon}.webp`}
+        srcSetPng={`${baseUrl}/icons/${icon}.png`}
+        srcSetWebp={`${baseUrl}/icons/next/${icon}.webp`}
       />
     );
 }

@@ -298,6 +298,9 @@ function Store({ data, error }) {
 }
 
 export async function getStaticProps() {
+  const { getRuntimeConfig } = require('../utils/runtimeConfig');
+  const config = await getRuntimeConfig();
+
   let { response, error } = await fetchWinstallAPI(
     `/apps?offset=0&limit=60`
   );
@@ -311,6 +314,24 @@ export async function getStaticProps() {
       },
       revalidate: 600
     };
+  }
+
+  // Transform icons to full URLs
+  if (response && config.apiBase) {
+    const transformIcon = (app) => {
+      if (app.icon && !app.icon.startsWith('http')) {
+        const iconName = app.icon.replace('.png', '');
+        app.iconUrl = `${config.apiBase}/icons/next/${iconName}.webp`;
+        app.iconPng = `${config.apiBase}/icons/${iconName}.png`;
+      }
+      return app;
+    };
+
+    if (response.data) {
+      response.data = response.data.map(transformIcon);
+    } else if (Array.isArray(response)) {
+      response = response.map(transformIcon);
+    }
   }
 
   return {

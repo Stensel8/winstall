@@ -81,8 +81,20 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
+    const { getRuntimeConfig } = require('../../utils/runtimeConfig');
+    const config = await getRuntimeConfig();
+
     try{
         let { response: app } = await fetchWinstallAPI(`/apps/${params.id}`);
+
+        // Transform icon to full URL for client-side rendering
+        if (app && app.icon && config.apiBase) {
+            if (!app.icon.startsWith('http')) {
+                const iconName = app.icon.replace('.png', '');
+                app.iconUrl = `${config.apiBase}/icons/next/${iconName}.webp`;
+                app.iconPng = `${config.apiBase}/icons/${iconName}.png`;
+            }
+        }
 
     return { props: app ? { app } : {}, revalidate: 3600 }
     } catch(err) {

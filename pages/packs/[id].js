@@ -283,6 +283,9 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
+  const { getRuntimeConfig } = require('../../utils/runtimeConfig');
+  const config = await getRuntimeConfig();
+
   try {
     let { response: pack } = await fetchWinstallAPI(`/packs/${params.id}`);
 
@@ -306,6 +309,15 @@ export async function getStaticProps({ params }) {
 
     let appsList = pack.apps;
 
+    const transformIcon = (app) => {
+      if (app && app.icon && config.apiBase && !app.icon.startsWith('http')) {
+        const iconName = app.icon.replace('.png', '');
+        app.iconUrl = `${config.apiBase}/icons/next/${iconName}.webp`;
+        app.iconPng = `${config.apiBase}/icons/${iconName}.png`;
+      }
+      return app;
+    };
+
     const getIndividualApps = appsList.map(async (app, index) => {
       return new Promise(async (resolve) => {
 
@@ -315,6 +327,10 @@ export async function getStaticProps({ params }) {
 
 
         if (error) appData = null;
+
+        if (appData) {
+          appData = transformIcon(appData);
+        }
 
         appsList[index] = appData;
         resolve();

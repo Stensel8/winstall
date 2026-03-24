@@ -155,12 +155,12 @@ let SingleApp = ({ app, onVersionChange = false, large = false, showTime = false
         <h3>
           {large ? (
             <>
-              <AppIcon id={app._id} name={app.name} icon={app.icon} />
+              <AppIcon id={app._id} name={app.name} icon={app.icon} iconUrl={app.iconUrl} iconPng={app.iconPng} />
               Install {app.name} with winget
             </>
           ) : (
             <Link href="/apps/[id]" as={`/apps/${app._id}`} prefetch={false}>
-              <AppIcon id={app._id} name={app.name} icon={app.icon} />
+              <AppIcon id={app._id} name={app.name} icon={app.icon} iconUrl={app.iconUrl} iconPng={app.iconPng} />
               <p>{app.name}</p>
             </Link>
           )}

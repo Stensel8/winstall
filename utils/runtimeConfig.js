@@ -1,6 +1,6 @@
 export const getRuntimeConfig = async () => {
   if (typeof window === 'undefined') {
-    // Server-side: use env directly
+    // Server-side: getStaticProps and direct API access
     return {
       apiBase: process.env.WINSTALL_API_BASE || '',
       apiKey: process.env.WINSTALL_API_KEY || '',
@@ -8,9 +8,10 @@ export const getRuntimeConfig = async () => {
     };
   }
 
-  // Client-side: use universal proxy (no credentials needed)
+  // Client-side: fetchWinstallAPI calls this but uses proxy, apiBase not used
+  // Return empty for safety - icons pre-rendered, API calls go through proxy
   return {
-    apiBase: '/api/winstall',
+    apiBase: '',
     apiKey: '',
     apiSecret: '',
   };

@@ -10,13 +10,19 @@ import { getRuntimeConfig } from "./runtimeConfig";
 const fetchWinstallAPI = async (path, givenOptions, throwErr) => {
   const config = await getRuntimeConfig();
 
-  // Skip API calls if no API configured
-  if (!config.apiBase) {
+  // Client-side routing logic:
+  // - All client requests go through proxy (/api/winstall)
+  // - Server-side: direct API access with auth headers
+  const isClientSide = typeof window !== 'undefined';
+  const useProxy = isClientSide;
+
+  // Client-side always uses proxy, doesn't need apiBase
+  if (!useProxy && !config.apiBase) {
     console.warn(`[fetchWinstallAPI] no API configured, skipping ${path}`);
     return { response: null, error: null };
   }
 
-  const url = `${config.apiBase}${path}`;
+  const url = useProxy ? `/api/winstall${path}` : `${config.apiBase}${path}`;
   const isDebug = process.env.WINSTALL_API_DEBUG === "1";
   const timeoutMs = Number(process.env.WINSTALL_API_TIMEOUT_MS || 15000);
   const method = givenOptions?.method || "GET";
@@ -41,8 +47,8 @@ const fetchWinstallAPI = async (path, givenOptions, throwErr) => {
 
     const headers = { ...headerOptions };
 
-    // Only add auth headers on server-side (client uses proxy)
-    if (typeof window === 'undefined' && config.apiKey && config.apiSecret) {
+    // Only add auth headers on server-side (client uses proxy for authenticated requests)
+    if (!isClientSide && config.apiKey && config.apiSecret) {
       headers.AuthKey = config.apiKey;
       headers.AuthSecret = config.apiSecret;
     }
