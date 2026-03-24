@@ -33,7 +33,8 @@ function UserProfile({ uid }) {
   }, []);
 
   const getPacks = async (id, cache = true) => {
-    const response = await fetch(`/api/packs/users/${uid}?cache=${cache}`)
+    const endpoint = cache ? 'users' : 'profile';
+    const response = await fetch(`/api/winstall/packs/${endpoint}/${uid}`)
       .then(res => res.json());
 
     if (response && !response.error) {

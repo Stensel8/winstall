@@ -39,12 +39,16 @@ const fetchWinstallAPI = async (path, givenOptions, throwErr) => {
       console.log(`[fetchWinstallAPI] request ${method} ${url} (timeout ${timeoutMs}ms)`);
     }
 
+    const headers = { ...headerOptions };
+
+    // Only add auth headers on server-side (client uses proxy)
+    if (typeof window === 'undefined' && config.apiKey && config.apiSecret) {
+      headers.AuthKey = config.apiKey;
+      headers.AuthSecret = config.apiSecret;
+    }
+
     const res = await fetch(url, {
-      headers: {
-        AuthKey: config.apiKey,
-        AuthSecret: config.apiSecret,
-        ...headerOptions,
-      },
+      headers,
       ...additionalOptions,
       redirect: "follow",
       signal: controller.signal,

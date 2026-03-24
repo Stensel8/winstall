@@ -1,5 +1,3 @@
-let cachedConfig = null;
-
 export const getRuntimeConfig = async () => {
   if (typeof window === 'undefined') {
     // Server-side: use env directly
@@ -10,20 +8,10 @@ export const getRuntimeConfig = async () => {
     };
   }
 
-  // Client-side: fetch once and cache
-  if (cachedConfig) return cachedConfig;
-
-  try {
-    const res = await fetch('/api/config');
-    if (res.ok) {
-      cachedConfig = await res.json();
-      return cachedConfig;
-    }
-  } catch (err) {
-    console.error('[runtimeConfig] Failed to fetch config:', err);
-  }
-
-  // Fallback to empty
-  cachedConfig = { apiBase: '', apiKey: '', apiSecret: '' };
-  return cachedConfig;
+  // Client-side: use universal proxy (no credentials needed)
+  return {
+    apiBase: '/api/winstall',
+    apiKey: '',
+    apiSecret: '',
+  };
 };
