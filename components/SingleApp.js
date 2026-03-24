@@ -91,7 +91,7 @@ let SingleApp = ({ app, onVersionChange = false, large = false, showTime = false
   };
 
 
-  if (!app && !app.img || !app.name) return <></>;
+  if (!app || !app.name) return <></>;
 
   let VersionSelector = () => {
     console.assert(app.versions);
@@ -250,8 +250,8 @@ let SingleApp = ({ app, onVersionChange = false, large = false, showTime = false
             >
               <FiDownload />
               Download{" "}
-              {app.versions[0].installerType
-                ? `(.${app.versions[0].installerType.toLowerCase()})`
+              {app.versions.find((i) => i.version === app.selectedVersion).installerType
+                ? `(.${app.versions.find((i) => i.version === app.selectedVersion).installerType.toLowerCase()})`
                 : ""}
             </a>
           </li>
