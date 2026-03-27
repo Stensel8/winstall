@@ -14,7 +14,7 @@ import {
   FiArrowRightCircle,
 } from "react-icons/fi";
 
-import Router from "next/router";
+import { useRouter } from "next/router";
 import fetchWinstallAPI from "../utils/fetchWinstallAPI";
 import Error from "../components/Error";
 import DonateCard from "../components/DonateCard";
@@ -22,6 +22,7 @@ import DonateCard from "../components/DonateCard";
 function Store({ data, error }) {
   if (error) return <Error title="Oops!" subtitle={error} />;
 
+  const router = useRouter();
   const [apps, setApps] = useState([]);
   const [searchInput, setSearchInput] = useState();
   const [sort, setSort] = useState();
@@ -31,6 +32,7 @@ function Store({ data, error }) {
   const [currentOffset, setCurrentOffset] = useState(0);
   const [clientError, setClientError] = useState("");
   const [apiBase, setApiBase] = useState("");
+  const [loadedPage, setLoadedPage] = useState(null);
 
   const appsPerPage = 60;
   const totalPages = totalKnown ? Math.ceil(total / appsPerPage) : 0;
@@ -92,7 +94,7 @@ function Store({ data, error }) {
 
     const normalized = normalizeAppsPayload(response);
     if (normalized.items.length) {
-      applySort(normalized.items, Router.query.sort || "update-desc");
+      applySort(normalized.items, router.query.sort || "update-desc");
 
       // Transform icons to full URLs for client-side pagination
       if (apiBase) {
@@ -109,6 +111,7 @@ function Store({ data, error }) {
     setTotal(normalized.total);
     setTotalKnown(normalized.totalKnown);
     setCurrentOffset(normalized.offset);
+    setLoadedPage(targetPage);
   };
 
   useEffect(() => {
@@ -120,10 +123,10 @@ function Store({ data, error }) {
 
     // Default to showing most recently updated first to entice Google to index
     // them, and to demonstrate to users that the site is being kept up-to-date.
-    let sortOrder = Router.query.sort || "update-desc";
+    let sortOrder = router.query.sort || "update-desc";
     setSort(sortOrder);
 
-    const initialPage = parseInt(Router.query.page) || 1;
+    const initialPage = parseInt(router.query.page) || 1;
     setPage(initialPage);
 
     const normalized = normalizeAppsPayload(data);
@@ -133,6 +136,7 @@ function Store({ data, error }) {
       setTotal(normalized.total);
       setTotalKnown(normalized.totalKnown);
       setCurrentOffset(normalized.offset);
+      setLoadedPage(1);
     }
 
     let handlePagination = (e) => {
@@ -151,24 +155,43 @@ function Store({ data, error }) {
       }
     };
 
-    document.addEventListener("keydown", handlePagination);
+    const handleRouteChange = () => {
+      const urlPage = parseInt(router.query.page) || 1;
+      if (urlPage !== page) {
+        setPage(urlPage);
+      }
+    };
 
-    return () => document.removeEventListener("keydown", handlePagination);
+    document.addEventListener("keydown", handlePagination);
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      document.removeEventListener("keydown", handlePagination);
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (page === 1 && apps.length > 0) return;
+    if (loadedPage === page) return;
     loadPage(page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
+
+  useEffect(() => {
+    const urlPage = parseInt(router.query.page) || 1;
+    if (urlPage !== page) {
+      setPage(urlPage);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query.page]);
 
   let handleNext = () => {
     window.scrollTo(0, 0);
     const nextPage = page + 1;
     setPage(nextPage);
 
-    Router.replace({
+    router.replace({
       pathname: "/apps",
       query: {
         page: nextPage,
@@ -181,7 +204,7 @@ function Store({ data, error }) {
     const previousPage = Math.max(1, page - 1);
     setPage(previousPage);
 
-    Router.replace({
+    router.replace({
       pathname: "/apps",
       query: {
         page: previousPage,
