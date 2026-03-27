@@ -25,11 +25,12 @@
     }
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "build:docker": "STANDALONE_BUILD=true next build",
     "start": "next start",
-    "start:standalone": "node .next/standalone/server.js"
+    "start:standalone": "node .next/standalone/server.js",
+    "lint": "next lint"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
