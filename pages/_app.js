@@ -18,6 +18,31 @@ function winstall({ Component, pageProps: { session, ...pageProps } }) {
 
   useEffect(() => {
     checkTheme();
+
+    // Force Service Worker update on app load (production only)
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((registration) => {
+          // Force check for updates
+          registration.update();
+
+          // Listen for new service worker waiting to activate
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (newWorker) {
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  // New SW is ready, skip waiting
+                  newWorker.postMessage({ type: 'SKIP_WAITING' });
+                  // Reload page to activate
+                  window.location.reload();
+                }
+              });
+            }
+          });
+        });
+      });
+    }
   }, []);
 
   return (
