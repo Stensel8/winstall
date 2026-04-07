@@ -5,21 +5,38 @@ if (typeof window === 'undefined') {
 
 import "../styles/base.scss";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 import SelectedContext from "../ctx/SelectedContext";
 
 import { checkTheme } from "../utils/helpers";
+import { trackPageLoaded } from "../utils/gtm";
 import Nav from "../components/Nav";
 import SelectionBar from "../components/SelectionBar";
 import PopularContext from "../ctx/PopularContext";
 import { SessionProvider } from "next-auth/react";
 
 function winstall({ Component, pageProps: { session, ...pageProps } }) {
+  const router = useRouter();
+
   const [selectedApps, setSelectedApps] = useState([]);
   const selectedAppValue = { selectedApps, setSelectedApps };
 
   const [popular, setPopular] = useState([]);
   const popularApps = { popular, setPopular };
+
+  useEffect(() => {
+    // Track page views on route change
+    const handleRouteChange = (url) => {
+      trackPageLoaded(url);
+    };
+
+    router.events.on("routeChangeComplete", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
 
   useEffect(() => {
     checkTheme();
