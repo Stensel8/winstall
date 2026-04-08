@@ -408,7 +408,7 @@
     flex-direction: column;
     gap: 8px;
     z-index: 1000;
-    min-width: 260px;
+    min-width: 220px;
 
     .shareButton{
         display: flex;
@@ -442,7 +442,7 @@
         }
 
         span{
-            font-size: 16px;
+            font-size: 18px;
             text-align: left;
             white-space: nowrap;
         }
@@ -450,7 +450,7 @@
 
     .shareDivider{
         height: 1px;
-        background-color: var(--card-bg);
+        background-color: #E5E5E5;
         margin: 4px 0;
         opacity: 0.8;
     }

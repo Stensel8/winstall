@@ -455,7 +455,7 @@ const ShareCard = ({ app, shareCardRef }) => {
     <div className={styles.shareCard} ref={shareCardRef}>
       <button onClick={shareToTwitter} className={styles.shareButton}>
         <FaXTwitter size={24} />
-        <span>Twitter</span>
+        <span>X (Twitter)</span>
       </button>
       <button onClick={shareToFacebook} className={styles.shareButton}>
         <FaFacebook size={24} color="#1877F2" />
