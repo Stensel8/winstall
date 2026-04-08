@@ -187,6 +187,10 @@ input[type="text"].search {
       grid-template-columns: 50px 1fr 1fr;
       grid-gap: 20px;
 
+      a {
+        text-decoration: none;
+      }
+
       .clear {
         background-color: var(--card-bg);
         opacity: 0.75;
@@ -894,6 +898,6 @@ input[type="radio"] {
 
   svg{
     margin-top: 0px;
-    
+
   }
 }

@@ -1,4 +1,4 @@
-import {useState, useContext, useEffect} from "react";
+import {useState, useContext, useEffect, useRef} from "react";
 import styles from "../styles/singleApp.module.scss";
 import SelectedContext from "../ctx/SelectedContext";
 import Link from "next/link";
@@ -22,7 +22,9 @@ import {
   FiCopy,
   FiCheckCircle
 } from "react-icons/fi";
-
+import { FaFacebook, FaLinkedin } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import { IoIosLink } from "react-icons/io";
 
 import AppIcon from "./AppIcon";
 import { buildSiteUrl, compareVersion, timeAgo } from "../utils/helpers";
@@ -136,11 +138,27 @@ let SingleApp = ({ app, onVersionChange = false, large = false, showTime = false
     );
   };
 
-  const handleShare = () => {
-     const shareUrl = buildSiteUrl(`/apps/${app._id}`);
-     const link = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Checkout ${app.name} by ${app.publisher} on @winstallHQ:`)}&url=${encodeURIComponent(shareUrl)}`
+  const [showShareCard, setShowShareCard] = useState(false);
+  const shareCardRef = useRef(null);
 
-    window.open(link)
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (shareCardRef.current && !shareCardRef.current.contains(event.target)) {
+        setShowShareCard(false);
+      }
+    };
+
+    if (showShareCard) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showShareCard]);
+
+  const handleShare = () => {
+    setShowShareCard(!showShareCard);
   }
 
   return (
@@ -268,10 +286,18 @@ let SingleApp = ({ app, onVersionChange = false, large = false, showTime = false
             <FiPlus />
             {selected ? "Unselect" : "Select"} app
           </button>
-          <button className={`button ${styles.shareApp}`} onClick={handleShare}>
-            <FiShare2 />
-            Share
-          </button>
+          <div className={styles.shareContainer}>
+            <button className={`button ${styles.shareApp}`} onClick={handleShare}>
+              <FiShare2 />
+              Share
+            </button>
+            {showShareCard && (
+              <ShareCard
+                app={app}
+                shareCardRef={shareCardRef}
+              />
+            )}
+          </div>
         </div>
       )}
     </li>
@@ -392,6 +418,70 @@ const Tags = ({ tags }) => {
     </div>
   )
 }
+
+const ShareCard = ({ app, shareCardRef }) => {
+  const [copyStatus, setCopyStatus] = useState('idle');
+  const shareUrl = buildSiteUrl(`/apps/${app._id}`);
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopyStatus('copied');
+    } catch (error) {
+      setCopyStatus('failed');
+    }
+
+    setTimeout(() => {
+      setCopyStatus('idle');
+    }, 5000);
+  };
+
+  const shareToTwitter = () => {
+    const link = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Checkout ${app.name} by ${app.publisher} on @winstallHQ:`)}&url=${encodeURIComponent(shareUrl)}`;
+    window.open(link, '_blank');
+  };
+
+  const shareToFacebook = () => {
+    const link = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+    window.open(link, '_blank');
+  };
+
+  const shareToLinkedIn = () => {
+    const link = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+    window.open(link, '_blank');
+  };
+
+  return (
+    <div className={styles.shareCard} ref={shareCardRef}>
+      <button onClick={shareToTwitter} className={styles.shareButton}>
+        <FaXTwitter size={24} />
+        <span>X (Twitter)</span>
+      </button>
+      <button onClick={shareToFacebook} className={styles.shareButton}>
+        <FaFacebook size={24} color="#1877F2" />
+        <span>Facebook</span>
+      </button>
+      <button onClick={shareToLinkedIn} className={styles.shareButton}>
+        <FaLinkedin size={24} color="#0A66C2" />
+        <span>LinkedIn</span>
+      </button>
+      <div className={styles.shareDivider} />
+      <button
+        onClick={handleCopyLink}
+        className={`${styles.shareButton} ${copyStatus === 'failed' ? styles.shareButtonFailed : ''}`}
+      >
+        <IoIosLink size={24} />
+        <span>
+          {copyStatus === 'copied'
+            ? 'Link copied'
+            : copyStatus === 'failed'
+              ? 'Copy failed'
+              : 'Copy link'}
+        </span>
+      </button>
+    </div>
+  );
+};
 
 const Copy = ({ id, version, latestVersion }) => {
   const [showingCheck, setShowingCheck] = useState(false);
