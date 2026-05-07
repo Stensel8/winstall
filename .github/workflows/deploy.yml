@@ -1,0 +1,25 @@
+name: Deploy
+
+on:
+  push:
+    branches: ["main", "master"]
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Staging Server via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          script: |
+            cd winstall
+            git fetch --all
+            git reset --hard origin/${{ github.ref_name }}
+            npm install
+            npm run build
+            pm2 restart winstall
