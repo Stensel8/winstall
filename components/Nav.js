@@ -15,6 +15,7 @@ import {
   FiGrid,
   FiChevronDown,
   FiX,
+  FiZap,
 } from "react-icons/fi";
 
 import NProgress from "nprogress";
@@ -88,6 +89,10 @@ function Nav() {
       </div>
 
       <div className={styles.nav} ref={navRef}>
+        <Link href="/express">
+          <FiZap />
+          <p>Express Setup</p>
+        </Link>
         <Link href="/apps">
           <FiPackage />
           <p>Apps</p>
