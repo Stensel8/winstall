@@ -3,7 +3,7 @@
 .intro {
     padding-top: 50px;
     margin-bottom: 50px;
-    
+
     h1{
         max-width: 600px;
         font-size: 45px;
@@ -12,6 +12,13 @@
 
 p.lead {
     font-size: 150%;
+}
+
+.searchFilters {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    flex-wrap: wrap;
 }
 
 .selectedApps{
@@ -26,5 +33,10 @@ p.lead {
         textarea{
             width: auto !important;
         }
+    }
+
+    .searchFilters {
+        flex-direction: column;
+        align-items: stretch;
     }
 }

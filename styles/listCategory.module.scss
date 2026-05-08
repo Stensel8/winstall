@@ -1,0 +1,135 @@
+.categoryWrapper {
+  display: inline-block;
+  position: relative;
+}
+
+.categoryLabel {
+  display: block;
+  padding-bottom: 10px;
+}
+
+.categoryBox {
+  position: relative;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 50px;
+  height: 50px;
+  background-color: var(--card-bg);
+  display: inline-block;
+  line-height: 50px;
+  width: 260px;
+}
+
+.categoryButton {
+  height: 50px;
+  padding: 0 40px 0 20px;
+  border: 0;
+  outline: 0;
+  background-color: transparent;
+  border-radius: 50px;
+  cursor: pointer;
+  color: var(--textColor);
+  transition: 0.3s all ease-in-out;
+  -webkit-appearance: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  line-height: 50px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  width: 100%;
+
+  &:hover {
+    opacity: 0.75;
+  }
+
+  span {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+}
+
+.icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  background-color: var(--main-bg);
+  border-radius: 10px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 1000;
+  width: 260px;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 12px;
+  background-color: transparent;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s all ease-in-out;
+  color: var(--textColor);
+  outline: 0;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  text-align: left;
+
+  &:hover {
+    transform: translateY(-2px);
+    opacity: 0.75;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  span {
+    white-space: nowrap;
+  }
+}
+
+.selected {
+  background-color: var(--card-bg);
+}
+
+:global(.dark) .dropdown {
+  background-color: var(--card-bg);
+}
+
+:global(.dark) .selected {
+  background-color: var(--main-bg);
+}
+
+@media (max-width: 690px) {
+  .categoryWrapper {
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .categoryBox {
+    width: 100%;
+  }
+
+  .categoryButton {
+    width: 100%;
+  }
+
+  .dropdown {
+    width: 100%;
+  }
+}
