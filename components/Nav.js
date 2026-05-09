@@ -83,16 +83,30 @@ function Nav() {
 
   return (
     <header>
-      <div className={styles.brand}>
-        <Link href="/">winstall</Link>
-        {/* <span className="preview">&nbsp;(preview)</span> */}
+      <div className={styles.leftSection}>
+        <div className={styles.brand}>
+          <img
+            src="/assets/logo.svg"
+            alt="winstall logo"
+            width="48"
+            height="48"
+            draggable={false}
+          />
+          <span className={styles.brandText}>winstall</span>
+          {/* <span className="preview">&nbsp;(preview)</span> */}
+        </div>
+
+        <div className={styles.nav}>
+          <Link href="/" className={styles.mainLink}>
+            Discover App
+          </Link>
+          <Link href="/express" className={styles.mainLink}>
+            Express Setup
+          </Link>
+        </div>
       </div>
 
-      <div className={styles.nav} ref={navRef}>
-        <Link href="/express">
-          <FiZap />
-          <p>Express Setup</p>
-        </Link>
+      <div className={styles.profile} ref={navRef}>
         <Link href="/apps">
           <FiPackage />
           <p>Apps</p>

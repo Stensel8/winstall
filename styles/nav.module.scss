@@ -1,4 +1,76 @@
+.leftSection{
+    display: flex;
+    align-items: center;
+    gap: 48px;
+}
+
+.brand{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    img{
+        display: block;
+    }
+
+    .brandText{
+        font-weight: 700;
+        font-size: 28pt;
+        background: linear-gradient(to bottom, #6D1CDD, #FC3AA2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.2;
+    }
+
+    :global(.dark) &{
+        .brandText{
+            background: linear-gradient(to bottom, #6D1CDD, #FC3AA2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    }
+}
+
 .nav{
+    display: flex;
+    align-items: center;
+    gap: 32px;
+
+    .mainLink{
+        background: transparent !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        height: auto !important;
+        border-radius: 0 !important;
+        font-weight: 700;
+        font-size: 28px;
+        color: var(--accent);
+        border-bottom: 5px solid var(--textColor) !important;
+        line-height: 1.2;
+        text-decoration: none;
+
+        &:hover{
+            opacity: 1 !important;
+            border-bottom: 5px solid var(--accent) !important;
+        }
+    }
+
+    :global(.dark) &{
+        .mainLink{
+            color: var(--textColor);
+            border-bottom: 5px solid var(--accent) !important;
+
+            &:hover{
+                color: var(--accent);
+            }
+        }
+    }
+}
+
+.profile{
     display: flex;
 
     .ddOnly{
@@ -14,7 +86,7 @@
         align-self: center;
         justify-content: center;
         border: 0px !important;
-        
+
         box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.25);
 
         &:hover{
@@ -25,7 +97,7 @@
     .justIcon{
         padding: 0px;
         width: 50px;
-        
+
         svg{
             padding-right: 0px;
         }
@@ -64,7 +136,7 @@
             border-radius: 50px;
             margin-right: 10px;
         }
-        
+
         svg{
             font-size: 18px;
             padding-right: 10px;
@@ -113,7 +185,7 @@
 
 
 @media(max-width: 590px){
-    .nav{
+    .profile{
         right: 30px !important;
     }
 }
@@ -124,7 +196,7 @@
         display: flex;
     }
 
-    .nav{
+    .profile{
         display: none;
         position: absolute;
         right: 55px;
@@ -157,7 +229,7 @@
 
         .justIcon{
             width: auto;
-            
+
             svg{
                 padding-right: 10px;
             }
