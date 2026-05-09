@@ -2,7 +2,7 @@ import styles from "../styles/home.module.scss";
 
 import categoryAppsList from "../data/categoryApps.json";
 
-import Search from "../components/Search";
+import CategorySearch from "../components/CategorySearch";
 import { ListCategory } from "../components/ListCategory";
 import Categories from "../components/Categories";
 import MetaTags from "../components/MetaTags";
@@ -27,6 +27,7 @@ const categoryNames = {
 
 function ExpressSetup({ error }) {
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchInput, setSearchInput] = useState("");
 
   if (error) {
     return <Error title="Oops!" subtitle={error} />;
@@ -52,7 +53,11 @@ function ExpressSetup({ error }) {
             <h1>Pick the apps you want</h1>
             <p className={styles.lead}>Here are the most popular apps, you can pick and install them instantly.</p>
             <div className={styles.searchFilters}>
-              <Search label="Search for apps" limit={4}/>
+              <CategorySearch
+                onFilter={(q) => setSearchInput(q)}
+                label="Search for apps"
+                placeholder={"Enter you search term here"}
+              />
               <ListCategory
                 categories={categoriesList}
                 defaultCategory="all"
@@ -76,12 +81,24 @@ function ExpressSetup({ error }) {
         // Filter by selected category
         if (selectedCategory !== "all" && key !== selectedCategory) return null;
 
+        // Filter apps by search input
+        let filteredApps = apps;
+        if (searchInput && searchInput.trim()) {
+          const searchTerm = searchInput.toLowerCase().trim();
+          filteredApps = apps.filter(app => 
+            app.name && app.name.toLowerCase().includes(searchTerm)
+          );
+        }
+
+        // Skip categories with no matching apps
+        if (filteredApps.length === 0) return null;
+
         const categoryName = categoryNames[key] || key;
 
         return (
           <Categories
             key={key}
-            apps={apps}
+            apps={filteredApps}
             category={categoryName}
           />
         );

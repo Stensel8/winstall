@@ -1,17 +1,17 @@
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import { FiSearch, FiHelpCircle } from "react-icons/fi";
+
 import styles from "../styles/search.module.scss";
 
 import SingleApp from "../components/SingleApp";
 import ListPackages from "../components/ListPackages";
 import fetchWinstallAPI from "../utils/fetchWinstallAPI";
 
-import { FiSearch, FiHelpCircle } from "react-icons/fi";
-import { useRouter } from "next/router";
-
 function Search({ onSearch, label, placeholder, preventGlobalSelect, isPackView, alreadySelected=[], limit=-1}) {
+  const router = useRouter();
   const [results, setResults] = useState([])
   const [searchInput, setSearchInput] = useState("");
-  const router = useRouter();
   const [urlQuery, setUrlQuery] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [apiBase, setApiBase] = useState("");
