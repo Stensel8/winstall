@@ -85,7 +85,7 @@ function ExpressSetup({ error }) {
         let filteredApps = apps;
         if (searchInput && searchInput.trim()) {
           const searchTerm = searchInput.toLowerCase().trim();
-          filteredApps = apps.filter(app => 
+          filteredApps = apps.filter(app =>
             app.name && app.name.toLowerCase().includes(searchTerm)
           );
         }

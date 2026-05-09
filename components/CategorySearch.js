@@ -7,7 +7,7 @@ function CategorySearch({ onFilter, label, placeholder }) {
 
   useEffect(() => {
     if (input === undefined || input === null) return;
-    
+
     const timer = setTimeout(() => {
       if (onFilter) onFilter(input);
     }, 300);

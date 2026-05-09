@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import styles from "../styles/categoryApp.module.scss";
 import SelectedContext from "../ctx/SelectedContext";
-import Link from "next/link";
 
 let CategoryApp = ({ app }) => {
   const [selected, setSelected] = useState(false);
@@ -66,15 +65,16 @@ let CategoryApp = ({ app }) => {
   return (
     <li
       key={app._id}
-      className={`${styles.app} ${selected ? styles.selected : ""}`}>
-      <Link href="/apps/[id]" as={`/apps/${app._id}`} prefetch={false}>
-        <div className={styles.appContent}>
-          <div className={styles.iconContainer}>
-            <AppIconElement />
-          </div>
-          <h3 className={styles.appName}>{app.name}</h3>
+      className={`${styles.app} ${selected ? styles.selected : ""}`}
+      onClick={handleAppSelect}
+      style={{ cursor: 'pointer' }}
+    >
+      <div className={styles.appContent}>
+        <div className={styles.iconContainer}>
+          <AppIconElement />
         </div>
-      </Link>
+        <h3 className={styles.appName}>{app.name}</h3>
+      </div>
     </li>
   );
 };
