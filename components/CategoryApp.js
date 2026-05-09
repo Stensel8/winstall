@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
 import styles from "../styles/categoryApp.module.scss";
 import SelectedContext from "../ctx/SelectedContext";
+import AppIcon from "./AppIcon";
 
 let CategoryApp = ({ app }) => {
   const [selected, setSelected] = useState(false);
-  const [imgError, setImgError] = useState(false);
   const { selectedApps, setSelectedApps } = useContext(SelectedContext);
 
   useEffect(() => {
@@ -30,48 +30,23 @@ let CategoryApp = ({ app }) => {
 
   if (!app) return <></>;
 
-  const AppIconElement = () => {
-    if (!app.img || imgError) {
-      return (
-        <img
-          src="/generic-app-icon.svg"
-          alt="Package icon"
-          draggable={false}
-          width="25"
-          height="25"
-        />
-      );
-    }
-
-    return (
-      <picture>
-        <source srcSet={`/assets/apps/${app.img}`} type="image/webp" />
-        <source
-          srcSet={`/assets/apps/fallback/${app.img.replace("webp", "png")}`}
-          type="image/png"
-        />
-        <img
-          src={`/assets/apps/fallback/${app.img.replace("webp", "png")}`}
-          alt={`Logo for ${app.name}`}
-          draggable={false}
-          width="25"
-          height="25"
-          onError={() => setImgError(true)}
-        />
-      </picture>
-    );
-  };
-
   return (
     <li
       key={app._id}
       className={`${styles.app} ${selected ? styles.selected : ""}`}
       onClick={handleAppSelect}
       style={{ cursor: 'pointer' }}
+      title={app.desc || app.name}
     >
       <div className={styles.appContent}>
         <div className={styles.iconContainer}>
-          <AppIconElement />
+          <AppIcon
+            id={app._id}
+            name={app.name}
+            icon={app.icon}
+            iconUrl={app.iconUrl}
+            iconPng={app.iconPng}
+          />
         </div>
         <h3 className={styles.appName}>{app.name}</h3>
       </div>

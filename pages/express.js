@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import styles from "../styles/home.module.scss";
 
 import categoryAppsList from "../data/categoryApps.json";
@@ -9,7 +11,7 @@ import MetaTags from "../components/MetaTags";
 
 import Footer from "../components/Footer";
 import Error from "../components/Error";
-import { useState } from "react";
+import fetchWinstallAPI from "../utils/fetchWinstallAPI";
 
 const categoryNames = {
   "all": "All",
@@ -25,7 +27,7 @@ const categoryNames = {
   "utilities": "Utilities"
 };
 
-function ExpressSetup({ error }) {
+function ExpressSetup({ error, categoryApps }) {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchInput, setSearchInput] = useState("");
 
@@ -33,10 +35,13 @@ function ExpressSetup({ error }) {
     return <Error title="Oops!" subtitle={error} />;
   }
 
+  // Use enriched data if available, fallback to static data
+  const appsData = categoryApps || categoryAppsList;
+
   // Prepare categories list for ListCategory component
   const categoriesList = [
     { key: "all", name: categoryNames["all"] },
-    ...Object.entries(categoryAppsList)
+    ...Object.entries(appsData)
       .filter(([key, apps]) => Array.isArray(apps) && apps.length > 0)
       .map(([key, apps]) => ({
         key,
@@ -75,7 +80,7 @@ function ExpressSetup({ error }) {
         </div>
       </div>
 
-      {Object.entries(categoryAppsList).map(([key, apps]) => {
+      {Object.entries(appsData).map(([key, apps]) => {
         if (!Array.isArray(apps) || apps.length === 0) return null;
 
         // Filter by selected category
@@ -110,8 +115,50 @@ function ExpressSetup({ error }) {
 }
 
 export async function getStaticProps(){
+  const { getRuntimeConfig } = require('../utils/runtimeConfig');
+  const config = await getRuntimeConfig();
+  const apiBase = config.apiBase;
+
+  // Enrich category apps with full data from API
+  const enrichedCategories = {};
+
+  for (const [category, apps] of Object.entries(categoryAppsList)) {
+    if (!Array.isArray(apps) || apps.length === 0) {
+      enrichedCategories[category] = apps;
+      continue;
+    }
+
+    const enrichedApps = await Promise.all(
+      apps.map(async (entry) => {
+        const { response: appData } = await fetchWinstallAPI(`/apps/${entry._id}?exclude=versions`);
+
+        if (!appData) {
+          return entry;
+        }
+
+        // Transform icons to full URLs using apiBase
+        if (apiBase && appData.icon && !appData.icon.startsWith('http') && !appData.iconUrl) {
+          const iconName = appData.icon.replace('.png', '');
+          appData.iconUrl = `${apiBase}/icons/next/${iconName}.webp`;
+          appData.iconPng = `${apiBase}/icons/${iconName}.png`;
+        }
+
+        return {
+          ...appData,
+          _id: entry._id,
+          img: entry.img, // Keep as fallback for popularApps matching
+        };
+      })
+    );
+
+    enrichedCategories[category] = enrichedApps.filter(Boolean);
+  }
+
   return {
-    props: {}
+    props: {
+      categoryApps: enrichedCategories
+    },
+    revalidate: 3600 // Revalidate every hour
   };
 }
 
