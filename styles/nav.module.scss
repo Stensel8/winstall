@@ -38,6 +38,12 @@
     align-items: center;
     gap: 32px;
 
+    .linkWithTag{
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
     .mainLink{
         background: transparent !important;
         box-shadow: none !important;
@@ -55,8 +61,13 @@
 
         &:hover{
             color: var(--accent) !important;
-            border-bottom: 5px solid #000 !important;
+            border-bottom: 4px solid #000 !important;
         }
+    }
+
+    .newTag{
+        width: 47px;
+        height: 22px;
     }
 
     :global(.dark) &{
@@ -65,7 +76,7 @@
 
             &:hover{
                 color: var(--accent) !important;
-                border-bottom: 5px solid #fff !important;
+                border-bottom: 4px solid #fff !important;
             }
         }
     }

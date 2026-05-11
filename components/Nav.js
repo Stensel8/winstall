@@ -9,12 +9,9 @@ import {
   FiMoon,
   FiSun,
   FiPackage,
-  FiTwitter,
   FiLogOut,
-  FiGrid,
   FiChevronDown,
   FiX,
-  FiZap,
 } from "react-icons/fi";
 
 import NProgress from "nprogress";
@@ -99,9 +96,12 @@ function Nav() {
           <Link href="/" className={styles.mainLink}>
             Discover App
           </Link>
-          <Link href="/express" className={styles.mainLink}>
-            Express Setup
-          </Link>
+          <span className={styles.linkWithTag}>
+            <Link href="/express" className={styles.mainLink}>
+              Express Setup
+            </Link>
+            <img src="/tag_new.svg" alt="new" className={styles.newTag} />
+          </span>
         </div>
       </div>
 
