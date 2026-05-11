@@ -47,24 +47,25 @@
         border-radius: 0 !important;
         font-weight: 700;
         font-size: 28px;
-        color: var(--accent);
-        border-bottom: 5px solid var(--textColor) !important;
+        color: #000;
+        border-bottom: 5px solid transparent !important;
         line-height: 1.2;
         text-decoration: none;
+        transition: all 0.3s ease;
 
         &:hover{
-            opacity: 1 !important;
-            border-bottom: 5px solid var(--accent) !important;
+            color: var(--accent) !important;
+            border-bottom: 5px solid #000 !important;
         }
     }
 
     :global(.dark) &{
         .mainLink{
-            color: var(--textColor);
-            border-bottom: 5px solid var(--accent) !important;
+            color: #fff;
 
             &:hover{
-                color: var(--accent);
+                color: var(--accent) !important;
+                border-bottom: 5px solid #fff !important;
             }
         }
     }
