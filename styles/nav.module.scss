@@ -54,14 +54,23 @@
         font-weight: 700;
         font-size: 28px;
         color: #000;
-        border-bottom: 5px solid transparent !important;
+        border-bottom: 4px solid transparent !important;
         line-height: 1.2;
         text-decoration: none;
         transition: all 0.3s ease;
 
         &:hover{
             color: var(--accent) !important;
+            border-bottom: 4px solid var(--accent) !important;
+        }
+
+        &.selected{
+            color: var(--accent);
             border-bottom: 4px solid #000 !important;
+
+            &:hover{
+                border-bottom: 4px solid var(--accent) !important;
+            }
         }
     }
 
@@ -76,7 +85,16 @@
 
             &:hover{
                 color: var(--accent) !important;
+                border-bottom: 4px solid var(--accent) !important;
+            }
+
+            &.selected{
+                color: var(--accent);
                 border-bottom: 4px solid #fff !important;
+
+                &:hover{
+                    border-bottom: 4px solid var(--accent) !important;
+                }
             }
         }
     }

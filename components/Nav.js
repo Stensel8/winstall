@@ -31,6 +31,8 @@ Router.onRouteChangeError = () => {
 function Nav() {
   const [ddShown, setDDShown] = useState(false);
   const navRef = useRef(null);
+  const router = useRouter();
+  const pathname = router.pathname;
 
   let handleClickOut = (e) => {
     if (navRef.current && !navRef.current.contains(e.target)) {
@@ -93,11 +95,17 @@ function Nav() {
         </div>
 
         <div className={styles.nav}>
-          <Link href="/" className={styles.mainLink}>
+          <Link
+            href="/"
+            className={`${styles.mainLink} ${(pathname === '/' || pathname === '') ? styles.selected : ''}`}
+          >
             Discover App
           </Link>
           <span className={styles.linkWithTag}>
-            <Link href="/express" className={styles.mainLink}>
+            <Link
+              href="/express"
+              className={`${styles.mainLink} ${pathname === '/express' ? styles.selected : ''}`}
+            >
               Express Setup
             </Link>
             <img src="/tag_new.svg" alt="new" className={styles.newTag} />
