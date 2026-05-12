@@ -305,13 +305,13 @@ let SingleApp = ({ app, onVersionChange = false, large = false, showTime = false
 };
 
 const Description = ({ name, desc, id, full }) => {
-  const [descTrimmed, setDescTrimmed] = useState(desc.length > 140);
+  const [descTrimmed, setDescTrimmed] = useState(desc ? desc.length > 140 : false);
   const router = useRouter();
 
   let toggleDescription = (e, status) => {
     e.stopPropagation();
 
-    if(desc.length > 340){
+    if(desc && desc.length > 340){
       router.push('/apps/[id]', `/apps/${id}`)
       return;
     };

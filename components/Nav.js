@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/router";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 
@@ -10,9 +9,7 @@ import {
   FiMoon,
   FiSun,
   FiPackage,
-  FiTwitter,
   FiLogOut,
-  FiGrid,
   FiChevronDown,
   FiX,
 } from "react-icons/fi";
@@ -34,6 +31,8 @@ Router.onRouteChangeError = () => {
 function Nav() {
   const [ddShown, setDDShown] = useState(false);
   const navRef = useRef(null);
+  const router = useRouter();
+  const pathname = router.pathname;
 
   let handleClickOut = (e) => {
     if (navRef.current && !navRef.current.contains(e.target)) {
@@ -82,16 +81,43 @@ function Nav() {
 
   return (
     <header>
-      <div className={styles.brand}>
-        <Link href="/">winstall</Link>
-        {/* <span className="preview">&nbsp;(preview)</span> */}
+      <div className={styles.leftSection}>
+        <div className={styles.brand}>
+          <img
+            src="/assets/logo.svg"
+            alt="winstall logo"
+            width="48"
+            height="48"
+            draggable={false}
+          />
+          <span className={styles.brandText}>winstall</span>
+          {/* <span className="preview">&nbsp;(preview)</span> */}
+        </div>
+
+        <div className={styles.nav}>
+          <Link
+            href="/"
+            className={`${styles.mainLink} ${(pathname === '/' || pathname === '') ? styles.selected : ''}`}
+          >
+            Discover App
+          </Link>
+          <span className={styles.linkWithTag}>
+            <Link
+              href="/express"
+              className={`${styles.mainLink} ${pathname === '/express' ? styles.selected : ''}`}
+            >
+              Express Setup
+            </Link>
+            <img src="/tag_new.svg" alt="new" className={styles.newTag} />
+          </span>
+        </div>
       </div>
 
-      <div className={styles.nav} ref={navRef}>
-        <Link href="/apps">
+      <div className={styles.profile} ref={navRef}>
+        {/* <Link href="/apps">
           <FiPackage />
           <p>Apps</p>
-        </Link>
+        </Link> */}
         {/* <a
           href="https://ko-fi.com/mehedi"
           target="_blank"
