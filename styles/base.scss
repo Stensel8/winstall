@@ -183,9 +183,9 @@ input[type="text"].search {
     }
 
     .controls {
-      display: grid;
-      grid-template-columns: 50px 1fr 1fr;
-      grid-gap: 20px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
 
       a {
         text-decoration: none;
@@ -196,6 +196,8 @@ input[type="text"].search {
         opacity: 0.75;
         padding: 0 5px;
         justify-content: center;
+        flex-shrink: 0;
+        width: 50px;
 
         svg {
           padding: 0px;
@@ -212,7 +214,6 @@ input[type="text"].search {
       border: 0px;
       outline: 0px;
       height: 50px;
-      margin-top: 11px;
       font-size: 18px;
       border-radius: 50px;
       padding: 0 20px;
@@ -404,8 +405,7 @@ article {
     }
 
     .controls {
-      grid-template-columns: 1fr 1fr 50px !important;
-      grid-gap: 10px !important;
+      gap: 10px !important;
     }
 
     p,

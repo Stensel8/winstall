@@ -49,6 +49,10 @@ function SelectionBar({ router }) {
                 </button>
               </Link>
             )}
+            <button>
+              <img src="/assets/ic_install.svg" alt="Install" style={{ width: '1em', height: '1em', marginRight: '0.5em' }} />
+              Install
+            </button>
             <Link href="/generate">
               <button>
                 <FiCodepen />
