@@ -24,6 +24,7 @@ const InstallerExport = ({ apps, filters = {} }) => {
         if (filters["--force"]) options["--force"] = null;
 
         const payload = {
+            version: "0.0.1",
             apps: appsPayload,
             options
         };
