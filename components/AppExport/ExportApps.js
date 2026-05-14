@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import styles from "../../styles/exportApps.module.scss";
 import generateWingetImport from "../../utils/generateWingetImport";
 import GenericExport from "./GenericExport";
+import InstallerExport from "./InstallerExport";
 import AdvancedConfig from "./AdvancedConfig";
 
 const ExportApps = ({ apps, title, subtitle }) => {
@@ -10,10 +11,15 @@ const ExportApps = ({ apps, title, subtitle }) => {
   const [ wingetScript, setWingetScript ] = useState("");
   const [ filters, setFilters ] = useState({});
   const [ wingetImportCommand, setWingetImportCommand ] = useState("");
-  const [active, setActive] = useState(".bat");
+  const [active, setActive] = useState(".installer");
 
   const tabs = useMemo(() => {
         return [
+            {
+                title: "Download Installer",
+                key: ".installer",
+                element: <InstallerExport apps={apps} />
+            },
             {
                 title: "Batch",
                 key: ".bat",
@@ -52,7 +58,7 @@ const ExportApps = ({ apps, title, subtitle }) => {
         if(filters["-o"]) advancedFilters += ` -o "${filters["-o"]}"`;
         if(filters["-l"]) advancedFilters += ` -l "${filters["-l"]}"`;
         if(filters["--scope"]) advancedFilters += ` --scope "${filters["--scope"]}"`;
-    } 
+    }
 
     apps.map((app) => {
       installs.push(
@@ -110,7 +116,7 @@ const ExportApps = ({ apps, title, subtitle }) => {
                 <h3>{title}</h3>
             </div>
         )}
-      
+
         { subtitle && <p>{subtitle}</p> }
 
         <ul className={styles.tabHeader}>
@@ -123,7 +129,7 @@ const ExportApps = ({ apps, title, subtitle }) => {
 
         { tabs.map((tab, index) => {
             return <section key={index} className={ tab.key === active ? styles.displaySection : styles.hideSection }>{ tab.element }</section>
-        }) }  
+        }) }
 
     </div>
   )
