@@ -106,7 +106,38 @@
       "img": "xmind.webp"
     }
   ],
-  "documents": [],
+  "documents": [
+    {
+      "_id": "Microsoft.Office",
+      "name": "Microsoft 365",
+      "img": "office.webp"
+    },
+    {
+      "_id": "Adobe.Acrobat.Reader.64-bit",
+      "name": "Adobe Acrobat Reader DC",
+      "img": "acrobat.webp"
+    },
+    {
+      "_id": "Foxit.FoxitReader.Inno",
+      "name": "Foxit Reader",
+      "img": "foxit.webp"
+    },
+    {
+      "_id": "Kingsoft.WPSOffice",
+      "name": "WPS Office",
+      "img": "wps.webp"
+    },
+    {
+      "_id": "TheDocumentFoundation.LibreOffice",
+      "name": "LibreOffice",
+      "img": "libreoffice.webp"
+    },
+    {
+      "_id": "AcroSoftware.CutePDFWriter",
+      "name": "CutePDF Writer",
+      "img": "cutepdf.webp"
+    }
+  ],
   "collaboration": [
     {
       "_id": "Splashtop.SplashtopBusiness",
@@ -148,14 +179,69 @@
   ],
   "development": [
     {
+      "_id": "Microsoft.PowerToys",
+      "name": "PowerToys",
+      "img": "powertoys.webp"
+    },
+    {
+      "_id": "Python.PythonInstallManager",
+      "name": "Python Install Manager",
+      "img": "python.webp"
+    },
+    {
       "_id": "Microsoft.VisualStudioCode",
       "name": "Visual Studio Code",
       "img": "code.webp"
     },
     {
+      "_id": "Python.Python.3.14",
+      "name": "Python 3.14",
+      "img": "python.webp"
+    },
+    {
+      "_id": "Python.Python.3.13",
+      "name": "Python 3.13",
+      "img": "python.webp"
+    },
+    {
+      "_id": "Docker.DockerDesktop",
+      "name": "Docker Desktop",
+      "img": "docker.webp"
+    },
+    {
+      "_id": "Ngrok.Ngrok",
+      "name": "Ngrok",
+      "img": "ngrok.webp"
+    },
+    {
+      "_id": "Termius.Termius",
+      "name": "Termius",
+      "img": "termius.webp"
+    },
+    {
+      "_id": "Git.Git",
+      "name": "Git",
+      "img": "git.webp"
+    },
+    {
+      "_id": "PuTTY.PuTTY",
+      "name": "PuTTY",
+      "img": "putty.webp"
+    },
+    {
       "_id": "Notepad++.Notepad++",
       "name": "Notepad++",
       "img": "npp.webp"
+    },
+    {
+      "_id": "WinMerge.WinMerge",
+      "name": "WinMerge",
+      "img": "winmerge.webp"
+    },
+    {
+      "_id": "Anysphere.Cursor",
+      "name": "Cursor",
+      "img": "cursor.webp"
     }
   ],
   "entertainment": [
@@ -210,6 +296,114 @@
       "_id": "Google.EarthPro",
       "name": "Google Earth Pro",
       "img": "googleearthpro.webp"
+    }
+  ],
+  "security": [
+    {
+      "_id": "Bitwarden.Bitwarden",
+      "name": "Bitwarden",
+      "img": "bitwarden.webp"
+    },
+    {
+      "_id": "AgileBits.1Password",
+      "name": "1Password",
+      "img": "1password.webp"
+    },
+    {
+      "_id": "LastPass.LastPass",
+      "name": "LastPass",
+      "img": "lastpass.webp"
+    },
+    {
+      "_id": "ESET.Nod32",
+      "name": "ESET NOD32",
+      "img": "eset.webp"
+    },
+    {
+      "_id": "Malwarebytes.Malwarebytes",
+      "name": "Malwarebytes",
+      "img": "malwarebytes.webp"
+    },
+    {
+      "_id": "KeeperSecurity.KeeperDesktop",
+      "name": "Keeper",
+      "img": "keeper.webp"
+    }
+  ],
+  "game": [
+    {
+      "_id": "Valve.Steam",
+      "name": "Steam",
+      "img": "steam.webp"
+    },
+    {
+      "_id": "EpicGames.EpicGamesLauncher",
+      "name": "Epic Games Launcher",
+      "img": "epicgameslauncher.webp"
+    }
+  ],
+  "photo": [
+    {
+      "_id": "ByteDance.CapCut",
+      "name": "CapCut",
+      "img": "capcut.webp"
+    },
+    {
+      "_id": "OBSProject.OBSStudio",
+      "name": "OBS Studio",
+      "img": "obsstudio.webp"
+    },
+    {
+      "_id": "KDE.Krita",
+      "name": "Krita",
+      "img": "krita.webp"
+    },
+    {
+      "_id": "BlenderFoundation.Blender",
+      "name": "Blender",
+      "img": "blender.webp"
+    },
+    {
+      "_id": "dotPDN.PaintDotNet",
+      "name": "Paint.NET",
+      "img": "paintdotnet.webp"
+    },
+    {
+      "_id": "GIMP.GIMP.3",
+      "name": "GIMP",
+      "img": "gimp.webp"
+    },
+    {
+      "_id": "IrfanSkiljan.IrfanView",
+      "name": "IrfanView",
+      "img": "irfanview.webp"
+    },
+    {
+      "_id": "XnSoft.XnView.Classic",
+      "name": "XnView Classic",
+      "img": "xnviewclassic.webp"
+    },
+    {
+      "_id": "Inkscape.Inkscape",
+      "name": "Inkscape",
+      "img": "inkscape.webp"
+    },
+    {
+      "_id": "FastStone.Viewer",
+      "name": "FastStone Viewer",
+      "img": "faststoneviewer.webp"
+    }
+  ],
+  "screenshots": [
+    {
+      "_id": "ShareX.ShareX",
+      "name": "ShareX",
+      "img": "sharex.webp"
+    },
+    {
+      "_id": "Greenshot.Greenshot",
+      "name": "Greenshot",
+      "img": "greenshot.webp"
     }
   ]
 }

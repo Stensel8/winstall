@@ -24,7 +24,12 @@ const categoryNames = {
   "cloud_storage": "Cloud Storage & Sync",
   "development": "Developer Tools",
   "entertainment": "Media & Entertainment",
-  "utilities": "Utilities"
+  "utilities": "Utilities",
+  "security": "Security",
+  "game": "Game",
+  "photo": "Photo, Design & Video",
+  "screenshots": "Screenshots & Screen Recording",
+  "runtimes": "Runtimes",
 };
 
 function ExpressSetup({ error, categoryApps }) {
