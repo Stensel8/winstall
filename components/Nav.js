@@ -114,10 +114,10 @@ function Nav() {
       </div>
 
       <div className={styles.profile} ref={navRef}>
-        {/* <Link href="/apps">
+        <Link href="/apps">
           <FiPackage />
           <p>Apps</p>
-        </Link> */}
+        </Link>
         {/* <a
           href="https://ko-fi.com/mehedi"
           target="_blank"
