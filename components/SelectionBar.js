@@ -44,15 +44,19 @@ function SelectionBar({ router }) {
             </button>
             <Link href="/generate">
               <button>
-                <img src="/assets/ic_install.svg" alt="Install" style={{ width: '1em', height: '1em', marginRight: '0.5em' }} />
+                <img src="/assets/ic_install.svg" alt="Install" style={{ width: '20px', height: '20px', marginRight: '10px' }} />
                 Install
               </button>
             </Link>
             { twitterLoginEnabled && !hideCreatePack && (
               <Link href="/packs/create">
-                <button disabled={selectedApps.length >= 2 ? false : true}>
+                {/* <button disabled={selectedApps.length >= 2 ? false : true}>
                   <FiShare />
                   <em>{selectedApps.length >= 2 ? "Create Pack" : `Need ${Math.abs(2 - selectedApps.length)} more ${Math.abs(2 - selectedApps.length) === 1 ? "app" : "apps"} to create a pack.`}</em>
+                </button> */}
+                <button>
+                  <FiShare />
+                  <em>Add to Pack</em>
                 </button>
               </Link>
             )}
