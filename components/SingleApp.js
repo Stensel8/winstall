@@ -331,7 +331,7 @@ const Description = ({ name, desc, id, full }) => {
         {desc.length > 140
           ? !descTrimmed || full
             ? desc
-            : `${desc.substr(0, 140).replace(/(^[\s]+|[\s]+$)/g, "")}...`
+            : `${desc.slice(0, 140).trim()}...`
           : desc}
       </p>
 
