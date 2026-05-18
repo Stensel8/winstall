@@ -8,25 +8,31 @@ const InstallerExport = ({ apps, filters = {} }) => {
             return;
         }
 
+        const options = {};
+
+        // Handle silent/interactive (mutually exclusive, default is silent=true)
+        if (filters["-i"]) {
+            options.silent = false;
+        } else if (filters["-h"]) {
+            options.silent = true;
+        }
+
+        if (filters["--force"]) options.force = true;
+        if (filters["--scope"]) options.scope = filters["--scope"];
+        if (filters["-o"]) options.log = filters["-o"];
+        if (filters["-l"]) options.location = filters["-l"];
+        if (filters["--override"]) options.override = filters["--override"];
+
         const appsPayload = apps.map(app => ({
             name: app.name,
             id: app._id,
-            version: app.selectedVersion !== app.latestVersion ? app.selectedVersion : undefined
+            version: app.selectedVersion !== app.latestVersion ? app.selectedVersion : undefined,
+            options
         }));
-
-        const options = {};
-        if (filters["--scope"]) options["--scope"] = filters["--scope"];
-        if (filters["-o"]) options["-o"] = filters["-o"];
-        if (filters["-l"]) options["-l"] = filters["-l"];
-        if (filters["-i"]) options["-i"] = null;
-        if (filters["-h"]) options["-h"] = null;
-        if (filters["--override"]) options["--override"] = null;
-        if (filters["--force"]) options["--force"] = null;
 
         const payload = {
             version: "0.0.1",
-            apps: appsPayload,
-            options
+            apps: appsPayload
         };
 
         if (process.env.NODE_ENV === 'development') {
