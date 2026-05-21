@@ -4,13 +4,14 @@
   "private": true,
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1046.0",
+    "@aws-sdk/s3-request-presigner": "^3.1046.0",
     "@hello-pangea/dnd": "^18.0.1",
     "@serwist/next": "^9.5.7",
     "@serwist/precaching": "^9.5.7",
     "@serwist/sw": "^9.5.7",
     "jsonwebtoken": "^9.0.3",
     "next": "^15.5.15",
-    "next-auth": "^4.24.12",
+    "next-auth": "^4.24.14",
     "nprogress": "^0.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -18,11 +19,14 @@
     "react-icons": "^5.6.0",
     "react-loading-skeleton": "^3.5.0",
     "react-modal": "^3.16.3",
+    "redis": "^4.7.0",
     "tunnel": "^0.0.6",
-    "undici": "^7.24.6"
+    "undici": "^7.24.6",
+    "uuid": "^11.1.0"
   },
   "overrides": {
     "serialize-javascript": "^7.0.3",
+    "uuid": "^11.1.0",
     "next": {
       "react": "^18.3.1",
       "react-dom": "^18.3.1"
