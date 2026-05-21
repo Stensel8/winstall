@@ -90,7 +90,7 @@ const InstallerExport = ({ apps, filters = {} }) => {
             };
 
             if (process.env.NODE_ENV === 'development') {
-                console.log('Installing apps with payload:', JSON.stringify(configPayload, null, 2));
+                console.log('Installer config:', JSON.stringify(configPayload, null, 2));
             }
 
             const response = await fetch('/api/installer', {

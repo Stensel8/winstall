@@ -5,66 +5,62 @@ let redisInitialized = false;
 let s3Initialized = false;
 
 async function ensureClientsInitialized() {
-  if (!redisInitialized) {
-    await initRedisClient();
-    redisInitialized = true;
-  }
-  if (!s3Initialized) {
-    initS3Client();
-    s3Initialized = true;
-  }
+	if (!redisInitialized) {
+		await initRedisClient();
+		redisInitialized = true;
+	}
+	if (!s3Initialized) {
+		initS3Client();
+		s3Initialized = true;
+	}
 }
 
 export default async function handler(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+	if (req.method !== 'GET') {
+		return res.status(405).json({ error: 'Method not allowed' });
+	}
 
-  const { taskId } = req.query;
+	const { taskId } = req.query;
 
-  if (!taskId) {
-    return res.status(400).json({ error: 'taskId is required' });
-  }
+	if (!taskId) {
+		return res.status(400).json({ error: 'taskId is required' });
+	}
 
-  await ensureClientsInitialized();
+	await ensureClientsInitialized();
 
-  const redisClient = getClient();
-  const cacheKey = `installer:task:${taskId}`;
+	const redisClient = getClient();
+	const cacheKey = `installer:task:${taskId}`;
 
-  try {
-    const uploaded = await redisClient.get(cacheKey);
+	try {
+		const uploaded = await redisClient.get(cacheKey);
 
-    // Task not found in cache
-    if (uploaded === null) {
-      return res.status(404).json({ error: 'Task not found or expired' });
-    }
+		if (uploaded === null) {
+			return res.status(404).json({ error: 'Task not found or expired' });
+		}
 
-    // Task still processing (uploaded timestamp is 0)
-    if (uploaded === '0') {
-      const protocol = req.headers['x-forwarded-proto'] || (req.connection.encrypted ? 'https' : 'http');
-      const host = req.headers.host;
-      const statusUrl = `${protocol}://${host}/api/installer/status?taskId=${taskId}`;
+		if (uploaded === '0') {
+			const protocol = req.headers['x-forwarded-proto'] || (req.connection.encrypted ? 'https' : 'http');
+			const host = req.headers.host;
+			const statusUrl = `${protocol}://${host}/api/installer/status?taskId=${taskId}`;
 
-      return res.status(202).json({
-        message: 'Processing',
-        statusUrl,
-      });
-    }
+			return res.status(202).json({
+				message: 'Processing',
+				statusUrl,
+			});
+		}
 
-    // Task completed, generate download URL
-    const downloadUrl = await generateGetPresignedUrl(taskId, 3600);
+		const downloadUrl = await generateGetPresignedUrl(taskId, 3600);
 
-    if (!downloadUrl) {
-      return res.status(500).json({ error: 'S3 not configured, cannot generate download URL' });
-    }
+		if (!downloadUrl) {
+			return res.status(500).json({ error: 'S3 not configured, cannot generate download URL' });
+		}
 
-    return res.status(200).json({
-      downloadUrl,
-      uploadedAt: parseInt(uploaded, 10),
-    });
-
-  } catch (error) {
-    console.error('[Installer Status API] Error:', error);
-    return res.status(500).json({ error: error.message });
-  }
+		return res.status(200).json({
+			downloadUrl,
+			uploadedAt: parseInt(uploaded, 10),
+		});
+	} catch (error) {
+		console.error('[Installer Status API] Error:', error);
+		return res.status(500).json({ error: error.message });
+	}
 }
