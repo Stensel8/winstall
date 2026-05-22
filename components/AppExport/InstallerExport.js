@@ -17,7 +17,7 @@ const InstallerExport = ({ apps, filters = {} }) => {
 
     const pollStatus = async (statusUrl, timeoutMs = 300000) => {
         const startTime = Date.now();
-        const pollInterval = 2000;
+        const pollInterval = 1000;
 
         while (Date.now() - startTime < timeoutMs) {
             await new Promise(resolve => setTimeout(resolve, pollInterval));
