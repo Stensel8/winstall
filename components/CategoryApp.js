@@ -40,13 +40,25 @@ let CategoryApp = ({ app }) => {
     >
       <div className={styles.appContent}>
         <div className={styles.iconContainer}>
-          <AppIcon
-            id={app._id}
-            name={app.name}
-            icon={app.icon}
-            iconUrl={app.iconUrl}
-            iconPng={app.iconPng}
-          />
+          <picture>
+                <source srcSet={`/assets/apps/${app.img}`}
+                        type="image/webp" />
+                <source
+                srcSet={`/assets/apps/fallback/${app.img.replace(
+                    "webp",
+                    "png"
+                )}`}
+                type="image/png"
+                />
+                <img
+                src={`/assets/apps/fallback/${app.img.replace("webp", "png")}`}
+                alt={`Logo for ${app.name}`}
+                draggable={false}
+                // Specify the size to avoid Cumulative Layout Shift:
+                width="25"
+                height="25"
+                />
+            </picture>
         </div>
         <h3 className={styles.appName}>{app.name}</h3>
       </div>
