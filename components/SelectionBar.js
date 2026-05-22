@@ -3,7 +3,7 @@ import Link from 'next/link'
 import SelectedContext from "../ctx/SelectedContext";
 import { withRouter } from 'next/router'
 
-import { FiTrash, FiCodepen, FiShare } from "react-icons/fi";
+import { FiTrash, FiCodepen, FiShare, FiDownload } from "react-icons/fi";
 
 function SelectionBar({ router }) {
     const { selectedApps, setSelectedApps } = useContext(SelectedContext);
@@ -44,7 +44,7 @@ function SelectionBar({ router }) {
             </button>
             <Link href="/generate">
               <button>
-                <img src="/assets/ic_install.svg" alt="Install" style={{ width: '20px', height: '20px', marginRight: '10px' }} />
+                <FiDownload />
                 Install
               </button>
             </Link>
