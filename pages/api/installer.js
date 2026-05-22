@@ -36,24 +36,23 @@ export default async function handler(req, res) {
 	try {
 		await redisClient.setEx(cacheKey, 3600, '0');
 
-		const s3Result = await generatePutPresignedUrl(taskId, 900);
-
 		const protocol = req.headers['x-forwarded-proto'] || (req.connection.encrypted ? 'https' : 'http');
 		const host = req.headers.host;
-		const callbackUrl = `${protocol}://${host}/api/installer/callback?taskId=${taskId}`;
-		console.log('callbackUrl:', callbackUrl);
-
-		const uploadData = {};
 		const payload = {
-			upload: uploadData,
 			config: req.body.config,
 		};
 
-		if (s3Result) {
-			console.log('s3Key:', s3Result.key);
-			console.log('uploadUrl:', s3Result.url);
-			uploadData.upload_url = s3Result.url;
-			uploadData.callback_url = callbackUrl;
+		const uploadUrl = await generatePutPresignedUrl(taskId, 900);
+		if (uploadUrl) {
+			//console.log('S3 PutPresign:', JSON.stringify(uploadUrl));
+
+			const callbackUrl = `${protocol}://${host}/api/installer/callback?taskId=${taskId}`;
+			console.log('callbackUrl:', callbackUrl);
+
+			payload.upload = {
+				upload_url: uploadUrl,
+				callback_url: callbackUrl,
+			};
 		}
 
 		const url = `${installBase}/installer`;

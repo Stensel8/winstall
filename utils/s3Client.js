@@ -60,7 +60,7 @@ async function generatePutPresignedUrl(taskId, expiresIn = 900) {
   });
 
   const url = await getSignedUrl(s3Client, command, { expiresIn });
-  return { url, key };
+  return url;
 }
 
 async function generateGetPresignedUrl(taskId, expiresIn = 3600) {

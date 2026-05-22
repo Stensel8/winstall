@@ -50,10 +50,10 @@ export default async function handler(req, res) {
 		}
 
 		const downloadUrl = await generateGetPresignedUrl(taskId, 3600);
-
 		if (!downloadUrl) {
 			return res.status(500).json({ error: 'S3 not configured, cannot generate download URL' });
 		}
+		console.log('S3 GetPresign:', JSON.stringify(downloadUrl));
 
 		return res.status(200).json({
 			downloadUrl,
