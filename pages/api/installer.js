@@ -1,48 +1,103 @@
+const { v4: uuidv4 } = require('uuid');
+const { initRedisClient, getClient } = require('../../utils/redisClient');
+const { initS3Client, generatePutPresignedUrl } = require('../../utils/s3Client');
+
+let redisInitialized = false;
+let s3Initialized = false;
+
+async function ensureClientsInitialized() {
+	if (!redisInitialized) {
+		await initRedisClient();
+		redisInitialized = true;
+	}
+	if (!s3Initialized) {
+		initS3Client();
+		s3Initialized = true;
+	}
+}
+
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+	if (req.method !== 'POST') {
+		return res.status(405).json({ error: 'Method not allowed' });
+	}
 
-  const installBase = process.env.WINSTALL_INSTALLER_BASE;
+	const installBase = process.env.WINSTALL_INSTALLER_BASE;
 
-  if (!installBase) {
-    return res.status(500).json({ error: 'Installer service not configured' });
-  }
+	if (!installBase) {
+		return res.status(500).json({ error: 'Installer service not configured' });
+	}
 
-  const url = `${installBase}/installer`;
+	await ensureClientsInitialized();
 
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(req.body),
-    });
+	const taskId = uuidv4();
+	const redisClient = getClient();
+	const cacheKey = `installer:task:${taskId}`;
 
-    const contentType = response.headers.get('content-type');
+	try {
+		await redisClient.setEx(cacheKey, 3600, '0');
 
-    // If response is binary (installer file), stream it back
-    if (contentType?.includes('application/octet-stream')) {
-      const buffer = await response.arrayBuffer();
+		const protocol = req.headers['x-forwarded-proto'] || (req.connection.encrypted ? 'https' : 'http');
+		const host = req.headers.host;
+		const payload = {
+			config: req.body.config,
+		};
 
-      res.setHeader('Content-Type', 'application/octet-stream');
-      res.setHeader('Content-Disposition', response.headers.get('content-disposition') || 'attachment; filename="installer.exe"');
-      res.setHeader('Content-Length', buffer.byteLength);
+		const uploadUrl = await generatePutPresignedUrl(taskId, 900);
+		if (uploadUrl) {
+			//console.log('S3 PutPresign:', JSON.stringify(uploadUrl));
 
-      return res.status(200).send(Buffer.from(buffer));
-    }
+			const callbackUrl = `${protocol}://${host}/api/installer/callback?taskId=${taskId}`;
+			console.log('callbackUrl:', callbackUrl);
 
-    // Otherwise, return as JSON (error message)
-    const data = await response.text();
-    try {
-      const json = JSON.parse(data);
-      return res.status(response.status).json(json);
-    } catch {
-      return res.status(response.status).json({ error: data || 'Installer service error' });
-    }
-  } catch (error) {
-    console.error('[Installer API] Error:', error);
-    return res.status(500).json({ error: error.message });
-  }
+			payload.upload = {
+				upload_url: uploadUrl,
+				callback_url: callbackUrl,
+			};
+		}
+
+		const url = `${installBase}/installer`;
+		if (process.env.NODE_ENV === 'development') {
+			console.log('generate installer with payload:', JSON.stringify(payload, null, 2));
+		}
+
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(payload),
+		});
+
+		const contentType = response.headers.get('content-type');
+
+		if (contentType?.includes('application/octet-stream')) {
+			const buffer = await response.arrayBuffer();
+
+			res.setHeader('Content-Type', 'application/octet-stream');
+			res.setHeader('Content-Disposition', `attachment; filename="${taskId}.exe"`);
+			res.setHeader('Content-Length', buffer.byteLength);
+
+			await redisClient.del(cacheKey);
+
+			return res.status(200).send(Buffer.from(buffer));
+		}
+
+		const statusUrl = `${protocol}://${host}/api/installer/status?taskId=${taskId}`;
+
+		return res.status(202).json({
+			taskId,
+			statusUrl,
+			message: 'Installer generation in progress',
+		});
+	} catch (error) {
+		console.error('[Installer API] Error:', error);
+
+		try {
+			await redisClient.del(cacheKey);
+		} catch (cleanupError) {
+			console.error('[Installer API] Cleanup error:', cleanupError);
+		}
+
+		return res.status(500).json({ error: error.message });
+	}
 }

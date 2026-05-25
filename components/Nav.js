@@ -99,7 +99,7 @@ function Nav() {
             href="/"
             className={`${styles.mainLink} ${(pathname === '/' || pathname === '') ? styles.selected : ''}`}
           >
-            Discover App
+            Discover Apps
           </Link>
           <span className={styles.linkWithTag}>
             <Link

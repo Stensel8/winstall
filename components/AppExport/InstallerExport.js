@@ -1,51 +1,111 @@
+import { useState } from "react";
 import { FiDownload, FiInfo } from "react-icons/fi";
 import styles from "../../styles/exportApps.module.scss";
 
 const InstallerExport = ({ apps, filters = {} }) => {
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    const downloadFile = (url, filename) => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    };
+
+    const pollStatus = async (statusUrl, timeoutMs = 300000) => {
+        const startTime = Date.now();
+        const pollInterval = 1000;
+
+        while (Date.now() - startTime < timeoutMs) {
+            await new Promise(resolve => setTimeout(resolve, pollInterval));
+
+            try {
+                const statusResponse = await fetch(statusUrl);
+
+                if (statusResponse.status === 200) {
+                    const data = await statusResponse.json();
+                    if (data.downloadUrl) {
+                        console.log('Installer ready, downloading from S3');
+                        downloadFile(data.downloadUrl, 'installer.exe');
+                        return true;
+                    }
+                } else if (statusResponse.status === 202) {
+                    console.log('Installer still processing...');
+                    continue;
+                } else if (statusResponse.status === 404) {
+                    throw new Error('Task not found or expired');
+                } else {
+                    const errorData = await statusResponse.json();
+                    throw new Error(errorData.error || 'Status check failed');
+                }
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        throw new Error('timeout');
+    };
+
     const handleInstall = async () => {
         if (!apps || apps.length === 0) {
             alert('No apps selected');
             return;
         }
 
-        const appsPayload = apps.map(app => ({
-            name: app.name,
-            id: app._id,
-            version: app.selectedVersion !== app.latestVersion ? app.selectedVersion : undefined
-        }));
-
-        const options = {};
-        if (filters["--scope"]) options["--scope"] = filters["--scope"];
-        if (filters["-o"]) options["-o"] = filters["-o"];
-        if (filters["-l"]) options["-l"] = filters["-l"];
-        if (filters["-i"]) options["-i"] = null;
-        if (filters["-h"]) options["-h"] = null;
-        if (filters["--override"]) options["--override"] = null;
-        if (filters["--force"]) options["--force"] = null;
-
-        const payload = {
-            version: "0.0.1",
-            apps: appsPayload,
-            options
-        };
-
-        if (process.env.NODE_ENV === 'development') {
-            console.log('Installing apps with payload:', JSON.stringify(payload, null, 2));
+        if (isProcessing) {
+            return;
         }
 
-        console.log('Installing apps with payload:', payload);
+        setIsProcessing(true);
 
         try {
+            const options = {};
+
+            // Handle silent/interactive (mutually exclusive, default is silent=true)
+            if (filters["-i"]) {
+                options.silent = false;
+            } else if (filters["-h"]) {
+                options.silent = true;
+            }
+
+            if (filters["--force"]) options.force = true;
+            if (filters["--scope"]) options.scope = filters["--scope"];
+            if (filters["-o"]) options.log = filters["-o"];
+            if (filters["-l"]) options.location = filters["-l"];
+            if (filters["--override"]) options.override = filters["--override"];
+
+            const appsPayload = apps.map(app => ({
+                name: app.name,
+                id: app._id,
+                version: app.selectedVersion !== app.latestVersion ? app.selectedVersion : undefined,
+                options
+            }));
+
+            const configPayload = {
+                version: "0.0.1",
+                apps: appsPayload
+            };
+
+            if (process.env.NODE_ENV === 'development') {
+                console.log('Installer config:', JSON.stringify(configPayload, null, 2));
+            }
+
             const response = await fetch('/api/installer', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(payload),
+                body: JSON.stringify({
+                    config: configPayload,
+                }),
             });
 
             const contentType = response.headers.get('content-type');
 
+            // Legacy sync mode: direct binary download
             if (contentType && contentType.includes('application/octet-stream')) {
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
@@ -59,24 +119,34 @@ const InstallerExport = ({ apps, filters = {} }) => {
                     }
                 }
 
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-                console.log('Installer downloaded successfully:', filename);
-            } else {
-                const errorText = await response.text();
-                console.error('Install failed:', errorText);
-                alert(`Install failed: ${errorText}`);
+                downloadFile(url, filename);
+                console.log('Installer downloaded successfully (sync mode):', filename);
+            }
+            // Async mode: poll for status
+            else if (response.status === 202) {
+                const data = await response.json();
+                console.log('Installer generation started, polling status:', data);
+
+                await pollStatus(data.statusUrl);
+                console.log('Installer downloaded successfully (async mode)');
+            }
+            // Error handling
+            else {
+                const errorData = await response.json();
+                console.error('Install failed:', errorData);
+                alert(`Install failed: ${errorData.error || 'Unknown error'}`);
             }
         } catch (error) {
             console.error('Install error:', error);
-            alert(`Install error: ${error.message}`);
+            if (error.message === 'timeout') {
+                alert('Install error: timeout');
+            } else {
+                alert(`Install error: ${error.message}`);
+            }
+        } finally {
+            setIsProcessing(false);
         }
-    }
+    };
 
     return (
         <div className={styles.generate}>
@@ -86,13 +156,17 @@ const InstallerExport = ({ apps, filters = {} }) => {
             </div>
 
             <div className={`box`}>
-                <button className={`button dl accent`} onClick={handleInstall}>
+                <button
+                    className={`button dl accent`}
+                    onClick={handleInstall}
+                    disabled={isProcessing}
+                >
                     <FiDownload />
-                    Download installer
+                    {isProcessing ? 'Processing...' : 'Download installer'}
                 </button>
             </div>
         </div>
-    )
+    );
 }
 
 export default InstallerExport;
