@@ -51,6 +51,9 @@ export default function Footer() {
 
       <ul>
         <li>
+          <Link href="/compare">Compare</Link>
+        </li>
+        <li>
           <a
             href="https://github.com/SplashtopInc/winstall"
             target="_blank"
