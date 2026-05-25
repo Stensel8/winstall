@@ -98,6 +98,11 @@ header {
       opacity: 1;
       background-color: var(--altAccent);
     }
+
+    &:disabled {
+      background-color: color-mix(in srgb, white 50%, var(--accent) 50%);
+      color: color-mix(in srgb, white 50%, var(--textColor) 50%);
+    }
   }
 }
 
@@ -231,9 +236,14 @@ input[type="text"].search {
         font-size: 20px;
       }
 
+      &:hover,
+      &:focus {
+        background-color: var(--card-bg);
+      }
       &:disabled {
-        opacity: 0.75;
         cursor: not-allowed;
+        background-color: color-mix(in srgb, white 50%, var(--main-bg) 50%);
+        color: color-mix(in srgb, white 50%, var(--textColor) 50%);
 
         &:hover {
           background-color: var(--main-bg);
@@ -251,10 +261,6 @@ input[type="text"].search {
         font-style: normal;
         text-align: left;
         font-size: 18px;
-      }
-
-      &:hover {
-        background-color: var(--card-bg);
       }
     }
   }
@@ -302,6 +308,11 @@ input[type="text"].search {
   &:focus {
     opacity: 0.75;
   }
+  &:disabled {
+    background-color: color-mix(in srgb, white 50%, var(--card-bg) 50%);
+    color: color-mix(in srgb, white 50%, var(--textColor) 50%);
+    cursor: not-allowed;
+  }
 
   svg {
     padding-right: 10px;
@@ -319,6 +330,10 @@ input[type="text"].search {
   &:focus {
     opacity: 1;
     background-color: var(--altAccent);
+  }
+  &:disabled {
+    background-color: color-mix(in srgb, white 50%, var(--accent) 50%);
+    color: color-mix(in srgb, white 50%, var(--altTextColor) 50%);
   }
 }
 
@@ -896,8 +911,7 @@ input[type="radio"] {
   margin: 0px;
   font-weight: 800;
 
-  svg{
+  svg {
     margin-top: 0px;
-
   }
 }
