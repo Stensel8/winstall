@@ -119,50 +119,47 @@ function ExpressSetup({ error, categoryApps }) {
   );
 }
 
-export async function getStaticProps(){
-  const { getRuntimeConfig } = require('../utils/runtimeConfig');
-  const config = await getRuntimeConfig();
-  const apiBase = config.apiBase;
+export async function getStaticProps() {
+  // Enrich category apps with full data from API
+  const enrichedCategories = {};
 
-  // // Enrich category apps with full data from API
-  // const enrichedCategories = {};
+  for (const [category, apps] of Object.entries(categoryAppsList)) {
+    if (!Array.isArray(apps) || apps.length === 0) {
+      enrichedCategories[category] = apps;
+      continue;
+    }
 
-  // for (const [category, apps] of Object.entries(categoryAppsList)) {
-  //   if (!Array.isArray(apps) || apps.length === 0) {
-  //     enrichedCategories[category] = apps;
-  //     continue;
-  //   }
+    const enrichedApps = await Promise.all(
+      apps.map(async (entry) => {
+        const { response: appData } = await fetchWinstallAPI(`/apps/${entry._id}?exclude=versions`);
 
-  //   const enrichedApps = await Promise.all(
-  //     apps.map(async (entry) => {
-  //       const { response: appData } = await fetchWinstallAPI(`/apps/${entry._id}?exclude=versions`);
+        if (!appData) {
+          return entry;
+        }
 
-  //       if (!appData) {
-  //         return entry;
-  //       }
+        // Transform icons to full URLs using apiBase
+        if (appData.icon && !appData.icon.startsWith('http') && !appData.iconUrl) {
+          const iconName = appData.icon.replace('.png', '');
+          appData.iconUrl = `${process.env.NEXT_PUBLIC_WINSTALL_API_BASE}/icons/next/${iconName}.webp`;
+          appData.iconPng = `${process.env.NEXT_PUBLIC_WINSTALL_API_BASE}/icons/${iconName}.png`;
+        }
 
-  //       // Transform icons to full URLs using apiBase
-  //       if (apiBase && appData.icon && !appData.icon.startsWith('http') && !appData.iconUrl) {
-  //         const iconName = appData.icon.replace('.png', '');
-  //         appData.iconUrl = `${apiBase}/icons/next/${iconName}.webp`;
-  //         appData.iconPng = `${apiBase}/icons/${iconName}.png`;
-  //       }
+        return {
+          ...appData,
+          _id: entry._id,
+          img: entry.img, // Keep as fallback for popularApps matching
+        };
+      })
+    );
 
-  //       return {
-  //         ...appData,
-  //         _id: entry._id,
-  //         img: entry.img, // Keep as fallback for popularApps matching
-  //       };
-  //     })
-  //   );
-
-  //   enrichedCategories[category] = enrichedApps.filter(Boolean);
-  // }
+    enrichedCategories[category] = enrichedApps.filter(Boolean);
+  }
 
   // TODO: Load enriched data from API server can provide app description, iconUrl and iconPng, but may slow down the page render speed
   return {
     props: {
-      categoryApps: categoryAppsList
+      // categoryApps: categoryAppsList
+      categoryApps: enrichedCategories
     },
     revalidate: 3600 // Revalidate every hour
   };

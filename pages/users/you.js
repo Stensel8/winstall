@@ -14,15 +14,10 @@ function OwnProfile() {
   const [packs, setPacks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState("Loading...");
-  const [apiBase, setApiBase] = useState("");
 
   const router = useRouter();
 
   useEffect(() => {
-    fetch('/api/config')
-      .then(res => res.json())
-      .then(config => setApiBase(config.apiBase));
-
     getSession().then(async (session) => {
       if (!session) {
         router.push(`/`);
@@ -58,20 +53,18 @@ function OwnProfile() {
     }
 
     if (packs) {
-      // Transform icons to full URLs using runtime apiBase
-      if (apiBase) {
-        packs.forEach(pack => {
-          if (pack.apps) {
-            pack.apps.forEach(app => {
-              if (app.icon && !app.icon.startsWith('http') && !app.iconUrl) {
-                const iconName = app.icon.replace('.png', '');
-                app.iconUrl = `${apiBase}/icons/next/${iconName}.webp`;
-                app.iconPng = `${apiBase}/icons/${iconName}.png`;
-              }
-            });
-          }
-        });
-      }
+      // Transform icons to full URLs
+      packs.forEach(pack => {
+        if (pack.apps) {
+          pack.apps.forEach(app => {
+            if (app.icon && !app.icon.startsWith('http') && !app.iconUrl) {
+              const iconName = app.icon.replace('.png', '');
+              app.iconUrl = `${process.env.NEXT_PUBLIC_WINSTALL_API_BASE}/icons/next/${iconName}.webp`;
+              app.iconPng = `${process.env.NEXT_PUBLIC_WINSTALL_API_BASE}/icons/${iconName}.png`;
+            }
+          });
+        }
+      });
       setPacks(packs);
       setLoading(false);
       localStorage.setItem("ownPacks", JSON.stringify(packs));

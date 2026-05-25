@@ -30,9 +30,7 @@ function Store({ data, error, buildTime }) {
   const [totalKnown, setTotalKnown] = useState(false);
   const [currentOffset, setCurrentOffset] = useState(0);
   const [clientError, setClientError] = useState("");
-  const [apiBase, setApiBase] = useState("");
   const [loadedPage, setLoadedPage] = useState(null);
-  const [apiBaseFetched, setApiBaseFetched] = useState(false);
   const [isLoading, setIsLoading] = useState(buildTime || (!data && !error));
 
   const appsPerPage = 60;
@@ -97,16 +95,14 @@ function Store({ data, error, buildTime }) {
     if (normalized.items.length) {
       applySort(normalized.items, router.query.sort || "update-desc");
 
-      // Transform icons to full URLs for client-side pagination using runtime apiBase
-      if (apiBase) {
-        normalized.items.forEach(app => {
-          if (app.icon && !app.icon.startsWith('http') && !app.iconUrl) {
-            const iconName = app.icon.replace('.png', '');
-            app.iconUrl = `${apiBase}/icons/next/${iconName}.webp`;
-            app.iconPng = `${apiBase}/icons/${iconName}.png`;
-          }
-        });
-      }
+      // Transform icons to full URLs for client-side pagination
+      normalized.items.forEach(app => {
+        if (app.icon && !app.icon.startsWith('http') && !app.iconUrl) {
+          const iconName = app.icon.replace('.png', '');
+          app.iconUrl = `${process.env.NEXT_PUBLIC_WINSTALL_API_BASE}/icons/next/${iconName}.webp`;
+          app.iconPng = `${process.env.NEXT_PUBLIC_WINSTALL_API_BASE}/icons/${iconName}.png`;
+        }
+      });
     }
     setApps(normalized.items);
     setTotal(normalized.total);
@@ -116,15 +112,6 @@ function Store({ data, error, buildTime }) {
   };
 
   useEffect(() => {
-    if (!apiBaseFetched) {
-      fetch('/api/config')
-        .then(res => res.json())
-        .then(config => {
-          setApiBase(config.apiBase);
-          setApiBaseFetched(true);
-        });
-    }
-
     // Default to showing most recently updated first to entice Google to index
     // them, and to demonstrate to users that the site is being kept up-to-date.
     let sortOrder = router.query.sort || "update-desc";

@@ -14,8 +14,6 @@ function Search({ onSearch, label, placeholder, preventGlobalSelect, isPackView,
   const [searchInput, setSearchInput] = useState("");
   const [urlQuery, setUrlQuery] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [apiBase, setApiBase] = useState("");
-  const [apiBaseFetched, setApiBaseFetched] = useState(false);
 
   const normalizeAppsPayload = (payload) => {
     if (!payload?.data) return [];
@@ -23,15 +21,6 @@ function Search({ onSearch, label, placeholder, preventGlobalSelect, isPackView,
   };
 
   useEffect(() => {
-    if (!apiBaseFetched) {
-      fetch('/api/config')
-        .then(res => res.json())
-        .then(config => {
-          setApiBase(config.apiBase);
-          setApiBaseFetched(true);
-        });
-    }
-
     // if we have a ?q param on the url, we deal with it
     if (router.isReady && router.query && router.query.q && urlQuery !== router.query.q){
       setSearchInput(router.query.q);
@@ -80,16 +69,14 @@ function Search({ onSearch, label, placeholder, preventGlobalSelect, isPackView,
 
     const items = normalizeAppsPayload(response);
 
-    // Transform icons to full URLs for search results using runtime apiBase
-    if (apiBase) {
-      items.forEach(app => {
-        if (app.icon && !app.icon.startsWith('http') && !app.iconUrl) {
-          const iconName = app.icon.replace('.png', '');
-          app.iconUrl = `${apiBase}/icons/next/${iconName}.webp`;
-          app.iconPng = `${apiBase}/icons/${iconName}.png`;
-        }
-      });
-    }
+    // Transform icons to full URLs for search results
+    items.forEach(app => {
+      if (app.icon && !app.icon.startsWith('http') && !app.iconUrl) {
+        const iconName = app.icon.replace('.png', '');
+        app.iconUrl = `${process.env.NEXT_PUBLIC_WINSTALL_API_BASE}/icons/next/${iconName}.webp`;
+        app.iconPng = `${process.env.NEXT_PUBLIC_WINSTALL_API_BASE}/icons/${iconName}.png`;
+      }
+    });
 
     setResults(items.slice(0, resultLimit));
   };
