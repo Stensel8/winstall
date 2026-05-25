@@ -6,6 +6,7 @@ import styles from "../styles/home.module.scss";
 import ListPackages from "../components/ListPackages";
 import SingleApp from "../components/SingleApp";
 import SelectedContext from "../ctx/SelectedContext";
+import AppSettingsDrawer from "../components/AppSettingsDrawer";
 
 import Footer from "../components/Footer";
 
@@ -16,10 +17,32 @@ import ExportApps from "../components/AppExport/ExportApps";
 function Generate() {
     const { selectedApps } = useContext(SelectedContext);
     const [apps, setApps] = useState([]);
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [selectedAppForSettings, setSelectedAppForSettings] = useState(null);
 
     useEffect(() => {
       setApps(selectedApps);
     }, [ apps, selectedApps ]);
+
+    const handleSettingsClick = (app) => {
+      setSelectedAppForSettings(app);
+      setDrawerOpen(true);
+    };
+
+    const handleCloseDrawer = () => {
+      setDrawerOpen(false);
+      setSelectedAppForSettings(null);
+    };
+
+    const handleConfigChange = (app, config) => {
+      const updatedApps = apps.map(a => {
+        if (a._id === app._id) {
+          return { ...a, advancedConfig: config };
+        }
+        return a;
+      });
+      setApps(updatedApps);
+    };
 
     if(selectedApps.length === 0){
       return (
@@ -68,10 +91,24 @@ function Generate() {
           <h2>Apps you are downloading ({selectedApps.length})</h2>
           <ListPackages showImg={true}>
             {selectedApps.map((app) => (
-              <SingleApp app={app} key={app._id} onVersionChange={setApps}/>
+              <SingleApp
+                app={app}
+                key={app._id}
+                onVersionChange={setApps}
+                showSettingsIcon={true}
+                onSettingsClick={handleSettingsClick}
+                disableSelectedStyle={true}
+              />
             ))}
           </ListPackages>
         </div>
+
+        <AppSettingsDrawer
+          app={selectedAppForSettings}
+          isOpen={drawerOpen}
+          onClose={handleCloseDrawer}
+          onConfigChange={handleConfigChange}
+        />
 
         <Footer />
       </div>

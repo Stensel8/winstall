@@ -71,18 +71,33 @@ export default function CompareNinite() {
       />
 
       <section className={styles.hero}>
-        <div className={styles.heroContent}>
-          <CompareTabs active="/compare-ninite" />
-          <h1>
-            Winstall.app <span>vs</span> Ninite
-          </h1>
-          <p>
-            The simplicity of Ninite, powered by the modern Winget ecosystem — more apps, open source,
-            community driven, and built for today's Windows.
-          </p>
-        </div>
+        <div className={styles.heroGrid}>
+          <div className={styles.heroContent}>
+            <CompareTabs active="/compare-ninite" />
+            <h1>
+              Winstall.app <span>vs</span> Ninite
+            </h1>
+            <p>
+              The simplicity of Ninite, powered by the modern Winget ecosystem — more apps, open source,
+              community driven, and built for today's Windows.
+            </p>
+            <div className={styles.actions}>
+              <a href="/" className={styles.btnPrimary}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                </svg>
+                Start Installing Apps
+              </a>
+              <a href="/apps" className={styles.btnSecondary}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 6h16M4 12h16M4 18h7" />
+                </svg>
+                Browse Packages
+              </a>
+            </div>
+          </div>
 
-        <div className={styles.visualCompare}>
+          <div className={styles.visualCompare}>
           <div className={styles.compareLeft}>
             <div className={styles.compareHeader}>
               <span className={styles.wIcon}>W</span>
@@ -115,6 +130,40 @@ export default function CompareNinite() {
           </div>
 
           <div className={styles.vsIndicator}>VS</div>
+          </div>
+        </div>
+
+        <div className={styles.trustBar}>
+          <div className={styles.trustItem}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <span>100% Free & Open Source</span>
+          </div>
+          <div className={styles.trustItem}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg>
+            <span>Powered by Microsoft Winget</span>
+          </div>
+          <div className={styles.trustItem}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
+            <span>No Installation Required</span>
+          </div>
+          <div className={styles.trustItem}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+              <line x1="12" y1="22.08" x2="12" y2="12" />
+            </svg>
+            <span>12,000+ Packages</span>
+          </div>
         </div>
       </section>
 

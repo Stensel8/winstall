@@ -61,8 +61,23 @@ const ExportApps = ({ apps, title, subtitle }) => {
     }
 
     apps.map((app) => {
+      let appFilters = advancedFilters;
+
+      if (app.advancedConfig) {
+        const appConfig = app.advancedConfig;
+        let appAdvancedFilters = "";
+
+        appAdvancedFilters = Object.entries({ ...appConfig }).filter(i => i[1] === true).map(i => i[0]).join(" ");
+
+        if(appConfig["-o"]) appAdvancedFilters += ` -o "${appConfig["-o"]}"`;
+        if(appConfig["-l"]) appAdvancedFilters += ` -l "${appConfig["-l"]}"`;
+        if(appConfig["--scope"]) appAdvancedFilters += ` --scope "${appConfig["--scope"]}"`;
+
+        appFilters = appAdvancedFilters;
+      }
+
       installs.push(
-        `winget install --id=${app._id}${app.selectedVersion !== app.latestVersion ? ` -v "${app.selectedVersion}"` : ""} -e ${advancedFilters}`
+        `winget install --id=${app._id}${app.selectedVersion !== app.latestVersion ? ` -v "${app.selectedVersion}"` : ""} -e ${appFilters}`
       );
 
       return app;

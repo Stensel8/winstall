@@ -18,7 +18,8 @@
     flex-direction: column;
     justify-content: flex-start;
 
-    &:focus{
+    &:focus,
+    &:hover {
        opacity: 0.75;
     }
 
@@ -37,7 +38,8 @@
             min-width: 0;
             display: grid;
             grid-template-columns: 35px 1fr;
-
+            align-items: start;
+            align-self: flex-start;
 
             &:hover, &:focus, &:active{
                 opacity: 0.76;
@@ -234,6 +236,7 @@
         align-items: center;
         justify-content: center;
         margin-left: auto;
+        align-self: flex-start;
         flex-shrink: 0;
         padding: 0px !important;
 
@@ -253,6 +256,49 @@
         &:hover{
             opacity: 0.75;
         }
+    }
+
+    .settingsIcon {
+        background-color: var(--main-bg) !important;
+        border-radius: 50px;
+        text-decoration: none;
+        color: var(--textColor);
+        box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.18);
+        transition: 0.3s all ease-in-out;
+        cursor: pointer;
+        border: 0px;
+        width: 28px !important;
+        height: 28px !important;
+        outline: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+        align-self: flex-start;
+        flex-shrink: 0;
+        padding: 0px !important;
+        opacity: 0;
+
+        svg{
+            padding-right: 0px !important;
+            margin-top: 0px !important;
+            width: 18px;
+            height: 18px;
+            color: var(--textColor);
+            transition: 0.1s all ease-in-out;
+        }
+
+        &:active, &:focus{
+            opacity: 0.7 !important;
+        }
+
+        &:hover{
+            opacity: 0.75 !important;
+        }
+    }
+
+    &:hover .settingsIcon {
+        opacity: 1;
     }
 }
 

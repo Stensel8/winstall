@@ -20,7 +20,8 @@ import {
   FiTerminal,
   FiUser,
   FiCopy,
-  FiCheckCircle
+  FiCheckCircle,
+  FiSettings
 } from "react-icons/fi";
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
@@ -30,7 +31,7 @@ import AppIcon from "./AppIcon";
 import { buildSiteUrl, compareVersion, timeAgo } from "../utils/helpers";
 
 
-let SingleApp = ({ app, onVersionChange = false, large = false, showTime = false, pack = false, displaySelect = false, preventGlobalSelect, hideBorder=false, preSelected=false}) => {
+let SingleApp = ({ app, onVersionChange = false, large = false, showTime = false, pack = false, displaySelect = false, preventGlobalSelect, hideBorder=false, preSelected=false, showSettingsIcon=false, onSettingsClick, disableSelectedStyle=false}) => {
   const [selected, setSelected] = useState(false);
   const { selectedApps, setSelectedApps } = useContext(SelectedContext);
 
@@ -166,7 +167,7 @@ let SingleApp = ({ app, onVersionChange = false, large = false, showTime = false
       key={app._id}
       // onClick={handleAppSelect}
       className={`${hideBorder ? styles.noBorder: "" }${large ? styles.large : ""} ${pack ? styles.pack : ""} ${styles.single} ${
-        selected ? styles.selected : ""
+        selected && !disableSelectedStyle ? styles.selected : ""
       }`}
     >
       <div className={styles.info}>
@@ -181,6 +182,19 @@ let SingleApp = ({ app, onVersionChange = false, large = false, showTime = false
               <AppIcon id={app._id} name={app.name} icon={app.icon} iconUrl={app.iconUrl} iconPng={app.iconPng} />
               <p>{app.name}</p>
             </Link>
+          )}
+
+          {showSettingsIcon && (
+            <button
+              className={styles.settingsIcon}
+              onClick={(e) => {
+                e.stopPropagation();
+                onSettingsClick && onSettingsClick(app);
+              }}
+              aria-label="App settings"
+            >
+              <FiSettings />
+            </button>
           )}
 
           {displaySelect &&  (
