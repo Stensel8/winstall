@@ -35,11 +35,11 @@ export default async function handler(req, res) {
 		const uploadedAt = Math.floor(Date.now() / 1000);
 		await redisClient.setEx(cacheKey, 3600, uploadedAt.toString());
 
-		console.log(`[Installer Callback] Task ${taskId} uploaded at ${uploadedAt}`);
+		console.log(`[Installer] Task ${taskId} uploaded at ${uploadedAt}`);
 
 		return res.status(200).json({ success: true });
 	} catch (error) {
-		console.error('[Installer Callback API] Error:', error);
+		console.error('[Installer] Callback Error:', error);
 		return res.status(500).json({ error: error.message });
 	}
 }

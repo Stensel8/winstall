@@ -53,14 +53,14 @@ export default async function handler(req, res) {
 		if (!downloadUrl) {
 			return res.status(500).json({ error: 'S3 not configured, cannot generate download URL' });
 		}
-		console.log('S3 GetPresign:', JSON.stringify(downloadUrl));
+		console.log('[Installer] S3 GetPresignUrl:', JSON.stringify(downloadUrl));
 
 		return res.status(200).json({
 			downloadUrl,
 			uploadedAt: parseInt(uploaded, 10),
 		});
 	} catch (error) {
-		console.error('[Installer Status API] Error:', error);
+		console.error('[Installer] Status Error:', error);
 		return res.status(500).json({ error: error.message });
 	}
 }

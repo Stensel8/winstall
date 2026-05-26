@@ -44,10 +44,10 @@ export default async function handler(req, res) {
 
 		const uploadUrl = await generatePutPresignedUrl(taskId, 900);
 		if (uploadUrl) {
-			//console.log('S3 PutPresign:', JSON.stringify(uploadUrl));
+			console.log('[Installer] S3 PutPresignUrl:', JSON.stringify(uploadUrl));
 
 			const callbackUrl = `${protocol}://${host}/api/installer/callback?taskId=${taskId}`;
-			console.log('callbackUrl:', callbackUrl);
+			console.log('[Installer] CallbackUrl:', callbackUrl);
 
 			payload.upload = {
 				upload_url: uploadUrl,
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
 
 		const url = `${installBase}/installer`;
 		if (process.env.NODE_ENV === 'development') {
-			console.log('generate installer with payload:', JSON.stringify(payload, null, 2));
+			console.log('[Installer] Config:', JSON.stringify(payload, null, 2));
 		}
 
 		const response = await fetch(url, {
@@ -90,12 +90,12 @@ export default async function handler(req, res) {
 			message: 'Installer generation in progress',
 		});
 	} catch (error) {
-		console.error('[Installer API] Error:', error);
+		console.error('[Installer] Error:', error);
 
 		try {
 			await redisClient.del(cacheKey);
 		} catch (cleanupError) {
-			console.error('[Installer API] Cleanup error:', cleanupError);
+			console.error('[Installer] Cleanup error:', cleanupError);
 		}
 
 		return res.status(500).json({ error: error.message });
