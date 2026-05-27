@@ -56,7 +56,6 @@ const GenericExport = ({ fileContent, displayedCommand, fileExtension, prioritis
 
                 <button className={`button dl ${prioritiseDownload ? 'accent' : ''}`}  onClick={() => {
                     handleDownload(fileContent, fileExtension, downloadId);
-                    setDownloadId(Math.floor(1000 + Math.random() * 9000));
 
                     if(prioritiseDownload){
                         handleCopy(textboxContent);
