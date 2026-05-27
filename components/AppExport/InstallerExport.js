@@ -5,6 +5,25 @@ import styles from "../../styles/exportApps.module.scss";
 const InstallerExport = ({ apps, filters = {} }) => {
     const [isProcessing, setIsProcessing] = useState(false);
 
+    const buildInstallerOptions = (sourceFilters = {}) => {
+        const options = {};
+
+        // Handle silent/interactive (mutually exclusive)
+        if (sourceFilters["-i"]) {
+            options.silent = false;
+        } else if (sourceFilters["-h"]) {
+            options.silent = true;
+        }
+
+        if (sourceFilters["--force"]) options.force = true;
+        if (sourceFilters["--scope"]) options.scope = sourceFilters["--scope"];
+        if (sourceFilters["-o"]) options.log = sourceFilters["-o"];
+        if (sourceFilters["-l"]) options.location = sourceFilters["-l"];
+        if (sourceFilters["--override"]) options.override = true;
+
+        return options;
+    };
+
     const downloadFile = (url, filename = null) => {
         // console.log('Installer download file:', filename);
         const a = document.createElement('a');
@@ -64,26 +83,11 @@ const InstallerExport = ({ apps, filters = {} }) => {
         setIsProcessing(true);
 
         try {
-            const options = {};
-
-            // Handle silent/interactive (mutually exclusive, default is silent=true)
-            if (filters["-i"]) {
-                options.silent = false;
-            } else if (filters["-h"]) {
-                options.silent = true;
-            }
-
-            if (filters["--force"]) options.force = true;
-            if (filters["--scope"]) options.scope = filters["--scope"];
-            if (filters["-o"]) options.log = filters["-o"];
-            if (filters["-l"]) options.location = filters["-l"];
-            if (filters["--override"]) options.override = filters["--override"];
-
             const appsPayload = apps.map(app => ({
                 name: app.name,
                 id: app._id,
                 version: app.selectedVersion !== app.latestVersion ? app.selectedVersion : undefined,
-                options
+                options: buildInstallerOptions(app.advancedConfig || filters)
             }));
 
             const configPayload = {
