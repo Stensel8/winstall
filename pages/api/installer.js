@@ -74,8 +74,6 @@ export default async function handler(req, res) {
 			const buffer = await response.arrayBuffer();
 
 			res.setHeader('Content-Type', 'application/octet-stream');
-			res.setHeader('Content-Disposition', `attachment; filename="${taskId}.exe"`);
-			res.setHeader('Content-Length', buffer.byteLength);
 
 			await redisClient.del(cacheKey);
 

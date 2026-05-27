@@ -6,9 +6,10 @@ const InstallerExport = ({ apps, filters = {} }) => {
     const [isProcessing, setIsProcessing] = useState(false);
 
     const downloadFile = (url, filename) => {
+        console.log('Installer download file:', filename);
         const a = document.createElement('a');
         a.href = url;
-        a.download = filename;
+        a.download = filename; // Async mode, filename is set by Content-Disposition header in S3 presigned URL
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
@@ -28,8 +29,8 @@ const InstallerExport = ({ apps, filters = {} }) => {
                 if (statusResponse.status === 200) {
                     const data = await statusResponse.json();
                     if (data.downloadUrl) {
-                        console.log('Installer ready, downloading from S3');
-                        downloadFile(data.downloadUrl, 'installer.exe');
+                        console.log('Installer ready, downloading from S3:', data.downloadUrl);
+                        downloadFile(data.downloadUrl, `installer.exe`);
                         return true;
                     }
                 } else if (statusResponse.status === 202) {
@@ -103,24 +104,14 @@ const InstallerExport = ({ apps, filters = {} }) => {
                 }),
             });
 
-            const contentType = response.headers.get('content-type');
-
-            // Legacy sync mode: direct binary download
-            if (contentType && contentType.includes('application/octet-stream')) {
+            // Sync mode: direct binary download
+            if (response.status === 200) {
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
 
                 let filename = 'installer.exe';
-                const disposition = response.headers.get('content-disposition');
-                if (disposition) {
-                    const filenameMatch = disposition.match(/filename="?([^";\n]+)"?/i);
-                    if (filenameMatch && filenameMatch[1]) {
-                        filename = filenameMatch[1];
-                    }
-                }
-
+                console.log('Installer ready, downloading from builder:', filename);
                 downloadFile(url, filename);
-                console.log('Installer downloaded successfully (sync mode):', filename);
             }
             // Async mode: poll for status
             else if (response.status === 202) {

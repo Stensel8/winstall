@@ -49,7 +49,7 @@ export default async function handler(req, res) {
 			});
 		}
 
-		const downloadUrl = await generateGetPresignedUrl(taskId, 3600);
+		const downloadUrl = await generateGetPresignedUrl(taskId, `winstall-${taskId}.exe`, 3600);
 		if (!downloadUrl) {
 			return res.status(500).json({ error: 'S3 not configured, cannot generate download URL' });
 		}

@@ -63,7 +63,7 @@ async function generatePutPresignedUrl(taskId, expiresIn = 900) {
   return url;
 }
 
-async function generateGetPresignedUrl(taskId, expiresIn = 3600) {
+async function generateGetPresignedUrl(taskId, filename = 'installer.exe', expiresIn = 3600) {
   if (!s3Client || !s3Bucket) {
     return null;
   }
@@ -73,6 +73,7 @@ async function generateGetPresignedUrl(taskId, expiresIn = 3600) {
   const command = new GetObjectCommand({
     Bucket: s3Bucket,
     Key: key,
+    ResponseContentDisposition: `attachment; filename="${filename}"`,
   });
 
   const url = await getSignedUrl(s3Client, command, { expiresIn });
