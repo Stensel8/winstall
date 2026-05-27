@@ -5,12 +5,12 @@ import { CheckboxConfig, RadioConfig, TextInputConfig } from "./AppExport/InputC
 
 const AppSettingsDrawer = ({ app, isOpen, onClose, onConfigChange }) => {
     const [config, setConfig] = useState({
-        "--scope": null,
-        "-i": false,
-        "-h": false,
-        "-o": "",
-        "--override": false,
-        "-l": "",
+        "--scope": "",
+        "--interactive": false,
+        "--silent": true,
+        "--override": "",
+        "--log": "",
+        "--location": "",
         "--force": false
     });
     const hiddenOptions = ["--ignore-unavailable"];
@@ -20,12 +20,12 @@ const AppSettingsDrawer = ({ app, isOpen, onClose, onConfigChange }) => {
             setConfig(app.advancedConfig);
         } else {
             setConfig({
-                "--scope": null,
-                "-i": false,
-                "-h": false,
-                "-o": "",
-                "--override": false,
-                "-l": "",
+                "--scope": "",
+                "--interactive": false,
+                "--silent": true,
+                "--override": "",
+                "--log": "",
+                "--location": "",
                 "--force": false
             });
         }
@@ -33,6 +33,10 @@ const AppSettingsDrawer = ({ app, isOpen, onClose, onConfigChange }) => {
 
     const updateConfig = (key, val) => {
         const newConfig = { ...config, [key]: val };
+        // --interactive and --silent are mutually exclusive: when --interactive is toggled, flip --silent
+        if (key === "--interactive") {
+            newConfig["--silent"] = !val;
+        }
         setConfig(newConfig);
         onConfigChange && onConfigChange(app, newConfig);
     };
@@ -55,19 +59,18 @@ const AppSettingsDrawer = ({ app, isOpen, onClose, onConfigChange }) => {
                         <RadioConfig
                             id="--scope"
                             defaultChecked={config["--scope"]}
-                            options={[{ id: "user", label: "User" }, { id: "machine", label: "Machine" }]}
+                            options={[{ id: "", label: "Default" }, { id: "user", label: "User" }, { id: "machine", label: "Machine" }]}
                             updateConfig={updateConfig}
                             hiddenOptions={hiddenOptions}
                             labelText="Installation scope"
                         />
 
-                        <CheckboxConfig id="-i" defaultChecked={config["-i"]} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Request interactive installation; user input may be needed"/>
-                        <CheckboxConfig id="-h" defaultChecked={config["-h"]} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Request silent installation"/>
-                        <CheckboxConfig id="--override" defaultChecked={config["--override"]} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Override arguments to be passed on to the installer"/>
+                        <CheckboxConfig id="--interactive" defaultChecked={config["--interactive"]} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Request interactive installation; user input may be needed"/>
                         <CheckboxConfig id="--force" defaultChecked={config["--force"]} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Override the installer hash check"/>
 
-                        <TextInputConfig id="-o" defaultValue={config["-o"]} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Log location (if supported)" inputPlaceholder="Enter a valid path for your local machine"/>
-                        <TextInputConfig id="-l" defaultValue={config["-l"]} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Location to install to (if supported)" inputPlaceholder="Enter a valid path for your local machine"/>
+                        <TextInputConfig id="--override" defaultValue={config["--override"]} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Override arguments to be passed on to the installer" inputPlaceholder="Enter arguments for installer"/>
+                        <TextInputConfig id="--log" defaultValue={config["--log"]} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Log location (if supported)" inputPlaceholder="Enter a valid file path for your local machine"/>
+                        <TextInputConfig id="--location" defaultValue={config["--location"]} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Location to install to (if supported)" inputPlaceholder="Enter a valid folder path for your local machine"/>
                     </div>
                 </div>
             </div>

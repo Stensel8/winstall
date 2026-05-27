@@ -6,20 +6,24 @@ const InstallerExport = ({ apps, filters = {} }) => {
     const [isProcessing, setIsProcessing] = useState(false);
 
     const buildInstallerOptions = (sourceFilters = {}) => {
-        const options = {};
+        const options = {
+            silent: true
+        };
 
         // Handle silent/interactive (mutually exclusive)
-        if (sourceFilters["-i"]) {
-            options.silent = false;
-        } else if (sourceFilters["-h"]) {
+        if (sourceFilters["--interactive"]) {
+            delete options.silent;
+            options.interactive = true;
+        } else if (sourceFilters["--silent"]) {
             options.silent = true;
+            delete options.interactive;
         }
 
         if (sourceFilters["--force"]) options.force = true;
         if (sourceFilters["--scope"]) options.scope = sourceFilters["--scope"];
-        if (sourceFilters["-o"]) options.log = sourceFilters["-o"];
-        if (sourceFilters["-l"]) options.location = sourceFilters["-l"];
-        if (sourceFilters["--override"]) options.override = true;
+        if (sourceFilters["--log"]) options.log = sourceFilters["--log"];
+        if (sourceFilters["--location"]) options.location = sourceFilters["--location"];
+        if (sourceFilters["--override"]) options.override = sourceFilters["--override"];
 
         return options;
     };
@@ -149,8 +153,31 @@ const InstallerExport = ({ apps, filters = {} }) => {
         }
     };
 
+    const appsPayload = apps.map(app => ({
+        name: app.name,
+        id: app._id,
+        version: app.selectedVersion !== app.latestVersion ? app.selectedVersion : undefined,
+        options: buildInstallerOptions(app.advancedConfig || filters)
+    }));
+
+    const configPayload = {
+        version: "0.0.1",
+        apps: appsPayload
+    };
+
     return (
         <div className={styles.generate}>
+            {process.env.NODE_ENV === 'development' && (
+                <textarea
+                    readOnly
+                    value={JSON.stringify(configPayload, null, 2)}
+                    onFocus={(e) => e.target.select()}
+                    onClick={(e) => e.target.select()}
+                    spellCheck={false}
+                    data-gramm_editor={false}
+                    rows={16}
+                />
+            )}
             <div className={styles.tipContainer}>
                 <FiInfo/>
                 <p>Download the instant installer and run!</p>

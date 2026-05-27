@@ -47,47 +47,54 @@ const ExportApps = ({ apps, title, subtitle }) => {
     const handleScriptChange = useCallback(async () => {
         if (!apps) return;
 
-        let installs = [];
-        let advancedFilters = "";
+        const buildFilterString = (f) => {
+            if (!f) return "";
+            let parts = [];
 
-        if (filters) {
-            advancedFilters = Object.entries({ ...filters} ).filter(i => i[1] === true).map(i => i[0]).join(" ");
+            // Silent/Interactive (Mutually Exclusive, Default Silent)
+            if (f["--interactive"]) {
+                parts.push("--interactive");
+            } else {
+                parts.push("--silent");
+            }
 
-        if (filters["-o"]) advancedFilters += ` -o "${filters["-o"]}"`;
-        if (filters["-l"]) advancedFilters += ` -l "${filters["-l"]}"`;
-        if (filters["--scope"]) advancedFilters += ` --scope "${filters["--scope"]}"`;
-    }
+            // Boolean flags
+            if (f["--force"]) parts.push("--force");
+            if (f["--ignore-unavailable"]) parts.push("--ignore-unavailable");
 
-    apps.map((app) => {
-        let appFilters = advancedFilters;
+            // Value flags
+            if (f["--log"]) parts.push(`--log "${f["--log"]}"`);
+            if (f["--location"]) parts.push(`--location "${f["--location"]}"`);
+            if (f["--scope"]) parts.push(`--scope "${f["--scope"]}"`);
+            if (f["--override"] && f["--override"].trim()) parts.push(`--override "${f["--override"]}"`);
 
-        if (app.advancedConfig) {
-            const appConfig = app.advancedConfig;
-            let appAdvancedFilters = "";
-
-            appAdvancedFilters = Object.entries({ ...appConfig }).filter(i => i[1] === true).map(i => i[0]).join(" ");
-
-            if(appConfig["-o"]) appAdvancedFilters += ` -o "${appConfig["-o"]}"`;
-            if(appConfig["-l"]) appAdvancedFilters += ` -l "${appConfig["-l"]}"`;
-            if(appConfig["--scope"]) appAdvancedFilters += ` --scope "${appConfig["--scope"]}"`;
-
-            appFilters = appAdvancedFilters;
+            return parts.join(" ");
         }
 
-        installs.push(
-            `winget install --id=${app._id}${app.selectedVersion !== app.latestVersion ? ` -v "${app.selectedVersion}"` : ""} -e ${appFilters}`
-        );
-        return app;
-    });
+        let installs = [];
+        let advancedFilters = buildFilterString(filters);
 
-    let newBatchScript = installs.join(" && ");
-    let newPSScript = installs.join(" ; ");
+        apps.map((app) => {
+            let appFilters = advancedFilters;
 
-    setBatScript(newBatchScript);
-    setPsScript(newPSScript);
-    setWingetScript(JSON.stringify(await generateWingetImport(apps), 2));
-    setWingetImportCommand(`winget import --import-file "$fileName" ${advancedFilters}`);
-}, [apps, filters]);
+            if (app.advancedConfig) {
+                appFilters = buildFilterString(app.advancedConfig);
+            }
+
+            installs.push(
+                `winget install --id=${app._id}${app.selectedVersion !== app.latestVersion ? ` -v "${app.selectedVersion}"` : ""} -e ${appFilters}`
+            );
+            return app;
+        });
+
+        let newBatchScript = installs.join(" && ");
+        let newPSScript = installs.join(" ; ");
+
+        setBatScript(newBatchScript);
+        setPsScript(newPSScript);
+        setWingetScript(JSON.stringify(await generateWingetImport(apps), 2));
+        setWingetImportCommand(`winget import --import-file "$fileName" ${advancedFilters}`);
+    }, [apps, filters]);
 
 useEffect(() => {
     const restoreDefaultTab = async () => {
