@@ -77,7 +77,7 @@ class FileCache {
     await this.ensureReady();
     const now = Date.now();
     const filePath = this.getFilePath(key);
-    const tempPath = `${filePath}.${process.pid}.${now}.${Math.random().toString(16).slice(2)}.tmp`;
+    const tempPath = `${filePath}.${process.pid}.${now}.tmp`;
     const entry = {
       value: String(value),
       expiresAt: now + ttl * 1000,
