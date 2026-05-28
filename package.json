@@ -38,6 +38,7 @@
     "build:docker": "STANDALONE_BUILD=true next build",
     "start": "next start",
     "start:standalone": "node .next/standalone/server.js",
+    "test": "node --test",
     "lint": "next lint",
     "clean:sw": "rm -f public/sw.js public/sw.js.map public/swe-worker-*.js"
   },
