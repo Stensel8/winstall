@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
-	const installBase = process.env.WINSTALL_INSTALLER_BASE;
+	const installBase = process.env.WINSTALL_BUILDER_BASE;
 
 	if (!installBase) {
 		return res.status(500).json({ error: 'Installer service not configured' });
