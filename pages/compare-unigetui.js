@@ -45,7 +45,7 @@ function StatusCell({ text, positive }) {
 }
 
 const UNIGETUI_TABLE = [
-  { feature: "Getting Started", win: "Instant browser-based experience — no installation required", other: "Requires downloading and installing a desktop application" },
+  { feature: "Getting Started", win: "Instant browser-based experience with no installation required", other: "Requires downloading and installing a desktop application" },
   { feature: "Setup Workflow", win: "Simple. Fast app discovery and Winget setup in minutes", other: "Complicated. More traditional package manager workflow" },
   { feature: "Share & Reuse", win: "Share install collections with a single link", other: "Limited sharing and onboarding workflow" },
   { feature: "User Experience", win: "Lightweight, beginner-friendly, and focused", other: "Complicated interface for users" },
@@ -55,7 +55,7 @@ const UNIGETUI_TABLE = [
 
 const UNIGETUI_FAQ = [
   { q: "Is Winstall.app a good UniGetUI alternative?", a: "Yes. Winstall.app is a lightweight alternative to UniGetUI for users who want a faster and simpler way to use Winget. Instead of installing another desktop application, Winstall.app lets you discover apps, generate install commands, and share software collections directly from your browser." },
-  { q: "Do I need UniGetUI if I already use Winget?", a: "Not necessarily. Winget already works natively in Windows 10 and 11. Winstall.app enhances the Winget experience with package discovery, curated collections, and reusable install commands — without adding another package management layer." },
+  { q: "Do I need UniGetUI if I already use Winget?", a: "Not necessarily. Winget already works natively in Windows 10 and 11. Winstall.app enhances the Winget experience with package discovery, curated collections, and reusable install commands without adding another package management layer." },
   { q: "What makes Winstall.app different from UniGetUI?", a: "UniGetUI focuses on desktop package management and maintenance workflows. Winstall.app focuses on fast setup, app discovery, onboarding, and shareable install experiences powered by Winget." },
   { q: "Is Winstall.app better for setting up a new PC?", a: "For many users, yes. Winstall.app is optimized for quickly installing multiple applications on a fresh Windows setup. You can create reusable install collections and launch them instantly using Winget." },
 ];
@@ -74,10 +74,10 @@ export default function CompareUniGetUI() {
           <div className={styles.heroContent}>
             <CompareTabs active="/compare-unigetui" />
             <h1>
-              Winstall.app <span>vs</span> UniGetUI
+              Best UniGetUI Alternative - Winstall.app
             </h1>
             <p>
-              Discover apps, build install collections, and install Windows software directly from your browser — without installing another package manager UI.
+              A simpler UniGetUI alternative built for fast Winget installs. Discover apps, create shareable collections, and generate install commands without downloading a desktop app.
             </p>
             <div className={styles.actions}>
               <a href="/" className={styles.btnPrimary}>
@@ -168,7 +168,7 @@ export default function CompareUniGetUI() {
 
       <section className={styles.featureComparison}>
         <div className={styles.sectionHeader}>
-          <h2>Feature Comparison</h2>
+          <h2>Winstall.app vs UniGetUI Feature Comparison</h2>
           <p>See how Winstall.app compares to UniGetUI across the features that matter.</p>
         </div>
 
@@ -208,7 +208,7 @@ export default function CompareUniGetUI() {
         <div className={styles.ctaBox}>
           <h2>Setup your Windows apps the modern way.</h2>
           <p>
-            Discover, share, and install apps with Winget — directly from your browser.
+            Discover, share, and install apps with Winget directly from your browser.
           </p>
           <a href="/" className={styles.ctaButton}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">

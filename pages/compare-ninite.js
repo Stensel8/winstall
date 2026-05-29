@@ -56,9 +56,9 @@ const NINITE_TABLE = [
 
 const NINITE_FAQ = [
   { q: "Is Winstall.app better than Ninite?", a: "Winstall.app offers both the simplicity of Ninite through Express Setup and the flexibility of the modern Winget ecosystem. You get access to 12,000+ packages, open-source transparency, shareable install scripts, and developer-friendly automation, while still supporting quick multi-app installation similar to Ninite." },
-  { q: "Can I switch from Ninite to Winstall.app?", a: "Yes. Most popular apps available on Ninite are also in the Winget repository. Just search for them on Winstall.app, build your collection, and generate the install command — no migration tool needed." },
-  { q: "Is Winstall.app free?", a: "Yes, completely free and open source — no paid tiers. Ninite is free for personal use but charges for its enterprise Pro version." },
-  { q: "Does Winstall.app require installation?", a: "No. Winstall.app runs entirely in your browser and generates Winget commands for your terminal. No downloads, no extra software — just Windows 10/11 with Winget." },
+  { q: "Can I switch from Ninite to Winstall.app?", a: "Yes. Most popular apps available on Ninite are also in the Winget repository. Just search for them on Winstall.app, build your collection, and generate the install command. No migration tool needed." },
+  { q: "Is Winstall.app free?", a: "Yes, completely free and open source with no paid tiers. Ninite is free for personal use but charges for its enterprise Pro version." },
+  { q: "Does Winstall.app require installation?", a: "No. Winstall.app runs entirely in your browser and generates Winget commands for your terminal. No downloads, no extra software. All you need is Windows 10/11 with Winget." },
 ];
 
 export default function CompareNinite() {
@@ -75,11 +75,10 @@ export default function CompareNinite() {
           <div className={styles.heroContent}>
             <CompareTabs active="/compare-ninite" />
             <h1>
-              Winstall.app <span>vs</span> Ninite
+              Best Ninite Alternative - Winstall.app
             </h1>
             <p>
-              The simplicity of Ninite, powered by the modern Winget ecosystem — more apps, open source,
-              community driven, and built for today's Windows.
+              A simpler, more flexible Ninite alternative powered by Winget. Install more apps, build shareable bundles, and generate commands without downloads or paid tiers.
             </p>
             <div className={styles.actions}>
               <a href="/" className={styles.btnPrimary}>
@@ -169,7 +168,7 @@ export default function CompareNinite() {
 
       <section className={styles.featureComparison}>
         <div className={styles.sectionHeader}>
-          <h2>Feature Comparison</h2>
+          <h2>Winstall.app vs Ninite Feature Comparison</h2>
           <p>See how Winstall.app compares to Ninite across the features that matter.</p>
         </div>
 

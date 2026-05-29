@@ -32,13 +32,13 @@ const COMPARISON_CARDS = [
   {
     competitor: "UniGetUI",
     page: "/compare-unigetui",
-    description: "UniGetUI (formerly WingetUI) is a desktop app that wraps multiple package managers. Winstall.app takes a lighter approach — no install needed, just open your browser and generate commands.",
+    description: "UniGetUI (formerly WingetUI) is a desktop app that wraps multiple package managers. Winstall.app takes a lighter approach. No install needed, just open your browser and generate commands.",
     highlights: ["No installation required", "Share collections via link", "Works instantly in any browser"],
   },
   {
     competitor: "Chocolatey",
     page: "/compare-chocolatey",
-    description: "Chocolatey has been the go-to Windows package manager for years, but it requires its own CLI setup. Winstall.app leverages the native Winget built into Windows — zero extra dependencies.",
+    description: "Chocolatey has been the go-to Windows package manager for years, but it requires its own CLI setup. Winstall.app leverages the native Winget built into Windows, with zero extra dependencies.",
     highlights: ["Native to Windows 10/11", "No extra CLI to install", "Free forever, no paid tiers"],
   },
 ];
@@ -86,7 +86,7 @@ export default function Compare() {
           <div className={styles.badge}>
             <span>COMPARISONS</span>
           </div>
-          <h1>See How Winstall.app Compares</h1>
+          <h1>See How Winstall.app Compares vs Alternatives</h1>
           <p>
             Thinking about switching to the modern Winget-powered way of installing apps?
             See how Winstall.app stacks up against the most popular alternatives.
@@ -108,7 +108,7 @@ export default function Compare() {
             <h2>Why developers and IT teams choose Winstall.app</h2>
             <p>
               Built on Microsoft's official Winget package manager, Winstall.app gives you access to the largest
-              Windows app ecosystem — with a modern web interface, shareable install collections, and full CLI
+              Windows app ecosystem with a modern web interface, shareable install collections, and full CLI
               automation. No installs, no accounts, no cost.
             </p>
             <a href="https://winstall.app/" className={styles.ctaButton}>

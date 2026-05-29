@@ -74,12 +74,10 @@ export default function CompareChocolatey() {
           <div className={styles.heroContent}>
             <CompareTabs active="/compare-chocolatey" />
             <h1>
-              Winstall.app <span>vs</span> Chocolatey
+              Best Chocolatey Alternative - Winstall.app
             </h1>
             <p>
-              Modern Winget setup without the complexity of traditional package managers. Use Microsoft's built-in
-              package manager to discover, install, and share apps directly from your browser — no extra package
-              management layer required.
+              A simpler Chocolatey alternative powered by Microsoft Winget. Discover apps, build shareable install bundles, and set up Windows software without another package manager.
             </p>
             <div className={styles.actions}>
               <a href="/" className={styles.btnPrimary}>
@@ -168,7 +166,7 @@ export default function CompareChocolatey() {
 
       <section className={styles.featureComparison}>
         <div className={styles.sectionHeader}>
-          <h2>Feature Comparison</h2>
+          <h2>Winstall.app vs Chocolatey Feature Comparison</h2>
           <p>See how Winstall.app compares to Chocolatey across the features that matter.</p>
         </div>
 
@@ -208,7 +206,7 @@ export default function CompareChocolatey() {
         <div className={styles.ctaBox}>
           <h2>Skip the legacy package manager workflow.</h2>
           <p>
-            Use Winget the modern way — directly from your browser, powered by Microsoft's native Windows package ecosystem.
+            Use Winget the modern way: directly from your browser, powered by Microsoft's native Windows package ecosystem.
           </p>
           <a href="/" className={styles.ctaButton}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
