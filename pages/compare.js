@@ -111,7 +111,7 @@ export default function Compare() {
               Windows app ecosystem with a modern web interface, shareable install collections, and full CLI
               automation. No installs, no accounts, no cost.
             </p>
-            <a href="https://winstall.app/" className={styles.ctaButton}>
+            <a href="/" className={styles.ctaButton}>
               <IconZapFill /> Start Installing Apps
             </a>
           </div>
