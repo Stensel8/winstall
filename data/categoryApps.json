@@ -408,188 +408,268 @@
   ],
   "runtimes": [
     {
-      "_id": "Microsoft .NET Framework Runtime 4.8.1",
-      "name": ".NET 4.8.1",
+      "_id": "Microsoft.DotNet.DesktopRuntime.10",
+      "name": "Microsoft .NET Windows Desktop Runtime 10.0",
       "img": "dotnet.webp"
     },
     {
-      "_id": "Microsoft Windows Desktop Runtime - 8.0.25 (x64)",
-      "name": ".NET Desktop Runtime (x64) 8.0.27.36030",
+      "_id": "Microsoft.DotNet.DesktopRuntime.9",
+      "name": "Microsoft .NET Windows Desktop Runtime 9.0",
       "img": "dotnet.webp"
     },
     {
-      "_id": "Microsoft .NET Windows Desktop Runtime 8.0",
-      "name": ".NET Desktop Runtime (arm64) 8.0.27.36030",
+      "_id": "Microsoft.DotNet.DesktopRuntime.8",
+      "name": "Microsoft .NET Windows Desktop Runtime 8.0",
       "img": "dotnet.webp"
     },
     {
-      "_id": "Microsoft Windows Desktop Runtime - 8.0.25 (x86)",
-      "name": ".NET Desktop Runtime (x86) 8.0.27.36030",
+      "_id": "Microsoft.DotNet.DesktopRuntime.7",
+      "name": "Microsoft .NET Windows Desktop Runtime 7.0",
       "img": "dotnet.webp"
     },
     {
-      "_id": "Microsoft .NET Windows Desktop Runtime 9.0",
-      "name": ".NET Desktop Runtime (arm64) 9.0.16.36030",
+      "_id": "Microsoft.DotNet.DesktopRuntime.6",
+      "name": "Microsoft .NET Windows Desktop Runtime 6.0",
       "img": "dotnet.webp"
     },
     {
-      "_id": "Microsoft .NET Windows Desktop Runtime 10.0",
-      "name": ".NET Desktop Runtime (arm64) 10.0.8.50000",
+      "_id": "Microsoft.DotNet.DesktopRuntime.5",
+      "name": "Microsoft .NET Windows Desktop Runtime 5.0",
       "img": "dotnet.webp"
     },
     {
-      "_id": "Microsoft ASP.NET Core Runtime 8.0",
-      "name": "ASP.NET Core Runtime (arm64) 8.0.27.26230",
+      "_id": "Microsoft.DotNet.DesktopRuntime.3_1",
+      "name": "Microsoft .NET Windows Desktop Runtime 3.1",
+      "img": "dotnet.webp"
+    },
+    {
+      "_id": "Microsoft.DotNet.Framework.Runtime",
+      "name": "Microsoft .NET Framework Runtime 4.8.1",
+      "img": "dotnet.webp"
+    },
+    {
+      "_id": "Microsoft.DotNet.Runtime.10",
+      "name": "Microsoft .NET Runtime 10.0",
+      "img": "dotnet.webp"
+    },
+    {
+      "_id": "Microsoft.DotNet.Runtime.9",
+      "name": "Microsoft .NET Runtime 9.0",
+      "img": "dotnet.webp"
+    },
+    {
+      "_id": "Microsoft.DotNet.Runtime.8",
+      "name": "Microsoft .NET Runtime 8.0",
+      "img": "dotnet.webp"
+    },
+    {
+      "_id": "Microsoft.DotNet.Runtime.7",
+      "name": "Microsoft .NET Runtime 7.0",
+      "img": "dotnet.webp"
+    },
+    {
+      "_id": "Microsoft.DotNet.Runtime.6",
+      "name": "Microsoft .NET Runtime 6.0",
+      "img": "dotnet.webp"
+    },
+    {
+      "_id": "Microsoft.DotNet.Runtime.5",
+      "name": "Microsoft .NET Runtime 5.0",
+      "img": "dotnet.webp"
+    },
+    {
+      "_id": "Microsoft.DotNet.Runtime.3_1",
+      "name": "Microsoft .NET Runtime 3.1",
+      "img": "dotnet.webp"
+    },
+    {
+      "_id": "Microsoft.DotNet.AspNetCore.10",
+      "name": "Microsoft ASP.NET Core Runtime 10.0",
       "img": "aspnetcore.webp"
     },
     {
-      "_id": "Microsoft ASP.NET Core Runtime 9.0",
-      "name": "ASP.NET Core Runtime (arm64) 9.0.16.26230",
+      "_id": "Microsoft.DotNet.AspNetCore.9",
+      "name": "Microsoft ASP.NET Core Runtime 9.0",
       "img": "aspnetcore.webp"
     },
     {
-      "_id": "Microsoft ASP.NET Core Runtime 10.0",
-      "name": "ASP.NET Core Runtime (arm64) 10.0.8.36029",
+      "_id": "Microsoft.DotNet.AspNetCore.8",
+      "name": "Microsoft ASP.NET Core Runtime 8.0",
       "img": "aspnetcore.webp"
     },
     {
-      "_id": "Eclipse Temurin JRE with Hotspot 8",
-      "name": "Java (AdoptOpenJDK) x64 8",
-      "img": "temurin.webp"
+      "_id": "Microsoft.DotNet.AspNetCore.7",
+      "name": "Microsoft ASP.NET Core Runtime 7.0",
+      "img": "aspnetcore.webp"
     },
     {
-      "_id": "Eclipse Temurin JRE with Hotspot 11",
-      "name": "Java (AdoptOpenJDK) x64 11",
-      "img": "temurin.webp"
+      "_id": "Microsoft.DotNet.AspNetCore.6",
+      "name": "Microsoft ASP.NET Core Runtime 6.0",
+      "img": "aspnetcore.webp"
     },
     {
-      "_id": "Eclipse Temurin JRE with Hotspot 17",
-      "name": "Java (AdoptOpenJDK) x64 17",
-      "img": "temurin.webp"
+      "_id": "Microsoft.DotNet.AspNetCore.5",
+      "name": "Microsoft ASP.NET Core Runtime 5.0",
+      "img": "aspnetcore.webp"
     },
     {
-      "_id": "Eclipse Temurin JRE with Hotspot 21",
-      "name": "Java (AdoptOpenJDK) x64 21",
-      "img": "temurin.webp"
+      "_id": "Microsoft.DotNet.AspNetCore.3_1",
+      "name": "Microsoft ASP.NET Core Runtime 3.1",
+      "img": "aspnetcore.webp"
     },
     {
-      "_id": "Eclipse Temurin JRE with Hotspot 25",
-      "name": "Java (AdoptOpenJDK) x64 25",
-      "img": "temurin.webp"
+      "_id": "Oracle.JDK.26",
+      "name": "Java(TM) SE Development Kit 26",
+      "img": "jdk.webp"
     },
     {
-      "_id": "Eclipse Temurin JDK with Hotspot 8",
-      "name": "JDK (AdoptOpenJDK) x64 8",
-      "img": "temurin.webp"
+      "_id": "Oracle.JDK.25",
+      "name": "Java(TM) SE Development Kit 25",
+      "img": "jdk.webp"
     },
     {
-      "_id": "Eclipse Temurin JDK with Hotspot 11",
-      "name": "JDK (AdoptOpenJDK) x64 11",
-      "img": "temurin.webp"
+      "_id": "Oracle.JDK.24",
+      "name": "Java(TM) SE Development Kit 24",
+      "img": "jdk.webp"
     },
     {
-      "_id": "Eclipse Temurin JDK with Hotspot 17",
-      "name": "JDK (AdoptOpenJDK) x64 17",
-      "img": "temurin.webp"
+      "_id": "Oracle.JDK.23",
+      "name": "Java(TM) SE Development Kit 23",
+      "img": "jdk.webp"
     },
     {
-      "_id": "Eclipse Temurin JDK with Hotspot 21",
-      "name": "JDK (AdoptOpenJDK) x64 21",
-      "img": "temurin.webp"
+      "_id": "Oracle.JDK.22",
+      "name": "Java(TM) SE Development Kit 22",
+      "img": "jdk.webp"
     },
     {
-      "_id": "Eclipse Temurin JDK with Hotspot 25",
-      "name": "JDK (AdoptOpenJDK) x64 25",
-      "img": "temurin.webp"
+      "_id": "Oracle.JDK.21",
+      "name": "Java(TM) SE Development Kit 21",
+      "img": "jdk.webp"
     },
     {
-      "_id": "Amazon Corretto 8",
-      "name": "JDK (Amazon Corretto) 8",
+      "_id": "Oracle.JDK.20",
+      "name": "Java(TM) SE Development Kit 20",
+      "img": "jdk.webp"
+    },
+    {
+      "_id": "Oracle.JDK.19",
+      "name": "Java(TM) SE Development Kit 19",
+      "img": "jdk.webp"
+    },
+    {
+      "_id": "Oracle.JDK.18",
+      "name": "Java(TM) SE Development Kit 18",
+      "img": "jdk.webp"
+    },
+    {
+      "_id": "Oracle.JDK.17",
+      "name": "Java(TM) SE Development Kit 17",
+      "img": "jdk.webp"
+    },
+    {
+      "_id": "Amazon.Corretto.26.JDK",
+      "name": "Amazon Corretto 26",
       "img": "corretto.webp"
     },
     {
-      "_id": "Amazon Corretto 11",
-      "name": "JDK (Amazon Corretto) x86 11",
+      "_id": "Amazon.Corretto.25.JDK",
+      "name": "Amazon Corretto 25",
       "img": "corretto.webp"
     },
     {
-      "_id": "Amazon Corretto 17",
-      "name": "JDK (Amazon Corretto) x64 17",
+      "_id": "Amazon.Corretto.24.JDK",
+      "name": "Amazon Corretto 24",
       "img": "corretto.webp"
     },
     {
-      "_id": "Amazon Corretto 21",
-      "name": "JDK (Amazon Corretto) x64 21",
+      "_id": "Amazon.Corretto.23.JDK",
+      "name": "Amazon Corretto 23",
       "img": "corretto.webp"
     },
     {
-      "_id": "Amazon Corretto 25",
-      "name": "JDK (Amazon Corretto) x64 25",
+      "_id": "Amazon.Corretto.22.JDK",
+      "name": "Amazon Corretto 22",
       "img": "corretto.webp"
     },
     {
-      "_id": "Amazon Corretto JRE 8",
-      "name": "JRE (Amazon Corretto) 8",
+      "_id": "Amazon.Corretto.21.JDK",
+      "name": "Amazon Corretto 21",
       "img": "corretto.webp"
     },
     {
-      "_id": "Microsoft Visual C++ 2015-2022 Redistributable (x64)",
-      "name": "VC Redist x64 2015+",
+      "_id": "Amazon.Corretto.20.JDK",
+      "name": "Amazon Corretto 20",
+      "img": "corretto.webp"
+    },
+    {
+      "_id": "Amazon.Corretto.19.JDK",
+      "name": "Amazon Corretto 19",
+      "img": "corretto.webp"
+    },
+    {
+      "_id": "Amazon.Corretto.18.JDK",
+      "name": "Amazon Corretto 18",
+      "img": "corretto.webp"
+    },
+    {
+      "_id": "Amazon.Corretto.17.JDK",
+      "name": "Amazon Corretto 17",
+      "img": "corretto.webp"
+    },
+    {
+      "_id": "Amazon.Corretto.11.JDK",
+      "name": "Amazon Corretto 11",
+      "img": "corretto.webp"
+    },
+    {
+      "_id": "Amazon.Corretto.8.JDK",
+      "name": "Amazon Corretto 8",
+      "img": "corretto.webp"
+    },
+    {
+      "_id": "Amazon.Corretto.8.JRE",
+      "name": "Amazon Corretto JRE 8",
+      "img": "corretto.webp"
+    },
+    {
+      "_id": "Microsoft.VCRedist.2015+.x64",
+      "name": "Microsoft Visual C++ 2015-2022 Redistributable (x64)",
       "img": "vcredist.webp"
     },
     {
-      "_id": "Microsoft Visual C++ 2015-2022 Redistributable (x86)",
-      "name": "VC Redist x86 2015+",
+      "_id": "Microsoft.VCRedist.2015+.x86",
+      "name": "Microsoft Visual C++ 2015-2022 Redistributable (x86)",
       "img": "vcredist.webp"
     },
     {
-      "_id": "Microsoft Visual C++ 2013 Redistributable (x64)",
-      "name": "VC Redist x64 2013",
+      "_id": "Microsoft.VCRedist.2013.x64",
+      "name": "Microsoft Visual C++ 2013 Redistributable (x64)",
       "img": "vcredist.webp"
     },
     {
-      "_id": "Microsoft Visual C++ 2013 Redistributable (x86)",
-      "name": "VC Redist x86 2013",
+      "_id": "Microsoft.VCRedist.2013.x86",
+      "name": "Microsoft Visual C++ 2013 Redistributable (x86)",
       "img": "vcredist.webp"
     },
     {
-      "_id": "Microsoft Visual C++ 2012 Redistributable (x64)",
-      "name": "VC Redist x64 2012",
+      "_id": "Microsoft.VCRedist.2012.x64",
+      "name": "Microsoft Visual C++ 2012 Redistributable (x64)",
       "img": "vcredist.webp"
     },
     {
-      "_id": "Microsoft Visual C++ 2012 Redistributable (x86)",
-      "name": "VC Redist x86 2012",
+      "_id": "Microsoft.VCRedist.2012.x86",
+      "name": "Microsoft Visual C++ 2012 Redistributable (x86)",
       "img": "vcredist.webp"
     },
     {
-      "_id": "Microsoft Visual C++ 2010 x64 Redistributable",
-      "name": "VC Redist x64 2010",
+      "_id": "Microsoft.VCRedist.2010.x64",
+      "name": "Microsoft Visual C++ 2010 X64 Redistributable",
       "img": "vcredist.webp"
     },
     {
-      "_id": "Microsoft Visual C++ 2010 x86 Redistributable",
-      "name": "VC Redist x86 2010",
-      "img": "vcredist.webp"
-    },
-    {
-      "_id": "Microsoft Visual C++ 2008 x64 Redistributable",
-      "name": "VC Redist x64 2008",
-      "img": "vcredist.webp"
-    },
-    {
-      "_id": "Microsoft Visual C++ 2008 x86 Redistributable",
-      "name": "VC Redist x86 2008",
-      "img": "vcredist.webp"
-    },
-    {
-      "_id": "Microsoft Visual C++ 2005 Redistributable (x64)",
-      "name": "VC Redist x64 2005",
-      "img": "vcredist.webp"
-    },
-    {
-      "_id": "Microsoft Visual C++ 2005 Redistributable (x86)",
-      "name": "VC Redist x86 2005",
+      "_id": "Microsoft.VCRedist.2010.x86",
+      "name": "Microsoft Visual C++ 2010 x86 Redistributable",
       "img": "vcredist.webp"
     }
   ]
