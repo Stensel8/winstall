@@ -78,6 +78,7 @@ export default async function handler(req, res) {
 				webhookHeaders.Authorization = `Basic ${Buffer.from(`${webhookAuthId}:${webhookAuthSecret}`).toString('base64')}`;
 			}
 
+			//console.log('[Installer] Webhook:', builderWebhook);
 			const webhookResponse = await fetch(builderWebhook, {
 				method: 'POST',
 				headers: webhookHeaders,
