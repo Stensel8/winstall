@@ -18,8 +18,7 @@
     flex-direction: column;
     justify-content: flex-start;
 
-    &:focus,
-    &:hover {
+    &:focus{
        opacity: 0.75;
     }
 
