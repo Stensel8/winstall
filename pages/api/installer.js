@@ -33,6 +33,7 @@ export default async function handler(req, res) {
 	const taskId = uuidv4();
 	const redisClient = getClient();
 	const cacheKey = `installer:task:${taskId}`;
+	console.log('[Installer] TaskId:', taskId);
 
 	try {
 		await redisClient.setEx(cacheKey, 3600, '0');
@@ -45,6 +46,9 @@ export default async function handler(req, res) {
 		if (uploadUrl) {
 			console.log('[Installer] S3 PutPresignUrl:', uploadUrl);
 			console.log('[Installer] CallbackUrl:', callbackUrl);
+		}
+		if (process.env.NODE_ENV === 'development') {
+			console.log('[Installer] Config:', JSON.stringify(config, null, 2));
 		}
 
 		if (builderWebhook) {
@@ -78,7 +82,7 @@ export default async function handler(req, res) {
 				webhookHeaders.Authorization = `Basic ${Buffer.from(`${webhookAuthId}:${webhookAuthSecret}`).toString('base64')}`;
 			}
 
-			//console.log('[Installer] Webhook:', builderWebhook);
+			//console.log('[Installer] WebhookUrl:', builderWebhook);
 			const webhookResponse = await fetch(builderWebhook, {
 				method: 'POST',
 				headers: webhookHeaders,
@@ -104,10 +108,6 @@ export default async function handler(req, res) {
 			}
 
 			const url = `${builderBase}/installer`;
-			if (process.env.NODE_ENV === 'development') {
-				console.log('[Installer] Config:', JSON.stringify(payload, null, 2));
-			}
-
 			const response = await fetch(url, {
 				method: 'POST',
 				headers: {
@@ -133,6 +133,7 @@ export default async function handler(req, res) {
 		statusUrlObj.searchParams.set('taskId', taskId);
 		if (filename) statusUrlObj.searchParams.set('fileName', filename);
 		const statusUrl = statusUrlObj.toString();
+		console.log('[Installer] StatusUrl:', statusUrl);
 
 		return res.status(202).json({
 			taskId,
