@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FiDownload, FiInfo } from "react-icons/fi";
 import styles from "../../styles/exportApps.module.scss";
 
 const InstallerExport = ({ apps, filters = {} }) => {
     const [isProcessing, setIsProcessing] = useState(false);
+    const [countdown, setCountdown] = useState(10);
+    const countdownTimerRef = useRef(null);
 
     const buildInstallerOptions = (sourceFilters = {}) => {
         const options = {
@@ -40,7 +42,7 @@ const InstallerExport = ({ apps, filters = {} }) => {
         document.body.removeChild(a);
     };
 
-    const pollStatus = async (statusUrl, timeoutMs = 300000) => {
+    const pollStatus = async (statusUrl, timeoutMs = 60000) => {
         const startTime = Date.now();
         const pollInterval = 1000;
 
@@ -85,6 +87,16 @@ const InstallerExport = ({ apps, filters = {} }) => {
         }
 
         setIsProcessing(true);
+        setCountdown(10);
+
+        countdownTimerRef.current = setInterval(() => {
+            setCountdown(prev => {
+                if (prev > 0) {
+                    return prev - 1;
+                }
+                return 0;
+            });
+        }, 1000);
 
         try {
             const appsPayload = apps.map(app => ({
@@ -144,12 +156,17 @@ const InstallerExport = ({ apps, filters = {} }) => {
         } catch (error) {
             console.error('Install error:', error);
             if (error.message === 'timeout') {
-                alert('Install error: timeout');
+                alert('Download timeout');
             } else {
                 alert(`Install error: ${error.message}`);
             }
         } finally {
+            if (countdownTimerRef.current) {
+                clearInterval(countdownTimerRef.current);
+                countdownTimerRef.current = null;
+            }
             setIsProcessing(false);
+            setCountdown(10);
         }
     };
 
@@ -190,7 +207,7 @@ const InstallerExport = ({ apps, filters = {} }) => {
                     disabled={isProcessing}
                 >
                     <FiDownload />
-                    {isProcessing ? 'Processing...' : 'Download installer'}
+                    {isProcessing ? `Processing (${countdown})...` : 'Download installer'}
                 </button>
             </div>
         </div>
