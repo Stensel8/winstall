@@ -57,45 +57,45 @@ export const authOptions = {
       }
 
       // Development mode: log session structure for testing/comparison
-      if (process.env.NODE_ENV === 'development') {
-        console.log('\n[NextAuth Session Debug]');
-        console.log('Provider: Twitter OAuth 2.0');
-        console.log('Session:', JSON.stringify(session, null, 2));
-        console.log('Token (JWT):', JSON.stringify({
-          id: token.id,
-          name: token.name,
-          email: token.email,
-          picture: token.picture,
-          username: token.username,
-          iat: token.iat,
-          exp: token.exp,
-          jti: token.jti
-        }, null, 2));
-        console.log('[NextAuth Session Debug End]\n');
-      }
+      // if (process.env.NODE_ENV === 'development') {
+      //   console.log('\n[NextAuth Session Debug]');
+      //   console.log('Provider: Twitter OAuth 2.0');
+      //   console.log('Session:', JSON.stringify(session, null, 2));
+      //   console.log('Token (JWT):', JSON.stringify({
+      //     id: token.id,
+      //     name: token.name,
+      //     email: token.email,
+      //     picture: token.picture,
+      //     username: token.username,
+      //     iat: token.iat,
+      //     exp: token.exp,
+      //     jti: token.jti
+      //   }, null, 2));
+      //   console.log('[NextAuth Session Debug End]\n');
+      // }
 
       return session;
     },
 
     jwt: async ({ token, account, profile }) => {
       // Development mode: log raw profile from OAuth provider
-      if (process.env.NODE_ENV === 'development' && profile) {
-        console.log('\n[NextAuth JWT Debug - Raw Profile]');
-        console.log('Provider: Twitter OAuth 2.0');
-        console.log('Profile:', JSON.stringify(profile, null, 2));
-        if (account) {
-          console.log('Account:', JSON.stringify({
-            provider: account.provider,
-            type: account.type,
-            access_token: account.access_token ? '***' + account.access_token.slice(-8) : undefined,
-            refresh_token: account.refresh_token ? '***' + account.refresh_token.slice(-8) : undefined,
-            expires_at: account.expires_at,
-            token_type: account.token_type,
-            scope: account.scope
-          }, null, 2));
-        }
-        console.log('[NextAuth JWT Debug End]\n');
-      }
+      // if (process.env.NODE_ENV === 'development' && profile) {
+      //   console.log('\n[NextAuth JWT Debug - Raw Profile]');
+      //   console.log('Provider: Twitter OAuth 2.0');
+      //   console.log('Profile:', JSON.stringify(profile, null, 2));
+      //   if (account) {
+      //     console.log('Account:', JSON.stringify({
+      //       provider: account.provider,
+      //       type: account.type,
+      //       access_token: account.access_token ? '***' + account.access_token.slice(-8) : undefined,
+      //       refresh_token: account.refresh_token ? '***' + account.refresh_token.slice(-8) : undefined,
+      //       expires_at: account.expires_at,
+      //       token_type: account.token_type,
+      //       scope: account.scope
+      //     }, null, 2));
+      //   }
+      //   console.log('[NextAuth JWT Debug End]\n');
+      // }
 
       if (profile) {
         token.id = profile.data?.id ?? profile.id;
