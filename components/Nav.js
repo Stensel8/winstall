@@ -84,14 +84,11 @@ function Nav() {
       <div className={styles.leftSection}>
         <div className={styles.brand}>
           <img
-            src="/assets/logo.svg"
-            alt="winstall logo"
-            width="48"
-            height="48"
+            src="/assets/winstall_logo.svg"
+            alt="winstall"
+            className={styles.brandLogo}
             draggable={false}
           />
-          <span className={styles.brandText}>winstall</span>
-          {/* <span className="preview">&nbsp;(preview)</span> */}
         </div>
 
         <div className={styles.nav}>

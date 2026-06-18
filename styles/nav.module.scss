@@ -1,35 +1,17 @@
 .leftSection{
     display: flex;
-    align-items: center;
+    align-items: flex-center;
     gap: 48px;
 }
 
 .brand{
     display: flex;
     align-items: center;
-    gap: 6px;
 
-    img{
+    .brandLogo{
         display: block;
-    }
-
-    .brandText{
-        font-weight: 700;
-        font-size: 28pt;
-        background: linear-gradient(to bottom, #6D1CDD, #FC3AA2);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        line-height: 1.2;
-    }
-
-    :global(.dark) &{
-        .brandText{
-            background: linear-gradient(to bottom, #6D1CDD, #FC3AA2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+        height: 53px;
+        width: auto;
     }
 }
 
