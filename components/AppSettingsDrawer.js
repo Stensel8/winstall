@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import styles from "../styles/appSettingsDrawer.module.scss";
 import exportStyles from "../styles/exportApps.module.scss";
 import { CheckboxConfig, RadioConfig, TextInputConfig } from "./AppExport/InputComponents";
+import {
+    drawerStateToInstallOptions,
+    installOptionsToDrawerState,
+} from "../utils/installOptions";
 
 const DEFAULT_APP_CONFIG = {
     customConfig: false,
@@ -14,26 +18,59 @@ const DEFAULT_APP_CONFIG = {
     "--force": false
 };
 
-const AppSettingsDrawer = ({ app, isOpen, onClose, onConfigChange, defaultFilters = {} }) => {
+const SCOPED_CONFIG_KEYS = new Set(["--scope", "--interactive", "--force"]);
+
+const AppSettingsDrawer = ({
+    app,
+    isOpen,
+    onClose,
+    onConfigChange,
+    defaultFilters = {},
+}) => {
     const [config, setConfig] = useState(DEFAULT_APP_CONFIG);
     const hiddenOptions = ["--ignore-unavailable"];
 
     useEffect(() => {
-        if (app && app.advancedConfig) {
-            setConfig({ ...DEFAULT_APP_CONFIG, ...app.advancedConfig });
-        } else {
+        if (!isOpen) {
             setConfig({ ...DEFAULT_APP_CONFIG });
+            return;
         }
-    }, [app]);
+
+        if (!app) {
+            return;
+        }
+
+        setConfig({
+            ...DEFAULT_APP_CONFIG,
+            ...installOptionsToDrawerState(app.installOptions),
+        });
+    }, [isOpen, app?._id]);
 
     const updateConfig = (key, val) => {
         const newConfig = { ...config, [key]: val };
+
         if (key === "--interactive") {
             newConfig["--silent"] = !val;
         }
+
+        if (key === "customConfig" && val === true) {
+            newConfig["--scope"] = defaultFilters["--scope"] ?? "";
+            newConfig["--interactive"] = defaultFilters["--interactive"] ?? false;
+            newConfig["--silent"] = newConfig["--interactive"]
+                ? false
+                : defaultFilters["--silent"] !== false;
+            newConfig["--force"] = defaultFilters["--force"] ?? false;
+        }
+
+        if (SCOPED_CONFIG_KEYS.has(key)) {
+            newConfig.customConfig = true;
+        }
+
         setConfig(newConfig);
-        onConfigChange && onConfigChange(app, newConfig);
+        onConfigChange && onConfigChange(app, drawerStateToInstallOptions(newConfig));
     };
+
+    const optionsDisabled = !config.customConfig;
 
     const scopeValue = config.customConfig
         ? config["--scope"]
@@ -78,11 +115,11 @@ const AppSettingsDrawer = ({ app, isOpen, onClose, onConfigChange, defaultFilter
                             updateConfig={updateConfig}
                             hiddenOptions={hiddenOptions}
                             labelText="Installation scope"
-                            disabled={!config.customConfig}
+                            disabled={optionsDisabled}
                         />
 
-                        <CheckboxConfig id="--interactive" defaultChecked={interactiveValue} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Request interactive installation; user input may be needed" disabled={!config.customConfig}/>
-                        <CheckboxConfig id="--force" defaultChecked={forceValue} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Override the installer hash check" disabled={!config.customConfig}/>
+                        <CheckboxConfig id="--interactive" defaultChecked={interactiveValue} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Request interactive installation; user input may be needed" disabled={optionsDisabled}/>
+                        <CheckboxConfig id="--force" defaultChecked={forceValue} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Override the installer hash check" disabled={optionsDisabled}/>
 
                         <TextInputConfig id="--override" defaultValue={config["--override"]} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Override arguments to be passed on to the installer" inputPlaceholder="Enter arguments for installer"/>
                         <TextInputConfig id="--log" defaultValue={config["--log"]} updateConfig={updateConfig} hiddenOptions={hiddenOptions} labelText="Log location (if supported)" inputPlaceholder="Enter a valid file path for your local machine"/>

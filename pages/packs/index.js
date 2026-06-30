@@ -1,142 +1,360 @@
+import { useState, useEffect, useCallback } from "react";
+import { getSession, signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub, FaMicrosoft } from "react-icons/fa";
+import { FiPlus } from "react-icons/fi";
+
 import PageWrapper from "../../components/PageWrapper";
 import MetaTags from "../../components/MetaTags";
-import styles from "../../styles/apps.module.scss";
-import PackPreview from "../../components/PackPreview";
-import Link from "next/link";
-import { FiChevronLeft, FiPlus, FiChevronRight, FiArrowLeftCircle, FiArrowRightCircle } from "react-icons/fi";
-import FeaturePromoter from "../../components/FeaturePromoter";
-import React, { useState } from "react";
-import fetchWinstallAPI from "../../utils/fetchWinstallAPI";
+import PackCard from "../../components/PackCard";
+import CreatePackModal from "../../components/CreatePackModal";
 import Error from "../../components/Error";
-import DonateCard from "../../components/DonateCard";
+import { fetchMyPacks, fetchPublicPacks } from "../../utils/fetchPackAPI";
+import { OWN_PACKS_UPDATED_EVENT } from "../../utils/packHelpers";
 
-export default function Packs({ packs, error }) {
-    if (error) return <Error title="Oops!" subtitle={error} />
+import styles from "../../styles/packsIndex.module.scss";
 
-    const [offset, setOffset] = useState(0);
-
-    const itemsPerPage = 60;
-    const totalPages = Math.ceil(packs.length / itemsPerPage);
-
-    let handleNext = () => {
-        window.scrollTo(0, 0)
-        setOffset(offset => offset + itemsPerPage);
-    }
-
-    let handlePrevious = () => {
-        window.scrollTo(0, 0)
-        setOffset(offset => offset - itemsPerPage);
-    }
-
-    const Pagination = ({ small, disable }) => {
-        return (
-            <div className={small ? styles.minPagination : styles.pagbtn}>
-                <button
-                    className={`button ${small ? styles.smallBtn : null}`}
-                    id={!small ? "previous" : ""}
-                    onClick={handlePrevious}
-                    title="Previous page of packs"
-                    disabled={offset > 0 ? (disable ? "disabled" : null) : "disabled"}
-                >
-                    <FiChevronLeft />
-                    {!small ? "Previous" : ""}
-                </button>
-                <button
-                    className={`button ${small ? styles.smallBtn : null}`}
-                    id={!small ? "next" : ""}
-                    title="Next page of packs"
-                    onClick={handleNext}
-                    disabled={offset + itemsPerPage < packs.length ? (disable ? "disabled" : null) : "disabled"}
-                >
-                    {!small ? "Next" : ""}
-                    <FiChevronRight />
-                </button>
-            </div>
-        );
-    }
-
-
-    return (
-        <PageWrapper>
-            <MetaTags title="Packs - winstall" desc="Checkout the community's app collections for your new Windows 10 machine." path="/packs" />
-
-            <div>
-                <FeaturePromoter art="/assets/packsPromo.svg" promoId="packs" disableHide={true}>
-                    <h3>Introducing Packs</h3>
-                    <h1>Curate and share the apps you use daily.</h1>
-                    <div className="box2">
-                        <Link href="/packs/create" className="button spacer accent" id="starWine"><FiPlus /> Create a pack</Link>
-                    </div>
-                </FeaturePromoter>
-
-                <div className={styles.controls}>
-                    <div>
-                        <h1>All packs {`(${packs.length})`}</h1>
-                        <p>
-                            Showing {packs.slice(offset, offset + itemsPerPage).length} packs
-                            (page {Math.round((offset + itemsPerPage - 1) / itemsPerPage)} of{" "}
-                            {totalPages}).
-                        </p>
-                    </div>
-                    <Pagination small />
-                </div>
-
-
-
-                <ul className={`${styles.all} ${styles.storeList}`}>
-                    {packs.slice(offset, offset + itemsPerPage).map((pack, index) => (
-                        <React.Fragment key={pack._id}>
-                            <li>
-                                <PackPreview pack={pack} />
-                            </li>
-                            {index % 15 === 0 && <DonateCard addMargin="" />}
-                        </React.Fragment>
-                    ))}
-                </ul>
-
-                <div className={styles.pagination}>
-                    <Pagination />
-                    <em>
-                        Hit the <FiArrowLeftCircle /> and <FiArrowRightCircle /> keys
-                        on your keyboard to navigate between pages quickly.
-                    </em>
-                </div>
-            </div>
-
-        </PageWrapper>
-    )
+function getApiBase() {
+  return process.env.NEXT_PUBLIC_WINSTALL_API_BASE || "";
 }
 
+function transformPackIcons(packs, apiBase) {
+  const base = apiBase || getApiBase();
+  if (!base || !packs) return packs;
 
-export async function getStaticProps() {
-    const { getRuntimeConfig } = require('../../utils/runtimeConfig');
-    const config = await getRuntimeConfig();
-
-    let { response: packsData, error } = await fetchWinstallAPI(`/packs`);
-
-    if (error || !packsData?.data) {
-        console.error('[getStaticProps /packs] Failed to fetch packs:', error);
+  return packs.map((pack) => ({
+    ...pack,
+    apps: (pack.apps || []).map((app) => {
+      if (app.icon && !app.icon.startsWith("http") && !app.iconUrl) {
+        const iconName = app.icon.replace(".png", "");
         return {
-            props: {
-                packs: [],
-                error: error || 'Failed to load packs'
-            },
-            revalidate: 600
+          ...app,
+          iconUrl: `${base}/icons/next/${iconName}.webp`,
+          iconPng: `${base}/icons/${iconName}.png`,
         };
+      }
+      return app;
+    }),
+  }));
+}
+
+function CreatePackCard({ onClick }) {
+  return (
+    <li>
+      <button type="button" className={styles.createCard} onClick={onClick}>
+        <span className={styles.createIcon} aria-hidden="true">
+          <FiPlus />
+        </span>
+        <span className={styles.createLabel}>Create Pack</span>
+      </button>
+    </li>
+  );
+}
+
+export default function PacksPage() {
+  const router = useRouter();
+  const activeTab = router.query.tab === "mine" ? "mine" : "public";
+
+  const [publicPacks, setPublicPacks] = useState([]);
+  const [publicPacksLoading, setPublicPacksLoading] = useState(false);
+  const [publicPacksError, setPublicPacksError] = useState(null);
+
+  const [user, setUser] = useState(null);
+  const [myPacks, setMyPacks] = useState([]);
+  const [sessionChecked, setSessionChecked] = useState(false);
+  const [myPacksLoading, setMyPacksLoading] = useState(false);
+  const [myPacksError, setMyPacksError] = useState(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const authError = router.query.error;
+
+  const loadPublicPacks = useCallback(async ({ silent = false } = {}) => {
+    if (!silent) {
+      setPublicPacksLoading(true);
+    }
+    setPublicPacksError(null);
+
+    try {
+      const { response, error } = await fetchPublicPacks({ limit: 1000 });
+
+      if (error) {
+        setPublicPacksError(error);
+        setPublicPacks([]);
+      } else if (response?.data) {
+        setPublicPacks(transformPackIcons(response.data, getApiBase()));
+      }
+    } catch (err) {
+      setPublicPacksError(err.message || "Failed to load packs.");
+    } finally {
+      if (!silent) {
+        setPublicPacksLoading(false);
+      }
+    }
+  }, []);
+
+  const loadMyPacks = useCallback(async ({ silent = false } = {}) => {
+    if (!silent) {
+      setMyPacksLoading(true);
+    }
+    setMyPacksError(null);
+
+    const session = await getSession();
+    setSessionChecked(true);
+
+    if (!session) {
+      setUser(null);
+      setMyPacks([]);
+      if (!silent) {
+        setMyPacksLoading(false);
+      }
+      return;
     }
 
-    const officialPacks = process.env.NEXT_OFFICIAL_PACKS_CREATOR;
+    setUser(session.user);
 
-    let packs = packsData.data;
-    packs = packs.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
-    packs = packs.sort((a, b) => a.creator === officialPacks ? -1 : 1)
+    try {
+      const { response: userPacks, error } = await fetchMyPacks();
 
-    // Don't transform icons here - let AppIcon component handle it on client side
+      if (error) {
+        setMyPacksError(error);
+        setMyPacks([]);
+      } else if (userPacks) {
+        setMyPacks(transformPackIcons(userPacks, getApiBase()));
+      }
+    } catch (err) {
+      setMyPacksError(err.message || "Failed to load packs.");
+    } finally {
+      if (!silent) {
+        setMyPacksLoading(false);
+      }
+    }
+  }, []);
 
-    return {
-        props: {
-            packs,
-        },
-        revalidate: 600
+  useEffect(() => {
+    if (activeTab !== "public") return;
+    loadPublicPacks();
+  }, [activeTab, loadPublicPacks]);
+
+  useEffect(() => {
+    if (activeTab !== "mine") return;
+    loadMyPacks();
+  }, [activeTab, loadMyPacks]);
+
+  useEffect(() => {
+    if (!router.isReady || router.pathname !== "/packs") return;
+
+    const refreshActiveTab = () => {
+      if (activeTab === "mine") {
+        loadMyPacks({ silent: true });
+      } else {
+        loadPublicPacks({ silent: true });
+      }
     };
+
+    const handlePageShow = (event) => {
+      if (event.persisted) {
+        refreshActiveTab();
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        refreshActiveTab();
+      }
+    };
+
+    window.addEventListener("pageshow", handlePageShow);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("pageshow", handlePageShow);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [activeTab, loadMyPacks, loadPublicPacks, router.isReady, router.pathname]);
+
+  useEffect(() => {
+    const handleOwnPacksUpdated = (event) => {
+      const updatedPack = event.detail;
+      if (!updatedPack?._id) return;
+
+      const [pack] = transformPackIcons([updatedPack], getApiBase());
+      setMyPacks((current) =>
+        current.map((item) =>
+          item._id === pack._id ? { ...item, ...pack } : item
+        )
+      );
+    };
+
+    window.addEventListener(OWN_PACKS_UPDATED_EVENT, handleOwnPacksUpdated);
+
+    return () => {
+      window.removeEventListener(OWN_PACKS_UPDATED_EVENT, handleOwnPacksUpdated);
+    };
+  }, []);
+
+  const setTab = (tab) => {
+    const query = tab === "mine" ? { tab: "mine" } : {};
+    router.push({ pathname: "/packs", query }, undefined, { shallow: true });
+  };
+
+  const handleLogin = (provider) => {
+    signIn(provider, { callbackUrl: "/packs?tab=mine" });
+  };
+
+  const handlePackCreated = (newPack) => {
+    const [pack] = transformPackIcons(
+      [{ ...newPack, apps: newPack.apps || [] }],
+      getApiBase()
+    );
+    setMyPacks((current) => [...current, pack]);
+    setShowCreateModal(false);
+  };
+
+  const renderPublicPacks = () => {
+    if (publicPacksLoading) {
+      return <p className={styles.loading}>Loading...</p>;
+    }
+
+    if (publicPacksError) {
+      return <Error title="Oops!" subtitle={publicPacksError} />;
+    }
+
+    return (
+      <ul className={styles.grid}>
+        {publicPacks.map((pack) => (
+          <li key={pack._id}>
+            <PackCard pack={pack} />
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
+  const renderMyPacks = () => {
+    if (!sessionChecked || myPacksLoading) {
+      return <p className={styles.loading}>Loading...</p>;
+    }
+
+    if (!user) {
+      return (
+        <section className={styles.signInSection}>
+          <h1 className={styles.signInTitle}>
+            Sign in to create and manage your own app packs.
+          </h1>
+          <p className={styles.signInSubtitle}>
+            Share them publicly or keep them just for you.
+          </p>
+          {authError && (
+            <p className={styles.authError}>
+              Authentication failed. Please try again.
+            </p>
+          )}
+          <div className={styles.loginButtons}>
+            <button
+              type="button"
+              className={styles.loginCard}
+              onClick={() => handleLogin("google")}
+            >
+              <FcGoogle />
+              Continue with Google
+            </button>
+            <button
+              type="button"
+              className={styles.loginCard}
+              onClick={() => handleLogin("github")}
+            >
+              <FaGithub />
+              Continue with GitHub
+            </button>
+            <button
+              type="button"
+              className={styles.loginCard}
+              onClick={() => handleLogin("azure-ad")}
+            >
+              <FaMicrosoft />
+              Continue with Microsoft
+            </button>
+          </div>
+        </section>
+      );
+    }
+
+    if (myPacksError) {
+      return <Error title="Oops!" subtitle={myPacksError} />;
+    }
+
+    if (myPacks.length === 0) {
+      return (
+        <div className={styles.emptyState}>
+          <div className={styles.emptyIcon} aria-hidden="true">
+            <FiPlus />
+          </div>
+          <h2 className={styles.emptyTitle}>No packs yet</h2>
+          <p className={styles.emptyDescription}>
+            Bundle your go-to apps into a single pack — install them all at once
+            on any new machine, or share with your team.
+          </p>
+          <button
+            type="button"
+            className={styles.emptyCreateButton}
+            onClick={() => setShowCreateModal(true)}
+          >
+            <FiPlus /> Create Your First Pack
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <ul className={styles.grid}>
+        <CreatePackCard onClick={() => setShowCreateModal(true)} />
+        {myPacks.map((pack) => (
+          <li key={pack._id}>
+            <PackCard pack={pack} />
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
+  return (
+    <PageWrapper>
+      <MetaTags
+        title="App Packs - winstall"
+        desc="Browse community app collections or create and manage your own app packs."
+        path="/packs"
+      />
+
+      <div className={styles.page}>
+        <div className={styles.tabs}>
+          <button
+            type="button"
+            className={`${styles.tab} ${activeTab === "public" ? styles.tabActive : ""}`}
+            onClick={() => setTab("public")}
+          >
+            Public Packs
+          </button>
+          <button
+            type="button"
+            className={`${styles.tab} ${activeTab === "mine" ? styles.tabActive : ""}`}
+            onClick={() => setTab("mine")}
+          >
+            My Packs
+          </button>
+        </div>
+
+        {activeTab === "public" ? renderPublicPacks() : renderMyPacks()}
+      </div>
+
+      {user && (
+        <CreatePackModal
+          isOpen={showCreateModal}
+          onClose={() => setShowCreateModal(false)}
+          user={user}
+          onCreated={handlePackCreated}
+        />
+      )}
+    </PageWrapper>
+  );
 }

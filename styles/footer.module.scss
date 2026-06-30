@@ -7,6 +7,10 @@
     align-content: center;
     align-tracks: center;
 
+    &.selectionOpen {
+        margin-bottom: 98px;
+    }
+
     .brand {
         display: flex;
         justify-content: flex-start;
@@ -163,10 +167,8 @@
     }
 }
 
-@media(max-width: 1490px) and (min-width: 791px) {
-    .selectionOpen.backToTop {
-        bottom: 90px;
-    }
+.selectionOpen.backToTop {
+    bottom: 98px;
 }
 
 

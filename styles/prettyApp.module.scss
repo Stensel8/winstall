@@ -1,101 +1,149 @@
-.app{
-    background-color: var(--card-bg);
-    padding: 20px;
-    border: 5px solid var(--card-bg);
-    border-radius: 10px;
-    cursor: pointer;
-    overflow: hidden;
-    transition: 0.1s all ease-in-out;
-    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.15);
+.app {
+  position: relative;
+  background-color: var(--card-bg);
+  padding: 20px;
+  border: 3px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: 0.1s all ease-in-out;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.15);
 
-    a {
-        color: inherit;
-        text-decoration: none;
-        display: block;
+  a {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+  }
+
+  .imgContainer {
+    min-height: 80px;
+    position: relative;
+
+    img {
+      width: 80px;
+      height: auto;
+      margin: 0 auto;
+      display: block;
+      user-select: none;
+
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
+  }
 
-    .imgContainer{
-        min-height: 80px;
-        position: relative;
+  h3 {
+    margin-top: 0px;
+    margin-bottom: 5px;
 
-        img{
-            width: 80px;
-            height: auto;
-            margin: 0 auto;
-            display: block;
-            user-select: none;
+    img {
+      user-select: none;
+      width: 25px;
+      height: 25px;
+      display: inline-block;
+      padding-right: 5px;
+    }
+  }
 
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+  .moreInfo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      opacity: 0.75;
+      font-size: 15px;
+      transition: 0.3s all ease-in-out;
+      border-bottom: 3px solid transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 3px;
+      padding-top: 5px;
+
+      svg {
+        transition: 0.3s all ease-in-out;
+      }
+
+      &:hover {
+        svg {
+          padding-left: 5px;
         }
+      }
     }
-
-    &:hover{
-       opacity: 0.75;
-    }
-
-    h3{
-        margin-top: 0px;
-        margin-bottom: 5px;
-
-        img{
-            user-select: none;
-            width: 25px;
-            height: 25px;
-            display: inline-block;
-            padding-right: 5px;
-        }
-    }
-
-    .moreInfo{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        span{
-            opacity: 0.75;
-            font-size: 15px;
-            transition: 0.3s all ease-in-out;
-            border-bottom: 3px solid transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-bottom: 3px;
-            padding-top: 5px;
-
-            svg{
-                transition: 0.3s all ease-in-out;
-            }
-
-            &:hover{
-                svg{
-                    padding-left: 5px;
-                }
-            }
-        }
-    }
+  }
 }
 
+.checkbox {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background-color: var(--main-bg);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 
-.selected{
-    border: 5px solid var(--accent);
+  svg {
+    width: 16px;
+    height: 16px;
+    stroke-width: 3px;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:focus-visible {
+    opacity: 1;
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
 }
 
-.imgHeader{
-    text-align: center;
-    padding: 20px;
-    margin: 0px;
+.app:hover .checkbox,
+.checkboxSelected {
+  opacity: 1;
 }
 
-@media(max-width: 690px){
-    .imgContainer{
-        min-height: 50px !important;
+.checkboxSelected {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
 
-        img{
-            width: 50px !important
-        }
+.selected {
+  border-color: var(--accent);
+}
+
+.imgHeader {
+  text-align: center;
+  padding: 20px;
+  margin: 0px;
+}
+
+@media (hover: none) {
+  .checkbox {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 690px) {
+  .imgContainer {
+    min-height: 50px !important;
+
+    img {
+      width: 50px !important;
     }
-
+  }
 }

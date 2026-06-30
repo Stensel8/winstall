@@ -326,6 +326,7 @@ function Store({ data, error, buildTime }) {
               <SingleApp
                 app={app}
                 showTime={sort.includes("update-") ? true : false}
+                showSelectCheckbox
               />
 
               {index % 15 === 0 && <DonateCard addMargin="" />}

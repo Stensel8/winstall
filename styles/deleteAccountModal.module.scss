@@ -1,0 +1,107 @@
+.modal {
+  position: absolute;
+  outline: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(420px, calc(100vw - 32px));
+  padding: 32px 32px 28px;
+  background-color: var(--main-bg);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 100;
+}
+
+.iconWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  border-radius: 50%;
+  background-color: rgba(229, 57, 53, 0.12);
+  color: #e53935;
+
+  svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.title {
+  margin: 0 0 12px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.description {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--textColor);
+  opacity: 0.65;
+}
+
+.error {
+  margin: 16px 0 0;
+  color: var(--error, #e53935);
+  font-size: 14px;
+}
+
+.footer {
+  display: flex;
+  gap: 12px;
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.cancelButton,
+.deleteButton {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: 50px;
+  border: 0;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s all ease-in-out;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.cancelButton {
+  background-color: var(--card-bg);
+  color: var(--textColor);
+
+  &:hover:not(:disabled) {
+    opacity: 0.75;
+  }
+}
+
+.deleteButton {
+  background-color: rgba(229, 57, 53, 0.12);
+  color: #e53935;
+
+  &:hover:not(:disabled) {
+    background-color: rgba(229, 57, 53, 0.2);
+  }
+}
+
+@media (max-width: 590px) {
+  .modal {
+    padding: 28px 20px 24px;
+  }
+}

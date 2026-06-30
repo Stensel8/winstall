@@ -14,6 +14,7 @@ import { trackPageLoaded } from "../utils/gtm";
 import Nav from "../components/Nav";
 import SelectionBar from "../components/SelectionBar";
 import PopularContext from "../ctx/PopularContext";
+import { AuthGateProvider } from "../ctx/AuthGateContext";
 import { SessionProvider } from "next-auth/react";
 
 function winstall({ Component, pageProps: { session, ...pageProps } }) {
@@ -69,17 +70,19 @@ function winstall({ Component, pageProps: { session, ...pageProps } }) {
 
   return (
     <SessionProvider session={session} refetchInterval={5 * 60}>
-      <SelectedContext.Provider value={selectedAppValue}>
-        <PopularContext.Provider value={popularApps}>
-          <>
-            <div className="container">
-              <Nav />
-              <Component {...pageProps} />
-            </div>
-            <SelectionBar />
-          </>
-        </PopularContext.Provider>
-      </SelectedContext.Provider>
+      <AuthGateProvider>
+        <SelectedContext.Provider value={selectedAppValue}>
+          <PopularContext.Provider value={popularApps}>
+            <>
+              <div className="container">
+                <Nav />
+                <Component {...pageProps} />
+              </div>
+              <SelectionBar />
+            </>
+          </PopularContext.Provider>
+        </SelectedContext.Provider>
+      </AuthGateProvider>
     </SessionProvider>
   );
 }

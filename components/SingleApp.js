@@ -21,6 +21,7 @@ import {
   FiUser,
   FiCopy,
   FiCheckCircle,
+  FiCheck,
   FiSettings
 } from "react-icons/fi";
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
@@ -31,7 +32,7 @@ import AppIcon from "./AppIcon";
 import { buildSiteUrl, compareVersion, timeAgo } from "../utils/helpers";
 
 
-let SingleApp = ({ app, onVersionChange = false, large = false, showTime = false, pack = false, displaySelect = false, preventGlobalSelect, hideBorder=false, preSelected=false, showSettingsIcon=false, onSettingsClick, disableSelectedStyle=false}) => {
+let SingleApp = ({ app, onVersionChange = false, large = false, showTime = false, pack = false, displaySelect = false, showSelectCheckbox = false, preventGlobalSelect, hideBorder=false, preSelected=false, showSettingsIcon=false, onSettingsClick, disableSelectedStyle=false}) => {
   const [selected, setSelected] = useState(false);
   const { selectedApps, setSelectedApps } = useContext(SelectedContext);
 
@@ -162,14 +163,34 @@ let SingleApp = ({ app, onVersionChange = false, large = false, showTime = false
     setShowShareCard(!showShareCard);
   }
 
+  let handleCheckboxSelect = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    handleAppSelect();
+  };
+
   return (
     <li
       key={app._id}
       // onClick={handleAppSelect}
       className={`${hideBorder ? styles.noBorder: "" }${large ? styles.large : ""} ${pack ? styles.pack : ""} ${styles.single} ${
+        showSelectCheckbox ? styles.selectable : ""
+      } ${
         selected && !disableSelectedStyle ? styles.selected : ""
       }`}
     >
+      {showSelectCheckbox && (
+        <button
+          type="button"
+          className={`${styles.checkbox} ${selected ? styles.checkboxSelected : ""}`}
+          onClick={handleCheckboxSelect}
+          aria-pressed={selected}
+          aria-label={selected ? `Deselect ${app.name}` : `Select ${app.name}`}
+        >
+          {selected && <FiCheck aria-hidden="true" />}
+        </button>
+      )}
+
       <div className={styles.info}>
         <h3>
           {large ? (

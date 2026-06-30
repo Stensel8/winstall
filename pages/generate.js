@@ -7,6 +7,7 @@ import ListPackages from "../components/ListPackages";
 import SingleApp from "../components/SingleApp";
 import SelectedContext from "../ctx/SelectedContext";
 import AppSettingsDrawer from "../components/AppSettingsDrawer";
+import useDefaultInstallFilters from "../hooks/useDefaultInstallFilters";
 
 import Footer from "../components/Footer";
 
@@ -20,6 +21,7 @@ function Generate() {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedAppForSettings, setSelectedAppForSettings] = useState(null);
     const [defaultFilters, setDefaultFilters] = useState(null);
+    const storedDefaultFilters = useDefaultInstallFilters(drawerOpen);
 
     useEffect(() => {
       // Keep local per-app options while syncing with selected apps from context.
@@ -31,7 +33,7 @@ function Generate() {
 
           return {
             ...app,
-            advancedConfig: existingApp.advancedConfig,
+            installOptions: existingApp.installOptions,
           };
         });
       });
@@ -48,17 +50,29 @@ function Generate() {
       setSelectedAppForSettings(null);
     };
 
-    const handleConfigChange = (app, config) => {
+    const handleConfigChange = (app, installOptions) => {
       setApps((prevApps) => prevApps.map((a) => {
         if (a._id === app._id) {
-          return { ...a, advancedConfig: config };
+          const nextApp = { ...a };
+          if (installOptions && Object.keys(installOptions).length > 0) {
+            nextApp.installOptions = installOptions;
+          } else {
+            delete nextApp.installOptions;
+          }
+          return nextApp;
         }
         return a;
       }));
 
       setSelectedAppForSettings((prevApp) => {
         if (!prevApp || prevApp._id !== app._id) return prevApp;
-        return { ...prevApp, advancedConfig: config };
+        const nextApp = { ...prevApp };
+        if (installOptions && Object.keys(installOptions).length > 0) {
+          nextApp.installOptions = installOptions;
+        } else {
+          delete nextApp.installOptions;
+        }
+        return nextApp;
       });
     };
 
@@ -126,7 +140,7 @@ function Generate() {
           isOpen={drawerOpen}
           onClose={handleCloseDrawer}
           onConfigChange={handleConfigChange}
-          defaultFilters={defaultFilters || {}}
+          defaultFilters={defaultFilters || storedDefaultFilters}
         />
 
         <Footer />

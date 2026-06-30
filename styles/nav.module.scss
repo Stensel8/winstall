@@ -115,6 +115,31 @@
         }
     }
 
+    .userMenuAnchor{
+        position: relative;
+        display: flex;
+        align-self: center;
+    }
+
+    .userAvatar{
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 0;
+        }
+
+        svg{
+            padding-top: 0;
+        }
+    }
+
     .user{
         padding: 0px;
 

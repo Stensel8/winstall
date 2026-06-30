@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import styles from "../styles/prettyApp.module.scss";
 import SelectedContext from "../ctx/SelectedContext";
 import Link from "next/link";
-import { FiPlus } from "react-icons/fi";
+import { FiCheck } from "react-icons/fi";
 
 let PrettyApp = ({ app }) => {
   const [selected, setSelected] = useState(false);
@@ -14,7 +14,10 @@ let PrettyApp = ({ app }) => {
     setSelected(found);
   }, [selectedApps, app._id]);
 
-  let handleAppSelect = () => {
+  let handleAppSelect = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     let found = selectedApps.findIndex((a) => a._id === app._id);
     if (found !== -1) {
       let updatedSelectedApps = selectedApps.filter(
@@ -29,37 +32,48 @@ let PrettyApp = ({ app }) => {
     }
   };
 
-  if (!app && !app.img) return <></>;
+  if (!app || !app.img) return <></>;
 
   return (
     <li
       key={app._id}
       className={`${styles.app} ${selected ? styles.selected : ""}`}
     >
+      <button
+        type="button"
+        className={`${styles.checkbox} ${selected ? styles.checkboxSelected : ""}`}
+        onClick={handleAppSelect}
+        aria-pressed={selected}
+        aria-label={selected ? `Deselect ${app.name}` : `Select ${app.name}`}
+      >
+        {selected && <FiCheck aria-hidden="true" />}
+      </button>
+
       <Link href="/apps/[id]" as={`/apps/${app._id}`} prefetch={false}>
         <div>
-            <div className={styles.imgContainer}>
+          <div className={styles.imgContainer}>
             <picture>
-                <source srcSet={`/assets/apps/${app.img}`}
-                        type="image/webp" />
-                <source
+              <source
+                srcSet={`/assets/apps/${app.img}`}
+                type="image/webp"
+              />
+              <source
                 srcSet={`/assets/apps/fallback/${app.img.replace(
-                    "webp",
-                    "png"
+                  "webp",
+                  "png"
                 )}`}
                 type="image/png"
-                />
-                <img
+              />
+              <img
                 src={`/assets/apps/fallback/${app.img.replace("webp", "png")}`}
                 alt={`Logo for ${app.name}`}
                 draggable={false}
-                // Specify the size to avoid Cumulative Layout Shift:
                 width="80"
                 height="80"
-                />
+              />
             </picture>
-            </div>
-            <h3 className={styles.imgHeader}>{app.name}</h3>
+          </div>
+          <h3 className={styles.imgHeader}>{app.name}</h3>
         </div>
       </Link>
     </li>

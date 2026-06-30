@@ -1,3 +1,73 @@
+.page {
+    padding-top: 50px;
+    padding-bottom: 64px;
+}
+
+.hero {
+    margin-bottom: 50px;
+
+    h1 {
+        max-width: 600px;
+        font-size: 45px;
+    }
+}
+
+.lead {
+    font-size: 24px;
+    max-width: 650px;
+    margin: 0;
+}
+
+.loginSection {
+    max-width: 480px;
+
+    h2 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 20px 0;
+    }
+}
+
+.authError {
+    color: var(--error);
+    margin: 0 0 1rem 0;
+}
+
+.loginButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.loginCard {
+    background-color: var(--main-bg);
+    border: 2px solid var(--card-bg);
+    border-radius: 10px;
+    height: 72px;
+    width: 100%;
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-size: 18.7px;
+    font-weight: 700;
+    color: var(--textColor);
+    transition: 0.3s all ease-in-out;
+
+    &:hover,
+    &:focus {
+        opacity: 0.75;
+    }
+
+    svg {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+    }
+}
+
 .content{
     max-width: 800px;
     margin: 0 auto;
@@ -109,6 +179,20 @@
 
    
 } 
+
+@media (max-width: 590px) {
+    .page {
+        padding-top: 0;
+    }
+
+    .hero h1 {
+        font-size: 35px;
+    }
+
+    .lead {
+        font-size: 20px;
+    }
+}
 
 .accents{
     display: grid;

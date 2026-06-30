@@ -1,0 +1,125 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 100;
+}
+
+.modal {
+  position: absolute;
+  outline: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(400px, calc(100vw - 32px));
+  background-color: var(--main-bg);
+  border-radius: 28px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  padding: 40px 32px 36px;
+}
+
+.closeButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 50%;
+  background: var(--main-bg);
+  color: var(--textColor);
+  cursor: pointer;
+  padding: 0;
+
+  &:hover {
+    opacity: 0.75;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.content {
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 10px;
+  padding: 0 28px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.subtitle {
+  margin: 0 0 28px;
+  padding: 0 8px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.45;
+  opacity: 0.65;
+}
+
+.authError {
+  margin: 0 0 16px;
+  color: var(--error);
+  font-size: 14px;
+}
+
+.loginButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.loginCard {
+  background-color: var(--main-bg);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  height: 52px;
+  width: 100%;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  font-family: "Nunito", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--textColor);
+  transition: 0.2s all ease-in-out;
+
+  &:hover,
+  &:focus {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal {
+    padding: 36px 24px 28px;
+    border-radius: 24px;
+  }
+
+  .title {
+    font-size: 18px;
+    padding: 0 20px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+}

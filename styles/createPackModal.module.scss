@@ -1,0 +1,164 @@
+.modal {
+  position: absolute;
+  outline: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(520px, calc(100vw - 32px));
+  background-color: var(--main-bg);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 100;
+}
+
+.header {
+  padding: 28px 32px 0;
+
+  h2 {
+    margin: 0;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+  }
+}
+
+.form {
+  padding: 24px 32px 28px;
+}
+
+.field {
+  display: block;
+  margin-bottom: 20px;
+  font-size: 15px;
+  font-weight: 700;
+
+  input[type="text"],
+  textarea {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 8px;
+    border: 0;
+    padding: 14px 18px;
+    outline: 0;
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--textColor);
+    resize: vertical;
+  }
+
+  textarea {
+    min-height: 96px;
+  }
+}
+
+.fieldError {
+  display: block;
+  padding-top: 6px;
+  font-size: 13px;
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+.checkboxContainer {
+  margin-bottom: 8px;
+
+  label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  em {
+    display: block;
+    margin: 8px 0 0 30px;
+    font-style: normal;
+    font-size: 13px;
+    font-weight: 400;
+    opacity: 0.65;
+  }
+}
+
+.apiError {
+  margin: 0 0 16px;
+  color: var(--error);
+  font-size: 14px;
+}
+
+.footer {
+  display: flex;
+  gap: 12px;
+  padding: 24px 0 4px;
+  margin-top: 24px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.cancelButton,
+.submitButton {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: 50px;
+  border: 0;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s all ease-in-out;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.cancelButton {
+  background-color: var(--card-bg);
+  color: var(--textColor);
+
+  &:hover:not(:disabled) {
+    opacity: 0.75;
+  }
+}
+
+.submitButton {
+  background-color: var(--accent);
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    opacity: 0.85;
+  }
+}
+
+@media (max-width: 590px) {
+  .header,
+  .form,
+  .footer {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}

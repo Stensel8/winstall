@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Router, { useRouter } from "next/router";
 
-import { useSession, signIn, signOut, getSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 import Link from "next/link";
 import styles from "../styles/nav.module.scss";
@@ -9,10 +9,15 @@ import {
   FiMoon,
   FiSun,
   FiPackage,
-  FiLogOut,
   FiChevronDown,
   FiX,
+  FiUser,
 } from "react-icons/fi";
+
+import UserMenu from "./UserMenu";
+import DeleteAccountModal from "./DeleteAccountModal";
+import { useAuthGate } from "../ctx/AuthGateContext";
+import { deleteAccount } from "../utils/fetchUserAPI";
 
 import NProgress from "nprogress";
 
@@ -96,7 +101,7 @@ function Nav() {
             href="/"
             className={`${styles.mainLink} ${(pathname === '/' || pathname === '') ? styles.selected : ''}`}
           >
-            Discover Apps
+            Discover App
           </Link>
           <span className={styles.linkWithTag}>
             <Link
@@ -104,6 +109,15 @@ function Nav() {
               className={`${styles.mainLink} ${pathname === '/express' ? styles.selected : ''}`}
             >
               Express Setup
+            </Link>
+            <img src="/tag_new.svg" alt="new" className={styles.newTag} />
+          </span>
+          <span className={styles.linkWithTag}>
+            <Link
+              href="/packs"
+              className={`${styles.mainLink} ${pathname.startsWith('/packs') ? styles.selected : ''}`}
+            >
+              App Packs
             </Link>
             <img src="/tag_new.svg" alt="new" className={styles.newTag} />
           </span>
@@ -129,7 +143,7 @@ function Nav() {
           <FiSun className="sun" />
           <p className={styles.ddOnly}>Switch theme</p>
         </span>
-        <User />
+        <NavUser />
       </div>
 
       <span className={`mobileDD ${styles.dropdown}`} onClick={toggleDD}>
@@ -139,28 +153,76 @@ function Nav() {
   );
 }
 
-const User = () => {
+const NavUser = () => {
   const { data: session } = useSession();
+  const { openLogin } = useAuthGate();
+  const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
+  const [deletingAccount, setDeletingAccount] = useState(false);
 
-  const [user, setUser] = useState();
+  const handleAvatarClick = () => {
+    if (!session) {
+      openLogin({ callbackUrl: router.asPath });
+      return;
+    }
 
-  useEffect(() => {
-    getSession().then(async (session) => {
-      if (!session) return;
-      const { response, error } = await fetch("/api/twitter/", {
-        method: "GET",
-        headers: {
-          endpoint: `https://api.twitter.com/2/users/${session.user.id}`,
-        },
-      }).then((res) => res.json());
+    setMenuOpen((current) => !current);
+  };
 
-      if (!error) {
-        setUser(response);
-      }
-    });
-  }, []);
+  const handleLogout = () => {
+    signOut({ callbackUrl: router.asPath });
+  };
 
-  return null;
+  const handleDeleteAccountConfirm = async () => {
+    setDeletingAccount(true);
+
+    const { error } = await deleteAccount();
+
+    if (error) {
+      setDeletingAccount(false);
+      return { error };
+    }
+
+    localStorage.removeItem("ownPacks");
+    await signOut({ callbackUrl: router.asPath });
+    return {};
+  };
+
+  return (
+    <div className={styles.userMenuAnchor}>
+      <span
+        onClick={handleAvatarClick}
+        className={`${styles.justIcon} ${styles.userAvatar}`}
+        role="button"
+        aria-label={session ? "User menu" : "Log in"}
+        aria-expanded={session ? menuOpen : undefined}
+      >
+        {session?.user?.image ? (
+          <img src={session.user.image} alt="" referrerPolicy="no-referrer" />
+        ) : (
+          <FiUser />
+        )}
+        <p className={styles.ddOnly}>{session ? "Account" : "Log in"}</p>
+      </span>
+      {session && (
+        <UserMenu
+          variant="nav"
+          open={menuOpen}
+          onClose={() => setMenuOpen(false)}
+          user={session.user}
+          onLogout={handleLogout}
+          onDeleteAccount={() => setShowDeleteAccountModal(true)}
+        />
+      )}
+      <DeleteAccountModal
+        isOpen={showDeleteAccountModal}
+        onClose={() => setShowDeleteAccountModal(false)}
+        onConfirm={handleDeleteAccountConfirm}
+        deleting={deletingAccount}
+      />
+    </div>
+  );
 };
 
 export default Nav;

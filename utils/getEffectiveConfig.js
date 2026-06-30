@@ -1,28 +1,37 @@
-const getEffectiveConfig = (defaultFilters = {}, appAdvancedConfig) => {
-    const effective = { ...defaultFilters };
+import {
+  hasCustomScopeInstallOptions,
+  normalizeInstallOptions,
+} from "./installOptions";
 
-    if (!appAdvancedConfig) return effective;
+const getEffectiveConfig = (defaultFilters = {}, installOptions) => {
+  const effective = { ...defaultFilters };
 
-    if (appAdvancedConfig.customConfig) {
-        effective["--scope"] = appAdvancedConfig["--scope"] ?? "";
-        effective["--interactive"] = appAdvancedConfig["--interactive"];
-        effective["--silent"] = appAdvancedConfig["--silent"];
-        effective["--force"] = appAdvancedConfig["--force"];
-    }
+  if (!installOptions) return effective;
 
-    if (appAdvancedConfig["--override"]) {
-        effective["--override"] = appAdvancedConfig["--override"];
-    }
+  const normalized = normalizeInstallOptions(installOptions);
 
-    if (appAdvancedConfig["--log"]) {
-        effective["--log"] = appAdvancedConfig["--log"];
-    }
+  if (hasCustomScopeInstallOptions(installOptions)) {
+    effective["--scope"] = normalized.scope ?? "";
+    effective["--interactive"] = normalized.interactive === true;
+    effective["--silent"] = normalized.interactive
+      ? false
+      : normalized.silent !== false;
+    effective["--force"] = normalized.force === true;
+  }
 
-    if (appAdvancedConfig["--location"]) {
-        effective["--location"] = appAdvancedConfig["--location"];
-    }
+  if (normalized.override) {
+    effective["--override"] = normalized.override;
+  }
 
-    return effective;
+  if (normalized.log) {
+    effective["--log"] = normalized.log;
+  }
+
+  if (normalized.location) {
+    effective["--location"] = normalized.location;
+  }
+
+  return effective;
 };
 
 export default getEffectiveConfig;

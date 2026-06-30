@@ -1,0 +1,98 @@
+@mixin menuItemBase {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  height: auto;
+  text-align: left;
+  font-family: inherit;
+  color: var(--textColor);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover:not(:disabled),
+  &:focus:not(:disabled) {
+    background-color: var(--card-bg);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: transparent;
+    color: var(--textColor);
+
+    &:hover {
+      background: transparent;
+    }
+  }
+}
+
+.menu {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  right: 0;
+  min-width: 240px;
+  max-width: min(320px, calc(100vw - 32px));
+  background-color: var(--main-bg);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  padding: 8px 0;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.divider {
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.08);
+  margin: 4px 0;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.loading,
+.empty {
+  padding: 12px 20px;
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.65;
+}
+
+.error {
+  padding: 8px 20px 12px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--error);
+}
+
+// Override .bottomBar .inner button pill styles
+:global(.bottomBar .inner) {
+  .menu {
+    .createItem,
+    .packItem {
+      @include menuItemBase;
+    }
+
+    .createItem {
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .packItem {
+      padding: 12px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

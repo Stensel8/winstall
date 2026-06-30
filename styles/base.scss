@@ -107,9 +107,13 @@ header {
 }
 
 .container {
-  max-width: 1300px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 20px 50px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
 input[type="text"].search {
@@ -175,10 +179,15 @@ input[type="text"].search {
   z-index: 9;
 
   .inner {
+    max-width: 1400px;
+    margin: 0 auto;
     padding: 0px 50px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     align-self: center;
+    height: 100%;
+    box-sizing: border-box;
 
     p {
       line-height: 75px;
@@ -415,17 +424,11 @@ article {
 
   .bottomBar {
     .inner {
-      justify-content: center !important;
-      padding: 0 25px !important;
+      padding: 0 20px !important;
     }
 
     .controls {
       gap: 10px !important;
-    }
-
-    p,
-    .clear {
-      display: none !important;
     }
   }
 

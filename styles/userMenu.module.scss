@@ -1,0 +1,142 @@
+.userRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 408px;
+  box-sizing: border-box;
+  padding: 9px 20px 9px 20px;
+  background-color: var(--main-bg);
+  border: 3px solid #e9eaed;
+  border-radius: 50px;
+  box-shadow: none;
+
+  img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  span {
+    font-weight: 700;
+    font-size: 14px;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.navMenuWrapper {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 100;
+}
+
+.navDropdown {
+  position: static;
+}
+
+.menuWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.menuButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 3px solid #e9eaed;
+  background-color: var(--main-bg);
+  box-shadow: none;
+  cursor: pointer;
+  color: var(--textColor);
+  flex-shrink: 0;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    opacity: 0.75;
+  }
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 200px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: var(--main-bg);
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+  z-index: 100;
+}
+
+.divider {
+  height: 1px;
+  margin: 2px 0;
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 8px;
+  background-color: transparent;
+  cursor: pointer;
+  color: var(--textColor);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: left;
+  transition: 0.2s all ease-in-out;
+
+  &:hover {
+    background-color: var(--card-bg);
+    opacity: 0.85;
+  }
+
+  svg {
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+}
+
+.menuItemDanger {
+  color: #e53935;
+
+  &:hover {
+    background-color: rgba(229, 57, 53, 0.08);
+    opacity: 1;
+  }
+}
+
+:global(.dark) .dropdown {
+  background-color: var(--card-bg);
+}
+
+:global(.dark) .divider {
+  background-color: rgba(255, 255, 255, 0.1);
+}

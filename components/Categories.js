@@ -12,7 +12,7 @@ let Categories = ({ apps, category = "Category" }) => {
       <div className="box">
         <h2 className="blockHeader">{category}</h2>
       </div>
-      <ListPackages>
+      <ListPackages popular>
         {apps.map((app) => (
           <CategoryApp app={app} key={app._id} />
         ))}

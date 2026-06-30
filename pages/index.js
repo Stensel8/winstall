@@ -18,7 +18,6 @@ import { useState, useEffect } from "react";
 import { getRevalidateTime } from "../utils/revalidateCache";
 
 function Home({ popular, appsTotal, recommended, error, buildTime, officialPacksCreator }) {
-  const twitterLoginEnabled = process.env.NEXT_PUBLIC_TWITTER_LOGIN === 'true';
   const [data, setData] = useState({ popular: popular || [], appsTotal: appsTotal || 0, recommended: recommended || [] });
   const [isLoading, setIsLoading] = useState(buildTime || (!popular && !error));
   const [clientError, setClientError] = useState(null);
@@ -115,16 +114,14 @@ function Home({ popular, appsTotal, recommended, error, buildTime, officialPacks
 
       {/* <RecentApps apps={recents} /> */}
 
-      {twitterLoginEnabled && (
-        <FeaturePromoter art="/assets/packsPromo.svg" promoId="packs">
-              <h3>Introducing Packs</h3>
-              <h1>Curate and share the apps you use daily.</h1>
-              <div className="box2">
-                  <Link href="/packs/create" className="button spacer accent" id="starWine"><FiPlus/> Create a pack</Link>
-                  <Link href="/packs/" className="button"><FiPackage/> View packs</Link>
-              </div>
-        </FeaturePromoter>
-      )}
+      <FeaturePromoter art="/assets/packsPromo.svg" promoId="packs">
+            <h3>Introducing Packs</h3>
+            <h1>Curate and share the apps you use daily.</h1>
+            <div className="box2">
+                <Link href="/packs/create" className="button spacer accent" id="starWine"><FiPlus/> Create a pack</Link>
+                <Link href="/packs/" className="button"><FiPackage/> View packs</Link>
+            </div>
+      </FeaturePromoter>
 
       <Footer />
     </div>

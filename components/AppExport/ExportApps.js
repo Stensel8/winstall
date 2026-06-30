@@ -75,7 +75,7 @@ const ExportApps = ({ apps, title, subtitle, onDefaultFiltersChange }) => {
         let installs = [];
 
         apps.map((app) => {
-            const appFilters = buildFilterString(getEffectiveConfig(filters, app.advancedConfig));
+            const appFilters = buildFilterString(getEffectiveConfig(filters, app.installOptions));
 
             installs.push(
                 `winget install --id=${app._id}${app.selectedVersion !== app.latestVersion ? ` -v "${app.selectedVersion}"` : ""} -e ${appFilters}`

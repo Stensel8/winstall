@@ -2,17 +2,11 @@ import { useState, useEffect } from 'react';
 import { FiChevronDown, FiInfo } from "react-icons/fi";
 import styles from "../../styles/exportApps.module.scss";
 import { CheckboxConfig, RadioConfig } from "./InputComponents";
-
-const DEFAULT_CONFIG = {
-    "--scope": "",
-    "--interactive": false,
-    "--silent": true,
-    "--force": false,
-};
+import { DEFAULT_INSTALL_FILTERS } from "../../utils/defaultInstallOptions";
 
 const AdvancedConfig = ({ refreshConfig, activeTab, onFiltersChange }) => {
     const [ expanded, setExpnaded ] = useState(false);
-    const [ config, setConfig ] = useState(DEFAULT_CONFIG);
+    const [ config, setConfig ] = useState(DEFAULT_INSTALL_FILTERS);
 
     const updateConfig = async (key, val) => {
         const newConfig = { ...config, [key]: val};
@@ -33,10 +27,10 @@ const AdvancedConfig = ({ refreshConfig, activeTab, onFiltersChange }) => {
             let previousConfig = await localStorage.getItem("winstall-default-options");
 
             if (previousConfig) {
-                previousConfig = { ...DEFAULT_CONFIG, ...JSON.parse(previousConfig) };
+                previousConfig = { ...DEFAULT_INSTALL_FILTERS, ...JSON.parse(previousConfig) };
                 setExpnaded(true);
             } else {
-                previousConfig = { ...DEFAULT_CONFIG };
+                previousConfig = { ...DEFAULT_INSTALL_FILTERS };
             }
 
             refreshConfig(previousConfig);

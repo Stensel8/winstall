@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { FiDownload, FiInfo } from "react-icons/fi";
 import getEffectiveConfig from "../../utils/getEffectiveConfig";
 import styles from "../../styles/exportApps.module.scss";
+import {
+    installOptionsToWingetFlags,
+} from "../../utils/installOptions";
 
 const InstallerExport = ({ apps, filters = {} }) => {
     const [isProcessing, setIsProcessing] = useState(false);
@@ -77,6 +80,12 @@ const InstallerExport = ({ apps, filters = {} }) => {
         throw new Error('timeout');
     };
 
+    const resolveInstallerFilters = (app) => {
+        return installOptionsToWingetFlags(
+            getEffectiveConfig(filters, app.installOptions)
+        );
+    };
+
     const handleInstall = async () => {
         if (!apps || apps.length === 0) {
             alert('No apps selected');
@@ -104,7 +113,8 @@ const InstallerExport = ({ apps, filters = {} }) => {
                 name: app.name,
                 id: app._id,
                 version: app.selectedVersion !== app.latestVersion ? app.selectedVersion : undefined,
-                options: buildInstallerOptions(getEffectiveConfig(filters, app.advancedConfig))
+                options: buildInstallerOptions(getEffectiveConfig(filters, app.installOptions))
+
             }));
 
             const configPayload = {
@@ -175,7 +185,8 @@ const InstallerExport = ({ apps, filters = {} }) => {
         name: app.name,
         id: app._id,
         version: app.selectedVersion !== app.latestVersion ? app.selectedVersion : undefined,
-        options: buildInstallerOptions(getEffectiveConfig(filters, app.advancedConfig))
+        options: buildInstallerOptions(getEffectiveConfig(filters, app.installOptions))
+
     }));
 
     const configPayload = {
