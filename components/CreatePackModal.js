@@ -7,21 +7,24 @@ import styles from "../styles/createPackModal.module.scss";
 
 Modal.setAppElement("#__next");
 
+const TITLE_MAX_LENGTH = 50;
+const DESCRIPTION_MAX_LENGTH = 300;
+
 const defaultValues = {
   title: "",
   description: "",
-  isUnlisted: true,
+  isPublic: false,
 };
 
-function toVisibility(isUnlisted) {
-  return isUnlisted ? "unlisted" : "public";
+function toVisibility(isPublic) {
+  return isPublic ? "public" : "private";
 }
 
 function packToFormValues(pack) {
   return {
     title: pack.name || "",
     description: pack.description || "",
-    isUnlisted: pack.visibility !== "public",
+    isPublic: pack.visibility === "public",
   };
 }
 
@@ -36,14 +39,16 @@ export default function CreatePackModal({ isOpen, onClose, user, onCreated, pack
   } = useForm({ defaultValues });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const isUnlisted = watch("isUnlisted");
-  const isUnlistedRegister = register("isUnlisted");
+  const isPublic = watch("isPublic");
+  const title = watch("title");
+  const description = watch("description");
+  const isPublicRegister = register("isPublic");
 
   const checkboxIcon = submitting
-    ? isUnlisted
+    ? isPublic
       ? "/assets/cb_check_disable.svg"
       : "/assets/cb_uncheck_disable.svg"
-    : isUnlisted
+    : isPublic
       ? "/assets/cb_check.svg"
       : "/assets/cb_uncheck.svg";
 
@@ -73,7 +78,7 @@ export default function CreatePackModal({ isOpen, onClose, user, onCreated, pack
     const payload = {
       name: values.title,
       description: values.description,
-      visibility: toVisibility(values.isUnlisted),
+      visibility: toVisibility(values.isPublic),
     };
 
     const { response, error: apiError } = isEditMode
@@ -109,39 +114,57 @@ export default function CreatePackModal({ isOpen, onClose, user, onCreated, pack
 
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <label className={styles.field}>
-          Pack title
+          <span className={styles.fieldHeader}>
+            Pack title
+            <span className={styles.charCount} aria-live="polite">
+              {(title || "").length}/{TITLE_MAX_LENGTH}
+            </span>
+          </span>
           <input
             type="text"
             placeholder="Give your pack a name"
             autoComplete="off"
+            maxLength={TITLE_MAX_LENGTH}
             {...register("title", {
-              required: true,
+              required: "Please enter a name for your pack.",
+              maxLength: {
+                value: TITLE_MAX_LENGTH,
+                message: `Pack name must be ${TITLE_MAX_LENGTH} characters or fewer.`,
+              },
               validate: (value) =>
-                value.replace(/\s/g, "").length > 0 || false,
+                value.replace(/\s/g, "").length > 0 ||
+                "Please enter a name for your pack.",
             })}
           />
           {errors.title && (
-            <span className={styles.fieldError}>
-              Please enter a name for your pack.
-            </span>
+            <span className={styles.fieldError}>{errors.title.message}</span>
           )}
         </label>
 
         <label className={styles.field}>
-          Pack description
+          <span className={styles.fieldHeader}>
+            Pack description
+            <span className={styles.charCount} aria-live="polite">
+              {(description || "").length}/{DESCRIPTION_MAX_LENGTH}
+            </span>
+          </span>
           <textarea
             placeholder="Give your pack a short description"
             autoComplete="off"
+            maxLength={DESCRIPTION_MAX_LENGTH}
             {...register("description", {
-              required: true,
+              required: "Please enter a description for your pack.",
+              maxLength: {
+                value: DESCRIPTION_MAX_LENGTH,
+                message: `Description must be ${DESCRIPTION_MAX_LENGTH} characters or fewer.`,
+              },
               validate: (value) =>
-                value.replace(/\s/g, "").length > 0 || false,
+                value.replace(/\s/g, "").length > 0 ||
+                "Please enter a description for your pack.",
             })}
           />
           {errors.description && (
-            <span className={styles.fieldError}>
-              Please enter a description for your pack.
-            </span>
+            <span className={styles.fieldError}>{errors.description.message}</span>
           )}
         </label>
 
@@ -152,7 +175,7 @@ export default function CreatePackModal({ isOpen, onClose, user, onCreated, pack
                 type="checkbox"
                 className={styles.checkboxInput}
                 disabled={submitting}
-                {...isUnlistedRegister}
+                {...isPublicRegister}
               />
               <img
                 src={checkboxIcon}
@@ -163,10 +186,10 @@ export default function CreatePackModal({ isOpen, onClose, user, onCreated, pack
                 height={17}
               />
             </span>
-            <p>Hide this pack from the public directory on winstall.</p>
+            <p>Public pack</p>
           </label>
           <em>
-            Your pack will still be accessible to anyone with a direct link.
+          Appears in the public App Packs directory for anyone to discover.
           </em>
         </div>
 

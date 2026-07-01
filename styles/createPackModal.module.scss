@@ -39,6 +39,20 @@
   font-size: 15px;
   font-weight: 700;
 
+  .fieldHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .charCount {
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 400;
+    opacity: 0.65;
+  }
+
   input[type="text"],
   textarea {
     display: block;
