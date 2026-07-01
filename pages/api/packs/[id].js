@@ -9,6 +9,7 @@ import {
   getOptionalSessionUser,
   requireSessionUser,
   sendPackError,
+  sendPackServiceResult,
 } from "./session";
 
 export default async function handler(req, res) {
@@ -31,8 +32,10 @@ export default async function handler(req, res) {
     if (!userId) return;
 
     if (req.method === "PATCH") {
-      const pack = await updatePack(id, userId, req.body);
-      return res.status(200).json(formatPackForResponse(pack));
+      const result = await updatePack(id, userId, req.body);
+      return sendPackServiceResult(res, result, (pack) =>
+        res.status(200).json(formatPackForResponse(pack))
+      );
     }
 
     if (req.method === "DELETE") {

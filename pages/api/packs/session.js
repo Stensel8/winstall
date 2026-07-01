@@ -29,3 +29,15 @@ export function sendPackError(res, err) {
     .status(500)
     .json({ error: err.message || "Something went wrong." });
 }
+
+export function isPackServiceFailure(result) {
+  return Boolean(result && result.ok === false);
+}
+
+export function sendPackServiceResult(res, result, onSuccess) {
+  if (isPackServiceFailure(result)) {
+    return res.status(400).json({ error: result.error });
+  }
+
+  return onSuccess(result);
+}

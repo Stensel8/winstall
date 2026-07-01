@@ -5,6 +5,10 @@ import {
   hasInstallOptions,
   normalizeInstallOptions,
 } from "../utils/installOptions";
+import {
+  isModerationFailure,
+  moderatePackFields,
+} from "../utils/contentModeration";
 
 const ACTIVE_PUBLIC_PACK_FILTER = { visibility: "public", status: "active" };
 const MAX_LIST_LIMIT = 1000;
@@ -189,6 +193,11 @@ export async function createPack(userId, { name, description, apps, visibility }
     throw new PackError(err.message, 400);
   }
 
+  const moderation = moderatePackFields({ name, description });
+  if (isModerationFailure(moderation)) {
+    return moderation;
+  }
+
   const doc = await Pack.create({
     userId,
     name,
@@ -309,6 +318,21 @@ export async function updatePack(
     parsedApps = parseAppsInputOptional(apps);
   } catch (err) {
     throw new PackError(err.message, 400);
+  }
+
+  const fieldsToCheck = {};
+  if (name !== undefined) {
+    fieldsToCheck.name = name;
+  }
+  if (description !== undefined) {
+    fieldsToCheck.description = description;
+  }
+
+  if (Object.keys(fieldsToCheck).length > 0) {
+    const moderation = moderatePackFields(fieldsToCheck);
+    if (isModerationFailure(moderation)) {
+      return moderation;
+    }
   }
 
   const pack = await findOwnedActivePack(packId, userId);

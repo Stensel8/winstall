@@ -1,6 +1,10 @@
 import { connectMongoose } from "../../../lib/mongoose";
 import { createPack, formatPackForResponse } from "../../../service/packService";
-import { requireSessionUser, sendPackError } from "./session";
+import {
+  requireSessionUser,
+  sendPackError,
+  sendPackServiceResult,
+} from "./session";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -12,8 +16,10 @@ export default async function handler(req, res) {
 
   try {
     await connectMongoose();
-    const pack = await createPack(userId, req.body);
-    return res.status(200).json(formatPackForResponse(pack));
+    const result = await createPack(userId, req.body);
+    return sendPackServiceResult(res, result, (pack) =>
+      res.status(200).json(formatPackForResponse(pack))
+    );
   } catch (err) {
     return sendPackError(res, err);
   }
