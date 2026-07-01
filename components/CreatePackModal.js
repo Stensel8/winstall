@@ -31,10 +31,21 @@ export default function CreatePackModal({ isOpen, onClose, user, onCreated, pack
     handleSubmit,
     register,
     reset,
+    watch,
     formState: { errors },
   } = useForm({ defaultValues });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const isUnlisted = watch("isUnlisted");
+  const isUnlistedRegister = register("isUnlisted");
+
+  const checkboxIcon = submitting
+    ? isUnlisted
+      ? "/assets/cb_check_disable.svg"
+      : "/assets/cb_uncheck_disable.svg"
+    : isUnlisted
+      ? "/assets/cb_check.svg"
+      : "/assets/cb_uncheck.svg";
 
   useEffect(() => {
     if (!isOpen) return;
@@ -136,7 +147,22 @@ export default function CreatePackModal({ isOpen, onClose, user, onCreated, pack
 
         <div className={styles.checkboxContainer}>
           <label>
-            <input type="checkbox" {...register("isUnlisted")} />
+            <span className={styles.checkbox}>
+              <input
+                type="checkbox"
+                className={styles.checkboxInput}
+                disabled={submitting}
+                {...isUnlistedRegister}
+              />
+              <img
+                src={checkboxIcon}
+                alt=""
+                aria-hidden="true"
+                className={styles.checkboxIcon}
+                width={17}
+                height={17}
+              />
+            </span>
             <p>Hide this pack from the public directory on winstall.</p>
           </label>
           <em>

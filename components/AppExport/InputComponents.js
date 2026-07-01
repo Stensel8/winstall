@@ -1,11 +1,36 @@
 import styles from "../../styles/exportApps.module.scss";
 
+function getCheckboxIcon(checked, disabled) {
+    if (disabled) {
+        return checked ? "/assets/cb_check_disable.svg" : "/assets/cb_uncheck_disable.svg";
+    }
+
+    return checked ? "/assets/cb_check.svg" : "/assets/cb_uncheck.svg";
+}
+
 export const CheckboxConfig = ({ id, defaultChecked, updateConfig, hiddenOptions, labelText, disabled = false }) => {
     if(hiddenOptions.includes(id)) return null;
 
     return (
         <label htmlFor={id} className={disabled ? styles.disabled : ''}>
-            <input type="checkbox" id={id} checked={defaultChecked} onChange={(e) => updateConfig(id, e.target.checked)} disabled={disabled}/>
+            <span className={styles.checkbox}>
+                <input
+                    type="checkbox"
+                    id={id}
+                    className={styles.checkboxInput}
+                    checked={defaultChecked}
+                    onChange={(e) => updateConfig(id, e.target.checked)}
+                    disabled={disabled}
+                />
+                <img
+                    src={getCheckboxIcon(defaultChecked, disabled)}
+                    alt=""
+                    aria-hidden="true"
+                    className={styles.checkboxIcon}
+                    width={17}
+                    height={17}
+                />
+            </span>
             <p>{labelText} <code>{id}</code></p>
         </label>
     )

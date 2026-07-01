@@ -80,13 +80,39 @@
     cursor: pointer;
   }
 
-  input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    margin-top: 2px;
+  .checkbox {
+    position: relative;
+    display: inline-flex;
     flex-shrink: 0;
-    accent-color: var(--accent);
+    width: 17px;
+    height: 17px;
+    margin-top: 2px;
+  }
+
+  .checkboxInput {
+    position: absolute;
+    inset: 0;
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    opacity: 0;
     cursor: pointer;
+    z-index: 1;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  .checkboxIcon {
+    display: block;
+    width: 17px;
+    height: 17px;
+    pointer-events: none;
+  }
+
+  label:has(.checkboxInput:disabled) {
+    cursor: not-allowed;
   }
 
   p {
@@ -96,7 +122,7 @@
 
   em {
     display: block;
-    margin: 8px 0 0 30px;
+    margin: 8px 0 0 27px;
     font-style: normal;
     font-size: 13px;
     font-weight: 400;

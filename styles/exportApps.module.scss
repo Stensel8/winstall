@@ -147,13 +147,82 @@
         cursor: pointer;
 
         &.disabled {
-            opacity: 0.5;
+            cursor: not-allowed;
+
+            p {
+                opacity: 0.5;
+            }
+        }
+
+        .checkbox {
+            position: relative;
+            display: inline-flex;
+            flex-shrink: 0;
+            width: 17px;
+            height: 17px;
+            margin-right: 10px;
+        }
+
+        .checkboxInput {
+            position: absolute;
+            inset: 0;
+            width: 17px;
+            height: 17px;
+            margin: 0;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 1;
+
+            &:disabled {
+                cursor: not-allowed;
+            }
+        }
+
+        .checkboxIcon {
+            display: block;
+            width: 17px;
+            height: 17px;
+            pointer-events: none;
+        }
+
+        &:has(.checkboxInput:disabled) {
             cursor: not-allowed;
         }
 
-        input{
+        input[type="radio"]{
             margin: 0px;
             margin-right: 10px;
+            width: 17px !important;
+            height: 17px !important;
+            border: 1px solid #6e1bdc !important;
+            border-radius: 50% !important;
+            background-color: var(--main-bg) !important;
+
+            &:hover:not(:disabled),
+            &:focus {
+                border: 1px solid #6e1bdc !important;
+            }
+
+            &:checked {
+                border: 1px solid #6e1bdc !important;
+                background-color: var(--main-bg) !important;
+                box-shadow: inset 0 0 0 4px #9b2eff;
+
+                &:hover:not(:disabled) {
+                    border: 1px solid #6e1bdc !important;
+                    box-shadow: inset 0 0 0 4px #9b2eff;
+                }
+            }
+
+            &:disabled {
+                border-color: #e9eaed !important;
+                background-color: #f2f4f7 !important;
+                cursor: not-allowed;
+
+                &:checked {
+                    box-shadow: inset 0 0 0 4px rgba(155, 46, 255, 0.4);
+                }
+            }
         }
 
         p{
