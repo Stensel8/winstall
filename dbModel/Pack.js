@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { nanoid } from "nanoid";
 
 export const VISIBILITY = ["public", "unlisted", "private"];
-export const STATUS = ["active", "archived", "deleted"];
+export const STATUS = ["active", "archived"];
 
 const PackSchema = new mongoose.Schema(
   {

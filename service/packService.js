@@ -1,4 +1,5 @@
 import Pack from "../dbModel/Pack";
+import PackLike from "../dbModel/PackLike";
 import { VISIBILITY } from "../dbModel/Pack";
 import {
   hasInstallOptions,
@@ -335,8 +336,8 @@ export async function updatePack(
 export async function deletePack(packId, userId) {
   const pack = await findOwnedActivePack(packId, userId);
 
-  pack.status = "deleted";
-  await pack.save();
+  await PackLike.deleteMany({ packId: pack._id }).exec();
+  await Pack.deleteOne({ _id: pack._id }).exec();
 
   return { msg: "Sucessfully deleted pack." };
 }

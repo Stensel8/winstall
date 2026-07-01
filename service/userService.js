@@ -41,11 +41,17 @@ export async function deleteUserAccount(userId, dbUserId) {
 
   await connectMongoose();
 
-  await Pack.updateMany(
-    { userId, status: "active" },
-    { $set: { status: "deleted" } }
-  ).exec();
+  const ownedPacks = await Pack.find({ userId, status: "active" })
+    .select("_id")
+    .lean()
+    .exec();
+  const ownedPackIds = ownedPacks.map((pack) => pack._id);
 
+  if (ownedPackIds.length > 0) {
+    await PackLike.deleteMany({ packId: { $in: ownedPackIds } }).exec();
+  }
+
+  await Pack.deleteMany({ userId }).exec();
   await PackLike.deleteMany({ userId }).exec();
 
   if (dbUserId) {
